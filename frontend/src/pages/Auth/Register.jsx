@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion, AnimatePresence } from 'framer-motion';
+import skillList from '../../data/skillList';
 
 const Register = () => {
     const [step, setStep] = useState(1);
@@ -12,6 +13,12 @@ const Register = () => {
     const { setUser } = useUser();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
+    
+    // Skill selection state
+    const [skillInput, setSkillInput] = useState('');
+    const [filteredSkills, setFilteredSkills] = useState([]);
+    const [showSkillDropdown, setShowSkillDropdown] = useState(false);
+    const skillInputRef = useRef(null);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -36,6 +43,80 @@ const Register = () => {
     const handleArrayChange = (name, value) => {
         setFormData({ ...formData, [name]: value.split(',').map(item => item.trim()) });
     };
+
+    // Skills input handler
+    const handleSkillInputChange = (e) => {
+        const value = e.target.value;
+        setSkillInput(value);
+        
+        if (value.trim() === '') {
+            setFilteredSkills([]);
+            setShowSkillDropdown(false);
+            return;
+        }
+        
+        // Filter skills that match the input
+        const matches = skillList.filter(skill => 
+            skill.toLowerCase().includes(value.toLowerCase())
+        ).slice(0, 5); // Limit to 5 suggestions
+        
+        setFilteredSkills(matches);
+        setShowSkillDropdown(matches.length > 0);
+    };
+
+    // Add selected skill from dropdown
+    const handleSelectSkill = (skill) => {
+        if (!formData.skills.includes(skill)) {
+            setFormData(prev => ({
+                ...prev,
+                skills: [...prev.skills, skill]
+            }));
+        }
+        setSkillInput('');
+        setShowSkillDropdown(false);
+        skillInputRef.current.focus();
+    };
+
+    // Add skill with Enter key
+    const handleSkillKeyDown = (e) => {
+        if (e.key === 'Enter' && skillInput.trim() !== '') {
+            e.preventDefault();
+            
+            if (filteredSkills.length > 0) {
+                // Select the first match from dropdown
+                handleSelectSkill(filteredSkills[0]);
+            } else if (!formData.skills.includes(skillInput.trim())) {
+                // Add custom skill if not in dropdown
+                setFormData(prev => ({
+                    ...prev, 
+                    skills: [...prev.skills, skillInput.trim()]
+                }));
+                setSkillInput('');
+            }
+        }
+    };
+
+    // Remove a skill tag
+    const removeSkill = (skillToRemove) => {
+        setFormData(prev => ({
+            ...prev,
+            skills: prev.skills.filter(skill => skill !== skillToRemove)
+        }));
+    };
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (skillInputRef.current && !skillInputRef.current.contains(event.target)) {
+                setShowSkillDropdown(false);
+            }
+        };
+        
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const handleRoleSelection = (selectedRole) => {
         const formattedRole = selectedRole === 'student' ? 'Student' : 'Teacher';
@@ -90,6 +171,17 @@ const Register = () => {
         initial: { y: 20, opacity: 0 },
         animate: { y: 0, opacity: 1 },
         hover: { y: -5, boxShadow: "0px 10px 20px rgba(0, 0, 0, 0.1)" }
+    };
+
+    const tagVariants = {
+        initial: { scale: 0.8, opacity: 0 },
+        animate: { scale: 1, opacity: 1 },
+        exit: { scale: 0.8, opacity: 0 }
+    };
+
+    const dropdownVariants = {
+        hidden: { opacity: 0, y: -10 },
+        visible: { opacity: 1, y: 0, transition: { duration: 0.2 } }
     };
 
     return (
@@ -192,7 +284,7 @@ const Register = () => {
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                         required
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Full Name</label>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Full Name</label>
                                 </div>
                                 
                                 <div className="relative">
@@ -205,7 +297,7 @@ const Register = () => {
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                         required
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Email Address</label>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Email Address</label>
                                 </div>
                                 
                                 <div className="relative">
@@ -218,7 +310,7 @@ const Register = () => {
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                         required
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Password</label>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Password</label>
                                 </div>
                             </div>
 
@@ -265,24 +357,68 @@ const Register = () => {
                             <p className="text-gray-600 mb-6">This helps us personalize your learning experience</p>
                             
                             <div className="space-y-4">
-                                <div className="relative">
+                                <div className="relative" ref={skillInputRef}>
                                     <input 
                                         type="text" 
                                         placeholder=" " 
-                                        onChange={(e) => handleArrayChange('skills', e.target.value)} 
+                                        value={skillInput}
+                                        onChange={handleSkillInputChange}
+                                        onKeyDown={handleSkillKeyDown}
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Skills (comma separated)</label>
-                                </div>
-                                
-                                <div className="relative">
-                                    <input 
-                                        type="text" 
-                                        placeholder=" " 
-                                        onChange={(e) => handleArrayChange('courses', e.target.value)} 
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
-                                    />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Courses (comma separated)</label>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">
+                                        Skills (type to search)
+                                    </label>
+                                    
+                                    {/* Skills dropdown */}
+                                    <AnimatePresence>
+                                        {showSkillDropdown && (
+                                            <motion.div 
+                                                className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto"
+                                                variants={dropdownVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="hidden"
+                                            >
+                                                {filteredSkills.map((skill, index) => (
+                                                    <div 
+                                                        key={index}
+                                                        className="p-3 hover:bg-blue-50 cursor-pointer transition-colors"
+                                                        onClick={() => handleSelectSkill(skill)}
+                                                    >
+                                                        {skill}
+                                                    </div>
+                                                ))}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                    
+                                    {/* Selected skills tags */}
+                                    <div className="flex flex-wrap gap-2 mt-3">
+                                        <AnimatePresence>
+                                            {formData.skills.map((skill, index) => (
+                                                <motion.div 
+                                                        key={`${skill}-${index}`}
+                                                        className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-2 rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
+                                                        variants={tagVariants}
+                                                        initial="initial"
+                                                        animate="animate"
+                                                        exit="exit"
+                                                    >
+                                                        {skill}
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => removeSkill(skill)}
+                                                        className="ml-1 bg-blue-200 hover:bg-blue-300 rounded-full p-1 text-blue-600 hover:text-blue-800 transition-colors"
+                                                    >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                    </button>
+                                                </motion.div>
+                                            ))}
+                                        </AnimatePresence>
+                                    </div>
                                 </div>
                                 
                                 <div className="relative">
@@ -292,7 +428,7 @@ const Register = () => {
                                         onChange={(e) => handleArrayChange('careerGoals', e.target.value)} 
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">Career Goals (comma separated)</label>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Career Goals (comma separated)</label>
                                 </div>
                             </div>
 
