@@ -94,7 +94,7 @@ const Register = () => {
 
     return (
         <motion.div 
-            className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700 p-4"
+            className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black to-purple-100 p-4 w-lvw"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}

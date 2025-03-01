@@ -72,7 +72,7 @@ const Login = () => {
 
     return (
         <motion.div 
-            className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700 p-4"
+            className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black to-purple-100 p-4 w-lvw"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -139,19 +139,6 @@ const Login = () => {
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                                <input
-                                    id="remember-me"
-                                    name="remember-me"
-                                    type="checkbox"
-                                    checked={rememberMe}
-                                    onChange={() => setRememberMe(!rememberMe)}
-                                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                                />
-                                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
-                                    Remember me
-                                </label>
-                            </div>
                             <div className="text-sm">
                                 <a href="#" className="text-blue-600 hover:text-blue-800">
                                     Forgot password?
