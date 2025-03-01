@@ -140,7 +140,7 @@ const Register = () => {
             localStorage.setItem('token', token);
             setUser(user);
 
-            setTimeout(() => navigate('/home'), 2000);
+            setTimeout(() => navigate('/login'), 2000);
         } catch (error) {
             toast.error('Registration failed. ' + (error.response?.data?.message || error.message));
         } finally {

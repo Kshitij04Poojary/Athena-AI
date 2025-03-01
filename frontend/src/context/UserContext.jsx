@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'; // Fix here!
 
 const UserContext = createContext();
 
@@ -7,33 +8,40 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true); // Added loading state for better handling
+    const [loading, setLoading] = useState(true);
 
-    const fetchUser = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            console.log('No token found, skipping user fetch');
-            setUser(null);
-            setLoading(false);
-            return;
-        }
-
+    const fetchUser = async (userId) => {
         try {
-            const response = await axios.get('http://localhost:8000/api/auth/profile', {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setUser(response.data.user);
+            const response = await axios.get(`http://localhost:8000/api/auth/profile/${userId}`);
+            setUser(response.data); // Assuming response.data is the user object
         } catch (error) {
             console.error('Failed to fetch user', error);
-            setUser(null); // Clear user if token is invalid
-            localStorage.removeItem('token'); // Remove token if it causes error (invalid/expired)
+            setUser(null);
+            localStorage.removeItem('token');
         } finally {
-            setLoading(false); // Ensure loading is set to false even if request fails
+            setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchUser(); // Run on initial load/refresh
+        const token = localStorage.getItem('token');
+
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);  // Use correctly named import
+                const userId = decoded.id; // Extract userId from token
+
+                fetchUser(userId);
+            } catch (error) {
+                console.error('Invalid token', error);
+                setUser(null);
+                localStorage.removeItem('token');
+                setLoading(false);
+            }
+        } else {
+            setUser(null);
+            setLoading(false);
+        }
     }, []);
 
     return (
