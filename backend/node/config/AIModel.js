@@ -1,5 +1,3 @@
-
-
     const {
       GoogleGenerativeAI,
       HarmCategory,
@@ -40,6 +38,25 @@
         ],
       });
     
+      const generateExamModel= model.startChat({
+            generationConfig,
+            history: [
+              {
+                role: "user",
+                parts: [
+                  {text: "Generate Exam on topic : React Native with Question and Options along with correct answer in JSON format with difficulty level high but not very long questions and no need for difficulty key, (Give 10)"},
+                ],
+              },
+              {
+                role: "model",
+                parts: [
+                  {text: "```json\n[\n  {\n    \"question\": \"What is the primary benefit of using React Native's Fast Refresh feature during development?\",\n    \"options\": [\n      \"It automatically refactors your code to improve performance.\",\n      \"It provides real-time updates to your code without losing component state.\",\n      \"It allows you to debug your code directly on the device.\",\n      \"It generates optimized production builds faster.\"\n    ],\n    \"answer\": \"It provides real-time updates to your code without losing component state.\"\n  },\n  {\n    \"question\": \"How does React Native bridge the gap between JavaScript code and native platform components?\",\n    \"options\": [\n      \"It uses a JavaScript engine to interpret JavaScript code directly on the native platform.\",\n      \"It translates JavaScript code into native code at compile time.\",\n      \"It uses a message queue to asynchronously communicate between JavaScript and native threads.\",\n      \"It replaces native components with JavaScript-based alternatives.\"\n    ],\n    \"answer\": \"It uses a message queue to asynchronously communicate between JavaScript and native threads.\"\n  },\n  {\n    \"question\": \"What is the purpose of the `useCallback` hook in React Native functional components?\",\n    \"options\": [\n      \"To memoize the result of a function call and prevent unnecessary re-renders.\",\n      \"To manage the lifecycle of a functional component.\",\n      \"To define a function that is called when a component is unmounted.\",\n      \"To prevent the creation of a new function instance on every render.\"\n    ],\n    \"answer\": \"To prevent the creation of a new function instance on every render.\"\n  },\n  {\n    \"question\": \"Which React Native API is used to manage asynchronous operations and background tasks?\",\n    \"options\": [\n      \"AsyncStorage\",\n      \"Fetch\",\n      \"BackgroundFetch\",\n      \"Promise\"\n    ],\n    \"answer\": \"Fetch\"\n  },\n  {\n    \"question\": \"What is the significance of using the `Platform` API in React Native?\",\n    \"options\": [\n      \"To access platform-specific information and adapt code based on the operating system.\",\n      \"To directly modify the native UI components of the platform.\",\n      \"To optimize the performance of React Native applications for different screen sizes.\",\n      \"To enable cross-platform code sharing with web applications.\"\n    ],\n    \"answer\": \"To access platform-specific information and adapt code based on the operating system.\"\n  },\n  {\n    \"question\": \"When would you choose to use a `FlatList` component over a `ScrollView` in React Native?\",\n    \"options\": [\n      \"When you need to render a small, static list of items.\",\n      \"When you want to render a dynamic list of items with potentially large dataset that benefits from virtualization.\",\n      \"When you need to implement custom animations for scrolling.\",\n      \"When you want to create a fixed layout with no scrolling.\"\n    ],\n    \"answer\": \"When you want to render a dynamic list of items with potentially large dataset that benefits from virtualization.\"\n  },\n  {\n    \"question\": \"What is the purpose of using Redux or similar state management libraries in a React Native application?\",\n    \"options\": [\n      \"To simplify UI rendering and improve performance.\",\n      \"To manage global application state and facilitate data sharing between components.\",\n      \"To handle navigation and routing between different screens.\",\n      \"To implement persistent storage for user data.\"\n    ],\n    \"answer\": \"To manage global application state and facilitate data sharing between components.\"\n  },\n  {\n    \"question\": \"How can you improve the performance of a React Native application when dealing with complex animations?\",\n    \"options\": [\n      \"By using JavaScript-based animations exclusively.\",\n      \"By offloading animations to the native driver using `useNativeDriver: true`.\",\n      \"By reducing the number of animations used in the application.\",\n      \"By increasing the frame rate of animations.\"\n    ],\n    \"answer\": \"By offloading animations to the native driver using `useNativeDriver: true`.\"\n  },\n  {\n    \"question\": \"What is the recommended way to handle navigation between screens in a React Native application with a complex navigation structure?\",\n    \"options\": [\n      \"Using the built-in `Navigator` component.\",\n      \"Using a third-party navigation library like React Navigation or react-native-navigation.\",\n      \"Implementing custom navigation logic using state management.\",\n      \"Using deep linking to navigate between screens.\"\n    ],\n    \"answer\": \"Using a third-party navigation library like React Navigation or react-native-navigation.\"\n  },\n  {\n    \"question\": \"What are the advantages of using TypeScript with React Native projects?\",\n    \"options\": [\n      \"It automatically optimizes your code for performance.\",\n      \"It provides static typing, improved code maintainability, and early error detection.\",\n      \"It simplifies the process of building native modules.\",\n      \"It eliminates the need for testing.\"\n    ],\n    \"answer\": \"It provides static typing, improved code maintainability, and early error detection.\"\n  }\n]\n```"},
+                ],
+              },
+            ],
+          });
       // const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
       // console.log(result.response.text());
+
+      module.exports = { generateExamModel };
     
