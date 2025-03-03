@@ -8,7 +8,8 @@ import {
   BarChart2, 
   HelpCircle, 
   LogOut, 
-  Menu, 
+  Menu,
+  BookOpen, 
   ChevronLeft, 
   ChevronRight 
 } from 'lucide-react';
@@ -19,8 +20,8 @@ const SideBar = () => {
     const [hoveredItem, setHoveredItem] = useState(null);
 
     const menuItems = [
-        { name: 'Dashboard', icon: Home, path: '/dashboard' },
         { name: 'Profile', icon: User, path: '/profile' },
+        { name: 'Courses', icon: BookOpen, path:'/my-courses'},
         { name: 'Settings', icon: Settings, path: '/settings' },
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
@@ -29,7 +30,7 @@ const SideBar = () => {
 
     return (
         <div 
-            className={`bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
+            className={`flex bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
                 collapsed ? 'w-20' : 'w-72'
             } h-screen flex flex-col`}
         >
@@ -114,12 +115,12 @@ const SideBar = () => {
             <div className="p-4 border-t border-blue-700 mb-auto">
                 <button 
                     onClick={logout} 
-                    className="flex items-center p-3 w-full rounded-lg hover:bg-black/20 transition-colors group"
+                    className="flex items-center p-3 w-full rounded-lg hover:bg-gray/20 transition-colors group !bg-black"
                 >
-                    <div className={`${!collapsed && 'mr-4'} text-black group-hover:text-black transition-colors`}>
+                    <div className={`${!collapsed && 'mr-4'} !text-white group-hover:text-gray transition-colors`}>
                         <LogOut size={20} />
                     </div>
-                    {!collapsed && <span className="group-hover:text-black transition-colors">Logout</span>}
+                    {!collapsed && <span className="group-hover:text-white transition-colors">Logout</span>}
                 </button>
             </div>
         </div>

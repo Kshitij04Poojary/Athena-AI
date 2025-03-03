@@ -66,10 +66,10 @@ const Register = () => {
 
     // Add selected skill from dropdown
     const handleSelectSkill = (skill) => {
-        if (!formData.skills.includes(skill)) {
+        if (!formData.skills.some(s => s.name === skill)) {
             setFormData(prev => ({
                 ...prev,
-                skills: [...prev.skills, skill]
+                skills: [...prev.skills, { name: skill, proficiency: 0 }]
             }));
         }
         setSkillInput('');
@@ -85,11 +85,11 @@ const Register = () => {
             if (filteredSkills.length > 0) {
                 // Select the first match from dropdown
                 handleSelectSkill(filteredSkills[0]);
-            } else if (!formData.skills.includes(skillInput.trim())) {
+            } else if (!formData.skills.some(skill => skill.name === skillInput.trim())) {
                 // Add custom skill if not in dropdown
                 setFormData(prev => ({
                     ...prev, 
-                    skills: [...prev.skills, skillInput.trim()]
+                    skills: [...prev.skills, { name: skillInput.trim(), proficiency: 0 }]
                 }));
                 setSkillInput('');
             }
@@ -396,19 +396,19 @@ const Register = () => {
                                     {/* Selected skills tags */}
                                     <div className="flex flex-wrap gap-2 mt-3">
                                         <AnimatePresence>
-                                            {formData.skills.map((skill, index) => (
+                                            {formData.skills.map((skillObj, index) => (
                                                 <motion.div 
-                                                        key={`${skill}-${index}`}
+                                                        key={`${skillObj}-${index}`}
                                                         className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-2 rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
                                                         variants={tagVariants}
                                                         initial="initial"
                                                         animate="animate"
                                                         exit="exit"
                                                     >
-                                                        {skill}
+                                                        {skillObj.name}
                                                     <button 
                                                         type="button"
-                                                        onClick={() => removeSkill(skill)}
+                                                        onClick={() => removeSkill(skillObj.name)}
                                                         className="ml-1 bg-blue-200 hover:bg-blue-300 rounded-full p-1 text-blue-600 hover:text-blue-800 transition-colors"
                                                     >
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">

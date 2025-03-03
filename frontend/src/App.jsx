@@ -5,6 +5,9 @@ import Login from './pages/Auth/Login';
 import Home from './pages/Home';
 import { UserProvider } from './context/UserContext';
 import 'react-toastify/dist/ReactToastify.css';
+import CreateCourse from './pages/CourseGen/createCourse';
+import CreateCourseProxy from './pages/CourseGen/CreateCourseProxy';
+import MyCourses from './pages/CourseGen/MyCourses';
 
 const App = () => (
     <UserProvider>
@@ -14,6 +17,8 @@ const App = () => (
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/my-courses" element={<MyCourses/>}/>
+                <Route path="/create-course" element={<CreateCourseProxy/>}/>
             </Routes>
         </Router>
     </UserProvider>
