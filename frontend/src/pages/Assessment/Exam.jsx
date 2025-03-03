@@ -4,7 +4,6 @@ import QuestionNavigation from "./QuestionNavigation";
 import ResultScreen from "./ResultScreen";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { QuizQuestions } from "./QuizQuestions";
 
 const Exam = () => {
   const { examId } = useParams();
