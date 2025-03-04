@@ -66,4 +66,19 @@ router.get("/:examId", async (req, res) => {
   }
 });
 
+router.get("/getassess/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const assessments = await Assessment.find({ user: userId });
+
+    if (assessments.length === 0) {
+      return res.status(404).json({ message: "No assessments found for the user" });
+    }
+
+    res.json(assessments);
+  } catch (error) {
+    console.error("Error fetching assessments:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 module.exports = router;
