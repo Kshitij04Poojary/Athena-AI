@@ -5,8 +5,7 @@ import Login from './pages/Auth/Login';
 import Home from './pages/Home';
 import { UserProvider } from './context/UserContext';
 import 'react-toastify/dist/ReactToastify.css';
-import CreateCourse from './pages/CourseGen/createCourse';
-import CreateCourseProxy from './pages/CourseGen/CreateCourseProxy';
+import CreateCourse from './pages/CourseGen/CreateCourse';
 import MyCourses from './pages/CourseGen/MyCourses';
 import ExamDashboard from './pages/Assessment/ExamDashboard';
 import Exam from './pages/Assessment/Exam';
@@ -21,7 +20,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/my-courses" element={<MyCourses/>}/>
-                <Route path="/create-course" element={<CreateCourseProxy/>}/>
+                <Route path="/create-course" element={<CreateCourse/>}/>
                 <Route path="/assessment" element={<ExamDashboard/>} />
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />

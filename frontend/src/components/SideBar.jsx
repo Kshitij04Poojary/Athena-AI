@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useUser } from '../context/UserContext';
 import { 
-  Home, 
   User, 
   Settings, 
   MessageSquare, 
   BarChart2, 
   HelpCircle, 
-  LogOut, 
-  Menu,
+  LogOut,
   BookOpen, 
   ChevronLeft, 
   ChevronRight,

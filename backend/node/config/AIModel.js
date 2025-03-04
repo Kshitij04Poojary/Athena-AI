@@ -59,4 +59,3 @@
       // console.log(result.response.text());
 
       module.exports = { generateExamModel };
-    

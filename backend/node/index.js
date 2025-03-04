@@ -6,6 +6,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRouter');
 const courseRoutes = require('./routes/courseRouter');
 const assessmentRoutes = require('./routes/assessmentRouter');
+const generateCourseRoutes = require('./routes/generateCourseRouter')
+const generateChapterContentRoutes = require('./routes/generateChapterContentRouter');
 
 const app = express();
 app.use(express.json());
@@ -16,5 +18,8 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
 app.use("/api/assessment", assessmentRoutes);
+app.use('/api', generateCourseRoutes);
+app.use('/api', generateChapterContentRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
