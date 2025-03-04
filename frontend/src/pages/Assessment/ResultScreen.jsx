@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
+import ExamReview from "./ExamReview";
 
-const ResultScreen = ({ score, totalQuestions }) => {
+const ResultScreen = ({ score, totalQuestions,userAnswers,quiz }) => {
   const navigate = useNavigate(); // Initialize navigate function
   const percentage = Math.round((score / totalQuestions) * 100);
-  
+  console.log("Quiz",quiz)
   const getResultMessage = () => {
     if (percentage >= 90) return "Excellent!";
     if (percentage >= 70) return "Good job!";
@@ -84,12 +85,18 @@ const ResultScreen = ({ score, totalQuestions }) => {
             </p>
           </div>
           
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex gap-8 justify-center">
             <button
               onClick={() => navigate("/assessment")} // Redirect to ExamDashboard
-              className="px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
             >
               Back to Dashboard
+            </button>
+            <button
+              onClick={() => navigate("/examreview", { state: { userAnswers, quiz } })} // Redirect to ExamDashboard
+              className="cursor-pointer px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+            >
+              ExamReview
             </button>
           </div>
         </div>

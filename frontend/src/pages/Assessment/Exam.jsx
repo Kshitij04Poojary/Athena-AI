@@ -99,25 +99,25 @@ const Exam = () => {
         totalQuestions={quiz.length}
         onRestart={restartQuiz}
         userAnswers={userAnswers}
-        questions={quiz}
+        quiz={quiz}
       />
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 p-6">
-      <div className="w-full">
+    <div className="min-h-screen max-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 max-w-screen min-w-screen p-6">
+      <div className="w-full h-full">
         <h1 className="text-center font-bold text-4xl tracking-tight text-indigo-800 mb-2">
           Challenge Quiz
         </h1>
         <p className="text-center text-indigo-600 mb-10">Test your knowledge and challenge yourself</p>
 
-        <div className="flex justify-center items-center flex-col lg:flex-row gap-8">
+        <div className="flex justify-center items-center flex-col lg:flex-row gap-8 min-w-full max-w-full h-full">
           {/* Main Quiz Area - Now full width on the left */}
-          <div className="lg:order-1 order-2 flex-grow bg-white rounded-2xl shadow-xl p-8 transform transition-all duration-300">
+          <div className="lg:order-1 order-2 flex-grow bg-white rounded-2xl shadow-xl p-6 transform transition-all duration-300 w-10/12 h-1/4">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center">
-                <span className="flex items-center justify-center w-12 h-12 rounded-full bg-indigo-100 text-indigo-700 font-bold text-lg">
+                <span className="flex items-center justify-center w-10 h-12 rounded-full bg-indigo-100 text-indigo-700 font-bold text-lg">
                   {currentQuestion + 1}
                 </span>
                 <div className="ml-4">
@@ -127,8 +127,8 @@ const Exam = () => {
               </div>
 
               <div className="hidden md:block">
-                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-6 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                   </svg>
                 </div>
@@ -148,12 +148,12 @@ const Exam = () => {
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestion === 0}
-                className={`px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center ${currentQuestion === 0
+                className={`cursor-pointer px-6 py-3 rounded-xl font-medium transition-all duration-200 flex items-center ${currentQuestion === 0
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "bg-white text-indigo-600 border border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50"
                   }`}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 Previous
@@ -172,7 +172,7 @@ const Exam = () => {
               ) : (
                 <button
                   onClick={handleNext}
-                  className="px-6 py-3 bg-gradient-to-r from-indigo-600 outline-0 focus:ring-0 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center"
+                  className="cursor-pointer px-6 py-3 bg-gradient-to-r from-indigo-600 outline-0 focus:ring-0 to-purple-600 text-white rounded-xl font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center"
                 >
                   Next
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -184,7 +184,7 @@ const Exam = () => {
           </div>
 
           {/* Question Navigation Panel - Now on the right side with darker theme */}
-          <div className="lg:order-2 order-1 lg:w-64 bg-gray-900 rounded-2xl shadow-xl p-6 overflow-hidden lg:sticky lg:top-6 lg:h-min">
+          <div className="lg:order-2 order-1 lg:w-64 bg-gray-900 rounded-2xl shadow-xl p-6 overflow-hidden lg:sticky lg:top-6 lg:h-min w-2/12">
             <h3 className="font-bold text-lg mb-4 text-gray-100">Questions</h3>
             <div className="mb-4 pt-1 pb-2 px-1 overflow-x-auto">
               <QuestionNavigation

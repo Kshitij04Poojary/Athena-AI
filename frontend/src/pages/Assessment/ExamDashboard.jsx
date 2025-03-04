@@ -8,10 +8,7 @@ const ExamDashboard = () => {
     const { user } = useUser();
     const [topic, setTopic] = useState("");
     const [loading, setLoading] = useState(false);  // Added loading state
-      // useEffect(() => {
-    //     console.log(user?.id)
-    // }
-    // , [user]);
+    console.log(user)
     const generateAssessment = async () => {
         if (!topic.trim()) {
             alert("Please enter a topic.");
@@ -22,8 +19,8 @@ const ExamDashboard = () => {
 
         try {           
             const res = await axios.post("http://localhost:8000/api/assessment/generate", {
-                 // userId: user?.id,
-                userId: "67c5c4b6ee979a1d4e8db9f7",
+                userId: user?._id,
+                // userId: "67c5c4b6ee979a1d4e8db9f7",
                 topic
             });
             console.log("Generated assessment:", res.data);

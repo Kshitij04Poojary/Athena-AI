@@ -9,7 +9,7 @@ const ExamCardItem = ({ quiz, userSelectedOption, selectedOption }) => {
           <button
             key={index}
             onClick={() => userSelectedOption(option)}
-            className={`relative overflow-hidden text-left p-4 w-full rounded-xl transition-all duration-300 ease-in-out group ${
+            className={`relative cursor-pointer overflow-hidden text-left p-4 w-full rounded-xl transition-all duration-300 ease-in-out group ${
               selectedOption === option
                 ? "bg-indigo-100 border-2 border-indigo-500"
                 : "bg-white border-2 border-gray-100 hover:border-indigo-200"

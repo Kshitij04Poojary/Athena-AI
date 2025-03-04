@@ -10,6 +10,7 @@ import CreateCourseProxy from './pages/CourseGen/CreateCourseProxy';
 import MyCourses from './pages/CourseGen/MyCourses';
 import ExamDashboard from './pages/Assessment/ExamDashboard';
 import Exam from './pages/Assessment/Exam';
+import ExamReview from './pages/Assessment/ExamReview';
 
 const App = () => (
     <UserProvider>
@@ -23,6 +24,7 @@ const App = () => (
                 <Route path="/create-course" element={<CreateCourseProxy/>}/>
                 <Route path="/assessment" element={<ExamDashboard/>} />
                 <Route path="/assessment/:examId" element={<Exam />} />
+                <Route path="/examreview" element={<ExamReview />} />
             </Routes>
         </Router>
     </UserProvider>

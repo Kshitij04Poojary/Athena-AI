@@ -5,7 +5,7 @@ import { Cpu, BarChart, Clock, Activity } from 'lucide-react';
 
 const Home = () => {
     const { user } = useUser();
-
+    console.log(user);
     return (
         <div className="flex min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 w-lvw">
             <SideBar />

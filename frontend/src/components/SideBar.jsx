@@ -11,7 +11,8 @@ import {
   Menu,
   BookOpen, 
   ChevronLeft, 
-  ChevronRight 
+  ChevronRight,
+  ClipboardList
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -22,7 +23,7 @@ const SideBar = () => {
     const menuItems = [
         { name: 'Profile', icon: User, path: '/profile' },
         { name: 'Courses', icon: BookOpen, path:'/my-courses'},
-        { name: 'Settings', icon: Settings, path: '/settings' },
+        { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
         { name: 'Help', icon: HelpCircle, path: '/help' },
