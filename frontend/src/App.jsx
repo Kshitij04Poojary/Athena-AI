@@ -13,6 +13,12 @@ import Exam from './pages/Assessment/Exam';
 import ExamReview from './pages/Assessment/ExamReview';
 import MainLayout from './MainLayout';
 import ChapterDetails from './pages/CourseGen/ChapterDetails';
+import AddNewInterview from './pages/Interview/AddNewInterview';
+import StartInterview from './pages/Interview/StartInterview';
+import MainInterview from './pages/Interview/MainInterview'
+import Feedback from './pages/Interview/Feedback';
+import InterviewList from './pages/Interview/InterviewList';
+import InterviewDashboard from './pages/Interview/InterviewDashboard';
 
 const App = () => (
     <UserProvider>
@@ -29,8 +35,13 @@ const App = () => (
                     <Route path="/course/:courseId" element={<CourseDetails /> } />
                     <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails/>} />
                     <Route path="/assessment" element={<ExamDashboard />} />
+                    <Route path="/interview" element={<InterviewDashboard/>} />
                     
                 </Route>
+                
+                <Route path="/interview/:interviewId" element={<StartInterview/>}/>
+                <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>
+                <Route path='/interview/:interviewId/feedback' element={<Feedback/>}/>
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />
             </Routes>
