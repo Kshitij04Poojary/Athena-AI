@@ -22,10 +22,9 @@ The course level should be "${difficulty}" and the total duration should be "${d
 
 The JSON response should follow this structure:
 {
-  "Course Name": "Course Title",
+  "Course Name": "${topic}",
   "Description": "Brief description of the course",
   "Skills": ["${skills.join('", "')}"],
-  "Topic": "${topic}",
   "Level": "${difficulty}",
   "Duration": "${duration} hours",
   "NoOfChapters": ${noOfChp},

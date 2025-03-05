@@ -11,16 +11,17 @@ const chapterSchema = new mongoose.Schema({
     about: { type: String, required: true },
     duration: { type: String, required: true },
     sections: [sectionSchema],
-    video: { type: String },
+    video: { 
+        url: { type: String },    
+        thumbnail: { type: String }
+    },
     isCompleted: { type: Boolean, default: false }
 });
 
 const courseSchema = new mongoose.Schema({
-    courseId: { type: String, required: true, unique: true },
     courseName: { type: String, required: true },
     description: { type: String, required: true },
     skills: { type: [String], required: true },
-    topic: { type: String, required: true },
     level: { type: String, required: true, enum: ['Basic', 'Intermediate', 'Advanced'] },
     courseOutcomes: { type: [String] },
     duration: { type: String, required: true },

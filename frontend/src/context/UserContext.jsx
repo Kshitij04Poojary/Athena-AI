@@ -13,7 +13,9 @@ export const UserProvider = ({ children }) => {
     const fetchUser = async (userId) => {
         try {
             const response = await axios.get(`http://localhost:8000/api/auth/profile/${userId}`);
-            setUser(response.data); // Assuming response.data is the user object
+            const userData = response.data;
+            const token = localStorage.getItem('token');
+            setUser({ ...userData, token }); // Assuming response.data is the user object
         } catch (error) {
             console.error('Failed to fetch user', error);
             setUser(null);

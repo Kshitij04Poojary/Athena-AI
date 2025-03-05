@@ -6,11 +6,13 @@ import Home from './pages/Home';
 import { UserProvider } from './context/UserContext';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateCourse from './pages/CourseGen/CreateCourse';
+import CourseDetails from './pages/CourseGen/CourseDetails';
 import MyCourses from './pages/CourseGen/MyCourses';
 import ExamDashboard from './pages/Assessment/ExamDashboard';
 import Exam from './pages/Assessment/Exam';
 import ExamReview from './pages/Assessment/ExamReview';
 import MainLayout from './MainLayout';
+import ChapterDetails from './pages/CourseGen/ChapterDetails';
 
 const App = () => (
     <UserProvider>
@@ -23,7 +25,9 @@ const App = () => (
                 <Route element={<MainLayout />}>
                    
                     <Route path="/my-courses" element={<MyCourses />} />
-                    <Route path="/create-course" element={<CreateCourseProxy />} />
+                    <Route path="/create-course" element={<CreateCourse />} />
+                    <Route path="/course/:courseId" element={<CourseDetails /> } />
+                    <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails/>} />
                     <Route path="/assessment" element={<ExamDashboard />} />
                     
                 </Route>

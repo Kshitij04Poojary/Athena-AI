@@ -3,8 +3,10 @@ import { FaWandMagicSparkles } from "react-icons/fa6";
 import { HiOutlineSquare3Stack3D } from "react-icons/hi2";
 import { FiTarget } from "react-icons/fi";
 import { IoMdOptions } from "react-icons/io";
-import SideBar from "../../components/SideBar";
 import skillList from "../../data/skillList";
+import axios from 'axios';
+import { useUser } from '../../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   { id: 1, name: "Skills", icon: HiOutlineSquare3Stack3D },
@@ -22,6 +24,8 @@ const CreateCourse = () => {
   
   // New state for terms agreement
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
+  const { user } = useUser();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     topic: "",
@@ -92,10 +96,9 @@ const CreateCourse = () => {
 
         const course = apiResponse.courseLayout;
         console.log("Generating chapters for course:", course);
-        const difficulty = course.Level;
 
+        const difficulty = course.Level;
         const updatedCourse = { ...course, Chapters: [...course.Chapters] };
-        console.log("Updated course:", updatedCourse);
 
         for (let i = 0; i < updatedCourse.Chapters.length; i++) {
             const chapter = updatedCourse.Chapters[i];
@@ -108,28 +111,94 @@ const CreateCourse = () => {
                 difficulty: difficulty,
             };
 
-            const chapterResponse = await fetch("http://localhost:8000/api/generate-chapter-content", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(chapterPayload),
-            });
+            try {
+                const chapterResponse = await fetch("http://localhost:8000/api/generate-chapter-content", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(chapterPayload),
+                });
 
-            if (!chapterResponse.ok) {
-                throw new Error(`Failed to fetch chapter: ${chapter["Chapter Name"]}`);
+                if (!chapterResponse.ok) {
+                    throw new Error(`Failed to fetch content for chapter: ${chapter["Chapter Name"]}`);
+                }
+
+                const { sections, video } = await chapterResponse.json();
+
+                updatedCourse.Chapters[i] = {
+                    ...chapter,
+                    sections,
+                    video: video ?? { url: null, thumbnail: null },  // Ensure both url and thumbnail exist
+                };
+            } catch (chapterError) {
+                console.error(`Error generating content for chapter "${chapter["Chapter Name"]}":`, chapterError);
+                alert(`Failed to generate content for chapter "${chapter["Chapter Name"]}". Skipping this chapter.`);
+                // Optional: you could set a 'generationFailed' flag on the chapter if you want to display it in UI
+                updatedCourse.Chapters[i] = {
+                    ...chapter,
+                    sections: [],
+                    video: { url: null, thumbnail: null },
+                };
             }
-
-            const { sections, video } = await chapterResponse.json();
-
-            updatedCourse.Chapters[i] = {
-                ...chapter,
-                sections,
-                video,
-            };
         }
 
         console.log("Updated course with sections and videos:", updatedCourse);
         alert("Course content generated successfully!");
-        
+
+        const token = user?.token;
+        if (!token) {
+            console.error("No token found. Log in again");
+            alert("Session expired or you're not logged in. Please log in again.");
+            return;
+        }
+
+        // ✅ Transform function to match backend's expected camelCase schema
+        const transformCourse = (course) => ({
+            courseName: course["Course Name"],
+            description: course["Description"],
+            skills: course["Skills"],
+            level: course["Level"],
+            duration: course["Duration"],
+            noOfChapters: course["NoOfChapters"],
+            courseOutcomes: course["Course Outcomes"],
+            chapters: course.Chapters.map(chapter => ({
+                chapterName: chapter["Chapter Name"],
+                about: chapter["About"],
+                duration: chapter["Duration"],
+                sections: chapter.sections,
+                video: chapter.video ?? { url: null, thumbnail: null },  // Ensure video structure is consistent
+                isCompleted: chapter.isCompleted ?? false
+            }))
+        });
+
+        const finalCourse = transformCourse(updatedCourse);
+        console.log("Final course:", finalCourse);
+
+        try {
+            const response = await axios.post(
+                'http://localhost:8000/api/courses/create-courses',
+                finalCourse,
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
+
+            console.log("Course created successfully:", response.data);
+            const courseId = response.data?.course?._id;
+
+            if (courseId) {
+                navigate(`/course/${courseId}`);
+            } else {
+                alert("Course created, but unable to retrieve course ID.");
+            }
+        } catch (error) {
+            console.error("Error creating course:", error);
+            if (error.response?.status === 401) {
+                alert("Session expired. Please log in again.");
+            } else {
+                alert("Failed to save course. Please try again.");
+            }
+        }
+
     } catch (error) {
         console.error("Course generation failed:", error);
         alert("Error generating course. Please try again.");
@@ -138,9 +207,9 @@ const CreateCourse = () => {
     }
 };
 
+
   return (
     <div className="flex">
-      <SideBar />
       <div className="p-6 w-lg min-h-lvh mx-40 my-40 min-w-2xl">
         <h2 className="text-3xl font-bold text-purple-600 text-center mb-6">Create Course</h2>
 
@@ -221,7 +290,7 @@ const CreateCourse = () => {
                     onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
                   >
                     <option value="">Select Difficulty</option>
-                    <option>Beginner</option>
+                    <option>Basic</option>
                     <option>Intermediate</option>
                     <option>Advanced</option>
                   </select>
@@ -324,6 +393,7 @@ const CreateCourse = () => {
         </div>
 
         <div className="mt-6 flex justify-between">
+          {step === 0 && <button onClick={() => navigate('/my-courses')} className="p-2 bg-black text-white rounded cursor pointer">Back to My Courses</button>}
           {step > 0 && <button onClick={() => setStep(step - 1)} className="p-2 bg-gray-300 rounded">Back</button>}
           {step === 2
             ? <button onClick={GenerateCourseLayout} className="p-2 bg-black text-white rounded">Generate</button>

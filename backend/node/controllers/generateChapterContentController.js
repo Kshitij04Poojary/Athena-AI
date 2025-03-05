@@ -81,18 +81,21 @@ async function getYouTubeVideo(query, durationCategory) {
         const { data } = await axios.get(YOUTUBE_URL, { params });
 
         if (data.items && data.items.length > 0) {
-            const videoId = data.items[0].id.videoId;
-            return `https://www.youtube.com/watch?v=${videoId}`;
+            const videoItem = data.items[0];
+            const videoId = videoItem.id.videoId;
+            const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+            const thumbnailUrl = videoItem.snippet.thumbnails?.high?.url || videoItem.snippet.thumbnails?.default?.url || "";
+
+            return { url: videoUrl, thumbnail: thumbnailUrl };
         }
 
-        return null;
+        return null;  // No video found
     } catch (error) {
         console.error("Error fetching video from YouTube:", error);
         throw new Error("Failed to fetch YouTube video.");
     }
 }
 
-// MAIN CONTROLLER FUNCTION
 const generateChapterContent = async (req, res) => {
     try {
         const { chapterName, about, duration, content, difficulty } = req.body;
@@ -102,7 +105,10 @@ const generateChapterContent = async (req, res) => {
         const videoDuration = getYouTubeDurationCategory(duration);
         const video = await getYouTubeVideo(chapterName, videoDuration);
 
-        res.json({ sections, video });
+        res.json({
+            sections,
+            video: video || { url: null, thumbnail: null }  // Handle if no video is found
+        });
     } catch (error) {
         console.error('Error generating chapter content:', error);
         res.status(500).json({ error: 'Failed to generate chapter content.' });
