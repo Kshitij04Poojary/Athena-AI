@@ -10,7 +10,8 @@ import {
   BookOpen, 
   ChevronLeft, 
   ChevronRight,
-  ClipboardList
+  ClipboardList,
+  BrainCircuit 
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -24,6 +25,7 @@ const SideBar = () => {
         { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
+        { name: 'Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Help', icon: HelpCircle, path: '/help' },
     ];
 

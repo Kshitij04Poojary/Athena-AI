@@ -36,12 +36,12 @@ const App = () => (
                     <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails/>} />
                     <Route path="/assessment" element={<ExamDashboard />} />
                     <Route path="/interview" element={<InterviewDashboard/>} />
+                    <Route path='/interview/:interviewId/feedback' element={<Feedback/>}/>
                     
                 </Route>
                 
                 <Route path="/interview/:interviewId" element={<StartInterview/>}/>
-                <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>
-                <Route path='/interview/:interviewId/feedback' element={<Feedback/>}/>
+                <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>                
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />
             </Routes>
