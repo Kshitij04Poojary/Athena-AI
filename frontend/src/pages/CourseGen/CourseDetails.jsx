@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useUser } from '../../context/UserContext'; // Fix: Correct hook import
+import { useUser } from '../../context/UserContext';
+import { 
+  ArrowLeft, 
+  BookOpen, 
+  Clock, 
+  Target, 
+  Layers, 
+  Star 
+} from 'lucide-react';
 
 const CourseDetails = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
-    const { user } = useUser();  // Extract user from context
+    const { user } = useUser();
     const token = user?.token;
 
     const [course, setCourse] = useState(null);
@@ -16,11 +24,12 @@ const CourseDetails = () => {
                 console.error('No auth token found');
                 return;
             }
+            console.log("Token: ",token);
 
             try {
                 const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,  // Send token here
+                        'Authorization': `Bearer ${token}`,
                     },
                 });
 
@@ -42,42 +51,94 @@ const CourseDetails = () => {
         navigate(`/course/${courseId}/chapter/${chapterId}`);
     };
 
-    if (!course) return <p>Loading...</p>;
+    if (!course) return (
+        <div className="flex justify-center items-center h-screen">
+            <div className="animate-pulse text-blue-600 text-xl">Loading Course Details...</div>
+        </div>
+    );
 
     return (
-        <div className="p-6">
-            <button
-                className="px-4 py-2 mb-4 bg-blue-500 text-white rounded hover:bg-blue-600"
-                onClick={() => navigate('/my-courses')}
-            >
-                Back to My Courses
-            </button>
-
-            <h1 className="text-3xl font-bold mb-4">{course.courseName}</h1>
-            <p><strong>Description:</strong> {course.description}</p>
-            <p><strong>Skills:</strong> {course.skills.join(', ')}</p>
-            <p><strong>Level:</strong> {course.level}</p>
-            <p><strong>Duration:</strong> {course.duration}</p>
-            <p><strong>Course Outcomes:</strong></p>
-            <ul className="list-disc pl-6">
-                {course.courseOutcomes.map((outcome, index) => (
-                    <li key={index}>{outcome}</li>
-                ))}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mt-6 mb-3">Chapters</h2>
-            <div className="space-y-4">
-                {course.chapters.map((chapter) => (
-                    <div 
-                        key={chapter._id} 
-                        className="border p-4 rounded-lg shadow cursor-pointer hover:bg-gray-100"
-                        onClick={() => handleChapterClick(chapter._id)}
-                    >
-                        <h3 className="text-xl font-semibold">{chapter.chapterName}</h3>
-                        <p><strong>About:</strong> {chapter.about}</p>
-                        <p><strong>Duration:</strong> {chapter.duration}</p>
+        <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
+            <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
+                <div className="bg-blue-600 text-white p-6">
+                    <div className="flex items-center space-x-4 mb-4">
+                        <button
+                            className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition"
+                            onClick={() => navigate('/my-courses')}
+                        >
+                            <ArrowLeft className="text-white" size={24} />
+                        </button>
+                        <h1 className="text-3xl font-bold flex-grow">{course.courseName}</h1>
                     </div>
-                ))}
+                </div>
+
+                <div className="p-8">
+                    <div className="grid md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <div className="flex items-center mb-4">
+                                <BookOpen className="mr-3 text-blue-600" size={24} />
+                                <p className="text-gray-700"><strong>Description:</strong> {course.description}</p>
+                            </div>
+                            
+                            <div className="flex items-center mb-4">
+                                <Layers className="mr-3 text-blue-600" size={24} />
+                                <p className="text-gray-700">
+                                    <strong>Skills:</strong> {course.skills.join(', ')}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center">
+                                    <Star className="mr-2 text-blue-600" size={20} />
+                                    <span><strong>Level:</strong> {course.level}</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <Clock className="mr-2 text-blue-600" size={20} />
+                                    <span><strong>Duration:</strong> {course.duration}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                            <div className="flex items-center mb-4">
+                                <Target className="mr-3 text-blue-600" size={24} />
+                                <h2 className="text-xl font-semibold">Course Outcomes</h2>
+                            </div>
+                            <ul className="list-disc pl-6 space-y-2 text-gray-700">
+                                {course.courseOutcomes.map((outcome, index) => (
+                                    <li key={index} className="pl-2">{outcome}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b pb-3">
+                        Course Chapters
+                    </h2>
+                    <div className="space-y-4">
+                        {course.chapters.map((chapter) => (
+                            <div 
+                                key={chapter._id} 
+                                className="bg-white border border-blue-100 rounded-xl p-5 
+                                           shadow-sm hover:shadow-md transition-all duration-300 
+                                           cursor-pointer hover:border-blue-300 
+                                           transform hover:-translate-y-1"
+                                onClick={() => handleChapterClick(chapter._id)}
+                            >
+                                <h3 className="text-xl font-semibold text-blue-600 mb-2">
+                                    {chapter.chapterName}
+                                </h3>
+                                <p className="text-gray-600 mb-2">
+                                    <strong>About:</strong> {chapter.about}
+                                </p>
+                                <div className="flex items-center text-gray-500">
+                                    <Clock className="mr-2" size={16} />
+                                    <span>{chapter.duration}</span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );

@@ -7,6 +7,8 @@ import skillList from "../../data/skillList";
 import axios from 'axios';
 import { useUser } from '../../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { Toaster, toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 
 const steps = [
   { id: 1, name: "Skills", icon: HiOutlineSquare3Stack3D },
@@ -21,9 +23,10 @@ const CreateCourse = () => {
   const [skills, setSkills] = useState([]);
   const [skillInput, setSkillInput] = useState("");
   const [apiResponse, setApiResponse] = useState({ courseLayout: [] });
-  
-  // New state for terms agreement
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
+  const [generatingCourse, setGeneratingCourse] = useState(false);
+  const [generatingChapters, setGeneratingChapters] = useState(false);
+
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -60,7 +63,7 @@ const CreateCourse = () => {
   };
 
   const GenerateCourseLayout = async () => {
-    setLoading(true);
+    setGeneratingCourse(true);
     try {
       const response = await fetch("http://localhost:8000/api/generate-course", {
         method: "POST",
@@ -71,33 +74,28 @@ const CreateCourse = () => {
       if (!response.ok) throw new Error("Failed to fetch course layout");
   
       const data = await response.json();
-      console.log("Generated course:", data);
-      
       setApiResponse(data);
       setStep(3);
-      // Reset terms agreement when moving to step 3
       setIsTermsAgreed(false);
+      toast.success('Course layout generated successfully!');
     } catch (error) {
       console.error("Course generation failed:", error);
-      alert("Error generating course. Please try again.");
+      toast.error('Error generating course. Please try again.');
     } finally {
-      setLoading(false);
+      setGeneratingCourse(false);
     }
   };
 
   const GenerateChapterContent = async () => {
-    setLoading(true);
+    setGeneratingChapters(true);
     try {
         if (!apiResponse.courseLayout || !apiResponse.courseLayout.Chapters?.length) {
-            alert("Please generate a course with chapters first.");
-            setLoading(false);
+            toast.error("Please generate a course with chapters first.");
+            setGeneratingChapters(false);
             return;
         }
 
         const course = apiResponse.courseLayout;
-        console.log("Generating chapters for course:", course);
-
-        const difficulty = course.Level;
         const updatedCourse = { ...course, Chapters: [...course.Chapters] };
 
         for (let i = 0; i < updatedCourse.Chapters.length; i++) {
@@ -108,7 +106,7 @@ const CreateCourse = () => {
                 about: chapter["About"],
                 duration: chapter["Duration"],
                 content: chapter["Content"],
-                difficulty: difficulty,
+                difficulty: course.Level,
             };
 
             try {
@@ -127,12 +125,11 @@ const CreateCourse = () => {
                 updatedCourse.Chapters[i] = {
                     ...chapter,
                     sections,
-                    video: video ?? { url: null, thumbnail: null },  // Ensure both url and thumbnail exist
+                    video: video ?? { url: null, thumbnail: null },
                 };
             } catch (chapterError) {
                 console.error(`Error generating content for chapter "${chapter["Chapter Name"]}":`, chapterError);
-                alert(`Failed to generate content for chapter "${chapter["Chapter Name"]}". Skipping this chapter.`);
-                // Optional: you could set a 'generationFailed' flag on the chapter if you want to display it in UI
+                toast.warning(`Failed to generate content for chapter "${chapter["Chapter Name"]}". Skipping this chapter.`);
                 updatedCourse.Chapters[i] = {
                     ...chapter,
                     sections: [],
@@ -141,17 +138,12 @@ const CreateCourse = () => {
             }
         }
 
-        console.log("Updated course with sections and videos:", updatedCourse);
-        alert("Course content generated successfully!");
-
         const token = user?.token;
         if (!token) {
-            console.error("No token found. Log in again");
-            alert("Session expired or you're not logged in. Please log in again.");
+            toast.error("Session expired or you're not logged in. Please log in again.");
             return;
         }
 
-        // ✅ Transform function to match backend's expected camelCase schema
         const transformCourse = (course) => ({
             courseName: course["Course Name"],
             description: course["Description"],
@@ -165,13 +157,12 @@ const CreateCourse = () => {
                 about: chapter["About"],
                 duration: chapter["Duration"],
                 sections: chapter.sections,
-                video: chapter.video ?? { url: null, thumbnail: null },  // Ensure video structure is consistent
+                video: chapter.video ?? { url: null, thumbnail: null },
                 isCompleted: chapter.isCompleted ?? false
             }))
         });
 
         const finalCourse = transformCourse(updatedCourse);
-        console.log("Final course:", finalCourse);
 
         try {
             const response = await axios.post(
@@ -182,34 +173,34 @@ const CreateCourse = () => {
                 }
             );
 
-            console.log("Course created successfully:", response.data);
+            toast.success("Course created successfully!");
             const courseId = response.data?.course?._id;
 
             if (courseId) {
                 navigate(`/course/${courseId}`);
             } else {
-                alert("Course created, but unable to retrieve course ID.");
+                toast.error("Course created, but unable to retrieve course ID.");
             }
         } catch (error) {
             console.error("Error creating course:", error);
             if (error.response?.status === 401) {
-                alert("Session expired. Please log in again.");
+                toast.error("Session expired. Please log in again.");
             } else {
-                alert("Failed to save course. Please try again.");
+                toast.error("Failed to save course. Please try again.");
             }
         }
 
     } catch (error) {
         console.error("Course generation failed:", error);
-        alert("Error generating course. Please try again.");
+        toast.error("Error generating course. Please try again.");
     } finally {
-        setLoading(false);
+        setGeneratingChapters(false);
     }
 };
 
-
   return (
     <div className="flex">
+    <Toaster position="top-right" richColors />
       <div className="p-6 w-lg min-h-lvh mx-40 my-40 min-w-2xl">
         <h2 className="text-3xl font-bold text-purple-600 text-center mb-6">Create Course</h2>
 
@@ -224,192 +215,245 @@ const CreateCourse = () => {
           ))}
         </div>
 
-        <div className="bg-white p-6 rounded shadow-md">
-          {step < 3 && (
-            <>
-              {step === 0 && (
-                <div>
-                  <h3 className="text-xl font-semibold">Select Skills</h3>
-                  <input
-                    type="text"
-                    placeholder="Add skill"
-                    className="mt-2 p-2 border rounded w-full"
-                    value={skillInput}
-                    onChange={(e) => setSkillInput(e.target.value)}
-                    list="skillSuggestions"
-                  />
-                  <datalist id="skillSuggestions">
-                    {skillList.filter(skill => skill.toLowerCase().includes(skillInput.toLowerCase())).map(skill => (
-                      <option key={skill} value={skill} />
-                    ))}
-                  </datalist>
-                  <button
-                    className="mt-2 p-2 bg-purple-600 text-white rounded"
-                    disabled={!skillInput.trim()}
-                    onClick={addSkill}
-                  >
-                    Add Skill
-                  </button>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {skills.map(skill => (
-                      <div key={skill} className="bg-purple-200 px-2 py-1 rounded flex items-center">
-                        {skill}
-                        <button className="ml-2 text-red-600" onClick={() => removeSkill(skill)}>x</button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {step === 1 && (
-                <div>
-                  <h3 className="text-xl font-semibold">Topic & Description</h3>
-                  <input
-                    type="text"
-                    placeholder="Topic"
-                    className="mt-2 p-2 border rounded w-full"
-                    value={formData.topic}
-                    onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
-                  />
-                  <textarea
-                    placeholder="Description"
-                    className="mt-2 p-2 border rounded w-full"
-                    rows="3"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  />
-                </div>
-              )}
-
-              {step === 2 && (
-                <div>
-                  <h3 className="text-xl font-semibold">Options</h3>
-                  <select
-                    className="mt-2 p-2 border rounded w-full"
-                    value={formData.difficulty}
-                    onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
-                  >
-                    <option value="">Select Difficulty</option>
-                    <option>Basic</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                  </select>
-                  <input
-                    type="text"
-                    placeholder="Duration"
-                    className="mt-2 p-2 border rounded w-full"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                  />
-                  <input
-                    type="number"
-                    placeholder="No. of Chapters (1-5)"
-                    className="mt-2 p-2 border rounded w-full"
-                    value={formData.noOfChp}
-                    min={1}
-                    max={5}
-                    onChange={(e) => setFormData({ ...formData, noOfChp: Number(e.target.value) })}
-                  />
-                </div>
-              )}
-            </>
-          )}
-
-          {step === 3 && apiResponse.courseLayout && Object.keys(apiResponse.courseLayout).length > 0 && (
-            <div>
-              {(() => {
-                const course = apiResponse.courseLayout;
-                return (
-                  <div className="space-y-4">
-                    <h3 className="text-2xl font-bold text-purple-600">{course["Course Name"]}</h3>
-                    
-                    <div className="bg-gray-50 p-4 rounded">
-                      <p className="text-gray-700 mb-2"><strong>Description:</strong> {course.Description}</p>
-                      
-                      <div className="mb-2">
-                        <strong>Skills:</strong>
-                        <div className="flex flex-wrap gap-2 mt-1">
-                          {course.Skills.map((skill, skillIdx) => (
-                            <span key={skillIdx} className="bg-purple-200 px-2 py-1 rounded text-sm">
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <p><strong>Level:</strong> {course.Level}</p>
-                      <p><strong>Duration:</strong> {course.Duration}</p>
-                      <p><strong>Number of Chapters:</strong> {course.NoOfChapters}</p>
-                      
-                      <div className="mt-4">
-                        <strong>Course Outcomes:</strong>
-                        <ul className="list-disc list-inside">
-                          {course["Course Outcomes"].map((outcome, outcomeIdx) => (
-                            <li key={outcomeIdx} className="text-gray-700">{outcome}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    <div className="mt-4">
-                      <h4 className="text-xl font-semibold mb-2">Chapters</h4>
-                      {course.Chapters.map((chapter, chapterIdx) => (
-                        <div key={chapterIdx} className="bg-white border rounded p-3 mb-3">
-                          <h5 className="text-lg font-medium text-purple-500">{chapter["Chapter Name"]}</h5>
-                          <p className="text-gray-600 mb-2">{chapter.About}</p>
-                          <p><strong>Duration:</strong> {chapter.Duration}</p>
-                          <div className="mt-2">
-                            <strong>Chapter Content:</strong>
-                            <ul className="list-disc list-inside">
-                              {chapter.Content.map((item, contentIdx) => (
-                                <li key={contentIdx}>{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Terms Agreement Section */}
-                    <div className="mt-4 bg-gray-100 p-4 rounded">
-                      <div className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id="terms-agreement"
-                          checked={isTermsAgreed}
-                          onChange={() => setIsTermsAgreed(!isTermsAgreed)}
-                          className="mr-2"
-                        />
-                        <label htmlFor="terms-agreement" className="text-gray-700">
-                          I understand that once the course is finalized, it cannot be deleted or edited
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          )}
-        </div>
-
-        <div className="mt-6 flex justify-between">
-          {step === 0 && <button onClick={() => navigate('/my-courses')} className="p-2 bg-black text-white rounded cursor pointer">Back to My Courses</button>}
-          {step > 0 && <button onClick={() => setStep(step - 1)} className="p-2 bg-gray-300 rounded">Back</button>}
-          {step === 2
-            ? <button onClick={GenerateCourseLayout} className="p-2 bg-black text-white rounded">Generate</button>
-            : step === 3
-              ? <button 
-                  onClick={GenerateChapterContent} 
-                  disabled={!isTermsAgreed}
-                  className={`p-2 rounded ${
-                    isTermsAgreed 
-                      ? "bg-green-600 text-white" 
-                      : "bg-green-300 text-gray-500 cursor-not-allowed"
-                  }`}
+        <div className="bg-gradient-to-br from-purple-50 to-white p-8 rounded-xl shadow-lg">
+  {step < 3 && (
+    <>
+      {step === 0 && (
+        <div className="space-y-4">
+          <h3 className="text-2xl font-bold text-purple-800 mb-4">Select Skills</h3>
+          <div className="flex space-x-2">
+            <input
+              type="text"
+              placeholder="Add skill"
+              className="flex-grow p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              list="skillSuggestions"
+            />
+            <button
+              className="bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition duration-300"
+              disabled={!skillInput.trim()}
+              onClick={addSkill}
+            >
+              Add Skill
+            </button>
+          </div>
+          <datalist id="skillSuggestions">
+            {skillList.filter(skill => skill.toLowerCase().includes(skillInput.toLowerCase())).map(skill => (
+              <option key={skill} value={skill} />
+            ))}
+          </datalist>
+          <div className="flex flex-wrap gap-2 mt-4">
+            {skills.map(skill => (
+              <div 
+                key={skill} 
+                className="bg-purple-200 px-3 py-1 rounded-full flex items-center space-x-2 text-purple-800"
+              >
+                <span>{skill}</span>
+                <button 
+                  className="text-red-500 hover:text-red-700 transition" 
+                  onClick={() => removeSkill(skill)}
                 >
-                  Finish
+                  ×
                 </button>
-              : <button onClick={() => setStep(step + 1)} className="p-2 bg-black text-white rounded" disabled={!isNextEnabled()}>Next</button>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {step === 1 && (
+        <div className="space-y-4">
+          <h3 className="text-2xl font-bold text-purple-800 mb-4">Topic & Description</h3>
+          <input
+            type="text"
+            placeholder="Topic"
+            className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            value={formData.topic}
+            onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+          />
+          <textarea
+            placeholder="Description"
+            className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            rows="4"
+            value={formData.description}
+            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          />
+        </div>
+      )}
+
+      {step === 2 && (
+        <div className="space-y-4">
+          <h3 className="text-2xl font-bold text-purple-800 mb-4">Options</h3>
+          <select
+            className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            value={formData.difficulty}
+            onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
+          >
+            <option value="">Select Difficulty</option>
+            <option>Basic</option>
+            <option>Intermediate</option>
+            <option>Advanced</option>
+          </select>
+          <input
+            type="text"
+            placeholder="Duration"
+            className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            value={formData.duration}
+            onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+          />
+          <input
+            type="number"
+            placeholder="No. of Chapters (1-5)"
+            className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+            value={formData.noOfChp}
+            min={1}
+            max={5}
+            onChange={(e) => setFormData({ ...formData, noOfChp: Number(e.target.value) })}
+          />
+        </div>
+      )}
+    </>
+  )}
+
+  {step === 3 && apiResponse.courseLayout && Object.keys(apiResponse.courseLayout).length > 0 && (
+    <div>
+      {(() => {
+        const course = apiResponse.courseLayout;
+        return (
+          <div className="space-y-6">
+            <h3 className="text-3xl font-bold text-purple-700">{course["Course Name"]}</h3>
+            
+            <div className="bg-purple-50 p-6 rounded-xl border border-purple-100">
+              <p className="text-gray-700 mb-4"><strong>Description:</strong> {course.Description}</p>
+              
+              <div className="mb-4">
+                <strong className="block mb-2">Skills:</strong>
+                <div className="flex flex-wrap gap-2">
+                  {course.Skills.map((skill, skillIdx) => (
+                    <span 
+                      key={skillIdx} 
+                      className="bg-purple-200 px-3 py-1 rounded-full text-purple-800 text-sm"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-2 text-gray-700">
+                <p><strong>Level:</strong> {course.Level}</p>
+                <p><strong>Duration:</strong> {course.Duration}</p>
+                <p><strong>Number of Chapters:</strong> {course.NoOfChapters}</p>
+              </div>
+              
+              <div className="mt-4">
+                <strong className="block mb-2">Course Outcomes:</strong>
+                <ul className="list-disc list-inside space-y-1">
+                  {course["Course Outcomes"].map((outcome, outcomeIdx) => (
+                    <li key={outcomeIdx} className="text-gray-700">{outcome}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            <div>
+              <h4 className="text-2xl font-semibold mb-4 text-purple-700">Chapters</h4>
+              {course.Chapters.map((chapter, chapterIdx) => (
+                <div 
+                  key={chapterIdx} 
+                  className="bg-white border border-purple-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md transition"
+                >
+                  <h5 className="text-xl font-semibold text-purple-600 mb-2">{chapter["Chapter Name"]}</h5>
+                  <p className="text-gray-600 mb-3">{chapter.About}</p>
+                  <p className="mb-2"><strong>Duration:</strong> {chapter.Duration}</p>
+                  <div>
+                    <strong className="block mb-2">Chapter Content:</strong>
+                    <ul className="list-disc list-inside space-y-1">
+                      {chapter.Content.map((item, contentIdx) => (
+                        <li key={contentIdx} className="text-gray-700">{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gray-100 p-4 rounded-xl">
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="terms-agreement"
+                  checked={isTermsAgreed}
+                  onChange={() => setIsTermsAgreed(!isTermsAgreed)}
+                  className="mr-3 w-5 h-5 text-purple-600 focus:ring-purple-500 border-gray-300 rounded"
+                />
+                <label 
+                  htmlFor="terms-agreement" 
+                  className="text-gray-700 select-none"
+                >
+                  I understand that once the course is finalized, it cannot be deleted or edited
+                </label>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  )}
+</div>
+
+        <div className="mt-6 flex justify-between items-center">
+          {step === 0 && <button onClick={() => navigate('/my-courses')} className="p-2 bg-black text-white rounded cursor-pointer">Back to My Courses</button>}
+          {step > 0 && <button onClick={() => setStep(step - 1)} className="p-2 bg-gray-300 rounded">Back</button>}
+          
+          {step === 2 && (
+            <button 
+              onClick={GenerateCourseLayout} 
+              disabled={generatingCourse}
+              className={`p-2 bg-black text-white rounded flex items-center ${generatingCourse ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+              {generatingCourse ? (
+                <>
+                  <Loader2 className="mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                'Generate'
+              )}
+            </button>
+          )}
+          
+          {step === 3 && (
+            <button 
+              onClick={GenerateChapterContent} 
+              disabled={!isTermsAgreed || generatingChapters}
+              className={`p-2 rounded flex items-center ${
+                isTermsAgreed && !generatingChapters
+                  ? "bg-green-600 text-white" 
+                  : "bg-green-300 text-gray-500 cursor-not-allowed"
+              }`}
+            >
+              {generatingChapters ? (
+                <>
+                  <Loader2 className="mr-2 animate-spin" />
+                  Finalizing...
+                </>
+              ) : (
+                'Finish'
+              )}
+            </button>
+          )}
+          
+          {(step === 0 || step === 1) && (
+            <button 
+              onClick={() => setStep(step + 1)} 
+              className="p-2 bg-black text-white rounded" 
+              disabled={!isNextEnabled()}
+            >
+              Next
+            </button>
+          )}
         </div>
       </div>
     </div>
