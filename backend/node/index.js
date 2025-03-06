@@ -8,23 +8,17 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRouter');
 const courseRoutes = require('./routes/courseRouter');
 const assessmentRoutes = require('./routes/assessmentRouter');
-const generateCourseRoutes = require('./routes/generateCourseRouter')
+const generateCourseRoutes = require('./routes/generateCourseRouter');
 const generateChapterContentRoutes = require('./routes/generateChapterContentRouter');
-const interviewRoutes=require('./routes/interviewRouter')
-//const fileRoutes = require('./routes/fileRouter');
-
-const app = express();
-app.use(express.json());
-app.use(cors({ origin: '*' }));
-const authRoutes = require('./routes/authRouter');
+const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
 const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
+
 const Lecture = require('./models/Lecture');
-const User = require('./models/User');
-const jwt = require('jsonwebtoken');
+const User = require('./models/UserModel');
 const Mentor = require('./models/Mentor');
 const Mentee = require('./models/Mentee');
-require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const server = http.createServer(app);
@@ -39,16 +33,16 @@ app.use(cors({
 // Connect to MongoDB
 connectDB();
 
+// API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/courses', courseRoutes);
-app.use("/api/assessment", assessmentRoutes);
+app.use('/api/assessment', assessmentRoutes);
 app.use('/api', generateCourseRoutes);
 app.use('/api', generateChapterContentRoutes);
-//app.use('/api/files', fileRoutes);
+app.use('/api/interview', interviewRoutes);
+app.use('/api/lectures', lectureRoutes);
+app.use('/api/users', mentorMenteeRouter);
 
-app.use('/api/interview',interviewRoutes)
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
@@ -79,7 +73,6 @@ io.use(async (socket, next) => {
 });
 
 // Track active users in memory
-// Participant tracking Map
 const connectedUsers = new Map();
 
 io.on('connection', (socket) => {
@@ -90,49 +83,33 @@ io.on('connection', (socket) => {
     connectedUsers.set(socket.id, { userId, role, name, socketId: socket.id });
     console.log('Connected users:', Array.from(connectedUsers.values()));
   });
-  // Join lecture room
-  socket.on('leave_lecture', async({roomId,role,userId}) => {
-    console.log(userId,"Left lecture");
-    if(role==='mentee'){
+
+  // Handle user leaving a lecture
+  socket.on('leave_lecture', async ({ roomId, role, userId }) => {
+    console.log(userId, "Left lecture");
+    if (role === 'mentee') {
       try {
-        let ment1;
-        if(role === 'mentee'){
-           ment1=await Mentee.find({ user: userId });
+        const mentee = await Mentee.findOne({ user: userId }); // Fix: Using `findOne` instead of `find`
+        if (mentee) {
+          await Lecture.findOneAndUpdate(
+            { roomId: roomId },
+            { $push: { attendance: { student: mentee._id } } },
+            { new: true }
+          );
         }
-        console.log("ment",ment1);
-        // Update leave time and duration
-        await Lecture.findOneAndUpdate(
-          { roomId:roomId },  // Find the ongoing lecture
-          { 
-              $push: { 
-                  attendance: { student: ment1._id }  // Add mentee to attendance array
-              } 
-          },
-          { new: true }  // Return the updated document
-      );
-     
       } catch (error) {
         console.error('Attendance update error:', error);
       }
     }
-    
   });
 
   // Handle disconnection
-  socket.on('disconnect', async () => {
-    // Update leave time for all lectures the user was attending
-   
+  socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.userId}`);
     connectedUsers.delete(socket.id);
     console.log('Connected users:', Array.from(connectedUsers.values()));
   });
 });
-
-// API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/lectures', lectureRoutes);
-app.use('/api/users', mentorMenteeRouter);
-
 
 // Start server
 const PORT = process.env.PORT || 8000;

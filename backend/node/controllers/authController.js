@@ -2,7 +2,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 
-const User = require('../models/User');
 const Mentor = require('../models/Mentor');
 const Mentee = require('../models/Mentee');
 exports.register = async (req, res) => {
