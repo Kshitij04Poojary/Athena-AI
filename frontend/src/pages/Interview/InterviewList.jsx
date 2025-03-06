@@ -91,11 +91,7 @@ const InterviewList = () => {
               <p className='text-gray-500 mb-6'>
                 Start your first mock interview to begin your interview preparation journey
               </p>
-              <button 
-                className='bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all'
-              >
-                Start First Interview
-              </button>
+              
             </div>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>

@@ -1,0 +1,74 @@
+/* StudentDashboard.css */
+
+/* Welcome Banner */
+.welcome-banner {
+    background-image: linear-gradient(to right, #7B61FF, #007BFF);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-size: 200% 200%;
+    animation: gradientFlow 10s ease infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Live Lecture Cards */
+.live-lecture-card {
+    border: 2px solid #fed7d7;
+    background-color: #fef2f2;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.live-lecture-card.active {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    border-color: #f87171;
+    background-color: #fee2e2;
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Tabs Styling */
+.dashboard-tab {
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.dashboard-tab:hover {
+    color: #2563eb;
+}
+
+.dashboard-tab.active {
+    color: #2563eb;
+    border-bottom: 2px solid #2563eb;
+}
+
+/* Dark Mode Support */
+.dark .welcome-banner {
+    background-image: linear-gradient(to right, #4A4E69, #22223B);
+}
+
+.dark .live-lecture-card {
+    border-color: #374151;
+    background-color: #1f2937;
+    color: white;
+}
+
+.dark .live-lecture-card.active {
+    border-color: #dc2626;
+    background-color: rgba(127, 29, 29, 0.5);
+}

@@ -2,23 +2,44 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/UserModel');
 
+const User = require('../models/User');
+const Mentor = require('../models/Mentor');
+const Mentee = require('../models/Mentee');
 exports.register = async (req, res) => {
     try {
         const { name, email, password, userType, ...rest } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) return res.status(400).json({ message: 'User already exists' });
-
+        let role = '';
+        if (userType === 'Student') {
+            role = 'mentee';
+        } else if (userType === 'Teacher') {
+            role = 'mentor';
+        }
         const hashedPassword = await bcrypt.hash(password, 12);
         const user = new User({
             name,
             email,
             password: hashedPassword,
             userType,
+            role,
             ...(userType === 'Student' ? rest : {})
         });
-
+        if(role==`mentor`){
+            const mentor = new Mentor({
+                user: user._id
+            });
+            await mentor.save();
+        }
+        if(role==`mentee`){
+            const mentee = new Mentee({
+                user: user._id
+            });
+            await mentee.save();
+        }
         await user.save();
+
         res.status(201).json({ message: 'User registered successfully' });
 
     } catch (err) {

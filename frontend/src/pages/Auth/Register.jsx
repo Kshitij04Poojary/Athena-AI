@@ -281,10 +281,10 @@ const Register = () => {
                                         name="name" 
                                         value={formData.name} 
                                         onChange={handleChange} 
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                         required
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Full Name</label>
+                                    <label className="absolute left-4 top-4 !text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Full Name</label>
                                 </div>
                                 
                                 <div className="relative">
@@ -294,10 +294,10 @@ const Register = () => {
                                         name="email" 
                                         value={formData.email} 
                                         onChange={handleChange} 
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                         required
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Email Address</label>
+                                    <label className="absolute left-4 top-4 !text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Email Address</label>
                                 </div>
                                 
                                 <div className="relative">
