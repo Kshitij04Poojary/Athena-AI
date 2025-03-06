@@ -242,7 +242,7 @@ const Register = () => {
 
                                 <motion.div
                                     className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border-2 border-green-200 cursor-pointer flex flex-col items-center"
-                                    onClick={() => handleRoleSelection('teacher')}
+                                    onClick={() => handleRoleSelection('Mentor')}
                                     variants={roleCardVariants}
                                     initial="initial"
                                     animate="animate"
