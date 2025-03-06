@@ -13,11 +13,9 @@ import Exam from './pages/Assessment/Exam';
 import ExamReview from './pages/Assessment/ExamReview';
 import MainLayout from './MainLayout';
 import ChapterDetails from './pages/CourseGen/ChapterDetails';
-import AddNewInterview from './pages/Interview/AddNewInterview';
 import StartInterview from './pages/Interview/StartInterview';
 import MainInterview from './pages/Interview/MainInterview'
 import Feedback from './pages/Interview/Feedback';
-import InterviewList from './pages/Interview/InterviewList';
 import InterviewDashboard from './pages/Interview/InterviewDashboard';
 import ProfilePage from './pages/Auth/ProfilePage'; 
 
