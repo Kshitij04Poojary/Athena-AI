@@ -119,7 +119,7 @@ const Register = () => {
     }, []);
 
     const handleRoleSelection = (selectedRole) => {
-        const formattedRole = selectedRole === 'student' ? 'Student' : 'Teacher';
+        const formattedRole = selectedRole === 'student' ? 'Student' : 'Mentor';
         setUserType(formattedRole);
         setFormData({ ...formData, userType: formattedRole });
         setStep(2);
