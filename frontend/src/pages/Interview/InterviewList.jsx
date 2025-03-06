@@ -40,13 +40,13 @@ const InterviewList = () => {
       return { totalInterviews, averageExperience };
     }, [interviewList]);
   
-    if (isLoading) {
-      return (
-        <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
-          <div className='w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse'></div>
-        </div>
-      );
-    }
+    // if (isLoading) {
+    //   return (
+    //     <div className='min-h-screen bg-gray-50 flex items-center justify-center'>
+    //       <div className='w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full animate-pulse'></div>
+    //     </div>
+    //   );
+    // }
   
     return (
       <div className='bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8'>

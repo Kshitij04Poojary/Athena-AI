@@ -50,7 +50,7 @@ exports.getMentorLectures = async (req, res) => {
         })
         .populate('mentor')
         .sort({ startTime: 1 });
-        console.log(lectures);
+        // console.log(lectures);
         res.json(lectures);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -66,7 +66,7 @@ exports.getMenteeLectures = async (req, res) => {
             populate: { path: 'user' }
         })
         .sort({ startTime: 1 });
-        console.log(lectures);
+        // console.log(lectures);
         res.json(lectures);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -160,7 +160,7 @@ exports.getLectureByRoomId = async (req, res) => {
          .populate('mentor')
             .populate('mentee')
             .exec();
-        console.log(lecture);
+        // console.log(lecture);
         if (!lecture) {
             return res.status(404).json({ message: 'Lecture not found' });
         }
@@ -189,7 +189,7 @@ exports.updateLectureStatus1 = async (req, res) => {
         { status },
         { new: true }
       ).populate('mentor').populate('mentee');
-      console.log(lecture);
+      // console.log(lecture);
   
       if (status === 'completed') {
         // Add Zego room data if needed
