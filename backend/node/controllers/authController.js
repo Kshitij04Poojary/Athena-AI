@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
         let role = '';
         if (userType === 'Student') {
             role = 'mentee';
-        } else if (userType === 'Teacher') {
+        } else if (userType === 'Mentor') {
             role = 'mentor';
         }
         const hashedPassword = await bcrypt.hash(password, 12);
