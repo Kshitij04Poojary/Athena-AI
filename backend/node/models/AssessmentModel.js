@@ -4,6 +4,7 @@ const assessmentSchema = new mongoose.Schema({
     topic: { type: String, required: true },
     questions: { type: Array, required: true }, 
     score: { type: Number, default: 0 },
+    course: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' } ,
     createdAt: { type: Date, default: Date.now }
   });
   

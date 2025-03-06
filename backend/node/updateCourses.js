@@ -2,26 +2,26 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const Course = require('./models/CourseModel');  // Adjust the path if needed
+const Assessment = require('./models/AssessmentModel');  // Adjust path if needed
 
-async function updateCourses() {
+async function updateAssessments() {
     try {
         await mongoose.connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
 
-        const result = await Course.updateMany(
-            { passedFinal: { $exists: false } },  // Only update if field doesn't exist
-            { $set: { passedFinal: false } }      // Default value
+        const result = await Assessment.updateMany(
+            { course: { $exists: false } },  // Only update if field doesn't exist
+            { $set: { course: null } }       // Set new field to null
         );
 
-        console.log(`Updated courses: ${result.modifiedCount}`);
+        console.log(`Updated assessments: ${result.modifiedCount}`);
         mongoose.disconnect();
     } catch (error) {
-        console.error('Error updating courses:', error);
+        console.error('Error updating assessments:', error);
         mongoose.disconnect();
     }
 }
 
-updateCourses();
+updateAssessments();
