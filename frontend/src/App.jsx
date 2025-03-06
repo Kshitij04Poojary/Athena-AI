@@ -23,6 +23,7 @@ import MainInterview from './pages/Interview/MainInterview'
 import Feedback from './pages/Interview/Feedback';
 import InterviewDashboard from './pages/Interview/InterviewDashboard';
 import ProfilePage from './pages/Auth/ProfilePage'; 
+import { useUser } from './context/UserContext';
 
 const App = () => (
     <UserProvider>

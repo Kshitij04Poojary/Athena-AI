@@ -193,7 +193,7 @@ exports.updateLectureStatus1 = async (req, res) => {
   
       if (status === 'completed') {
         // Add Zego room data if needed
-        lecture.recordingUrl = `zego-recording-url-${lecture.roomId}`;
+        // lecture.recordingUrl = `zego-recording-url-${lecture.roomId}`;
         await lecture.save();
       }
   
