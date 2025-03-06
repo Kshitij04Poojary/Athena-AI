@@ -82,3 +82,44 @@ router.get("/getassess/:userId", async (req, res) => {
   }
 });
 module.exports = router;
+
+router.post("/:id/course-end-assessment", async (req, res) => {
+  try {
+      const { userId, topic, courseId, skills, difficultyLevel } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      const aiPrompt = `
+          Generate a final assessment for the course on topic: "${topic}".
+          This is a ${difficultyLevel} level assessment.
+          Focus on the following skills: ${skills.join(", ")}.
+          Provide exactly 10 questions in JSON format.
+          Each question must include:
+          - The question text
+          - 4 options
+          - The correct answer.
+          No need to include a 'difficulty' key. Keep questions concise but challenging.
+      `;
+
+      const airesponse = await generateExamModel.sendMessage(aiPrompt.trim());
+
+      const examQuestions = JSON.parse(airesponse.response.text());  // Adjust if response format differs
+      console.log(examQuestions);
+
+      const newAssessment = new Assessment({
+          user: userId,
+          topic,
+          course: courseId || null,
+          questions: examQuestions
+      });
+
+      await newAssessment.save();
+      res.status(201).json(newAssessment);
+  } catch (error) {
+      console.error("Error generating exam:", error);
+      res.status(500).json({ message: "Error generating exam", error });
+  }
+});
+
+

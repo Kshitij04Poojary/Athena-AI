@@ -23,6 +23,7 @@ import MainInterview from './pages/Interview/MainInterview'
 import Feedback from './pages/Interview/Feedback';
 import InterviewDashboard from './pages/Interview/InterviewDashboard';
 import ProfilePage from './pages/Auth/ProfilePage'; 
+import CourseAssessment from './pages/CourseGen/CourseAssessment';
 import { useUser } from './context/UserContext';
 
 const App = () => (
@@ -60,6 +61,7 @@ const App = () => (
                 <Route path="/interview/:interviewId" element={<StartInterview/>}/>
                 <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>          
                 <Route path="/assessment/:examId" element={<Exam />} />
+                <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />}/>
                 <Route path="/examreview" element={<ExamReview />} />
             </Routes>
             </Router>
