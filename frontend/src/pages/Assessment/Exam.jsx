@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ExamCardItem from "./ExamCardItem";
-import QuestionNavigation from "./QuestionNavigation";
-import ResultScreen from "./ResultScreen";
+import ExamCardItem from "../../components/assessment/ExamCardItem";
+import QuestionNavigation from "../../components/assessment/QuestionNavigation";
+import ResultScreen from "../../components/assessment/ResultScreen";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 

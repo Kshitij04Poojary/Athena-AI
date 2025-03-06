@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
-import ExamReview from "./ExamReview";
+import ExamReview from "../../pages/Assessment/ExamReview";
 
 const ResultScreen = ({ score, totalQuestions,userAnswers,quiz }) => {
   const navigate = useNavigate(); // Initialize navigate function

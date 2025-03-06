@@ -31,7 +31,7 @@ const SideBar = () => {
 
     return (
         <div 
-            className={`flex max-h-screen fixed bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
+            className={`flex max-h-screen bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
                 collapsed ? 'w-20' : 'w-72'
             } h-screen flex flex-col`}
         >
