@@ -19,6 +19,7 @@ import MainInterview from './pages/Interview/MainInterview'
 import Feedback from './pages/Interview/Feedback';
 import InterviewList from './pages/Interview/InterviewList';
 import InterviewDashboard from './pages/Interview/InterviewDashboard';
+import ProfilePage from './pages/Auth/ProfilePage'; 
 
 const App = () => (
     <UserProvider>
@@ -28,12 +29,14 @@ const App = () => (
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
+                
                 <Route element={<MainLayout />}>
-                   
+
+                    <Route path="/profile" element={<ProfilePage />} />
                     <Route path="/my-courses" element={<MyCourses />} />
                     <Route path="/create-course" element={<CreateCourse />} />
-                    <Route path="/course/:courseId" element={<CourseDetails /> } />
-                    <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails/>} />
+                    <Route path="/course/:courseId" element={<CourseDetails />} />
+                    <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails />} />
                     <Route path="/assessment" element={<ExamDashboard />} />
                     <Route path="/interview" element={<InterviewDashboard/>} />
                     <Route path='/interview/:interviewId/feedback' element={<Feedback/>}/>

@@ -4,6 +4,7 @@ const userSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
     password: String,
+    phoneNumber: Number,
     userType: { type: String, enum: ['Student', 'Teacher'], required: true },
     role: { type: String, enum: ['mentor', 'mentee'], required: false },
     skills: [{
@@ -12,6 +13,8 @@ const userSchema = new mongoose.Schema({
     }],
     courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     careerGoals: [String],
+    linkedin: String,
+    github: String,
     preferences: {
         location: [String],
         preferredStipendRange: String,
