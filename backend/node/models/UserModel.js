@@ -8,8 +8,8 @@ const userSchema = new mongoose.Schema({
     userType: { type: String, enum: ['Student', 'Teacher'], required: true },
     role: { type: String, enum: ['mentor', 'mentee'], required: false },
     skills: [{
-        name: { type: String, required: true },         // Skill name (required)
-        proficiency: { type: Number, min: 0, max: 100 }  // Skill level 0-100
+        name: { type: String, required: true },         
+        proficiency: { type: Number, min: 0, max: 100 }  
     }],
     courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     careerGoals: [String],
