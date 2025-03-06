@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 
 project_recomm = Blueprint("project_recomm", __name__)
-
+from bson.objectid import ObjectId
 import random
 import requests
 import pandas as pd
@@ -64,14 +64,17 @@ def truncate_string_column(df, column_name, max_length=1000):
 @project_recomm.route("/", methods=["POST"])
 def get_projects():
     # Extracting the keywords
-    keywords = request.get_json().get("keywords")
+    user_id = request.get_json().get("user_id")
+    user = current_app.db["users"].find_one({'_id': ObjectId(user_id)})
+    # print(user["skills"])
+    keywords = user["skills"]#request.get_json().get("keywords")
     fp = ""
     for skill in keywords:
         fp += skill
     df = pd.read_csv(f"package/project-data/{fp}.csv")
 
     # Sample 5 random rows from the dataframe
-    sampled_rows = df.sample(n=5)  # Get 5 random rows from the DataFrame
+    sampled_rows = df.sample(n= min(5, len(df)))  # Get 5 random rows from the DataFrame
 
     # Function to get the project idea (accepting a positional index argument)
     def fetch_project_idea(positional_index):
@@ -100,13 +103,16 @@ def get_projects():
 @project_recomm.route("/load-projects", methods=["POST"])
 def load_df():
     # Example usage
-    keywords = request.get_json().get("keywords")
+    user_id = request.get_json().get("user_id")
+    user = current_app.db["users"].find_one({'_id': ObjectId(user_id)})
+    keywords = user["skills"]#request.get_json().get("keywords")
     # keywords = ['Web Development', 'Machine Learning', 'AI', 'Data Science']
     fp =""
     for skill in keywords:
         fp += skill
     # Get recommendations
-    recommended_projects = recommend_projects(keywords)
+    p = 10 if len(keywords) < 3 else 5
+    recommended_projects = recommend_projects(keywords, per_page=p)
 
     # Prepare DataFrame with parallel fetching of README files
     # columns = ['name', 'domain', 'owner', 'stars', 'description', 'url', 'readme']
