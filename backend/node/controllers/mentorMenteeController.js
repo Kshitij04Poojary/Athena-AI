@@ -1,6 +1,6 @@
 const Mentor = require('../models/Mentor');
 const Mentee = require('../models/Mentee');
-const User = require('../models/User');
+const User = require('../models/UserModel');
 
 // Mentor Controllers
 exports.getMentorMentees = async (req, res) => {
