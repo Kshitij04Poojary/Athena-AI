@@ -5,11 +5,11 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
     phoneNumber: Number,
-    userType: { type: String, enum: ['Student', 'Teacher'], required: true },
+    userType: { type: String, enum: ['Student', 'Mentor', 'Admin'], required: true },
     role: { type: String, enum: ['mentor', 'mentee'], required: false },
     skills: [{
         name: { type: String, required: true },         
-        proficiency: { type: Number, min: 0, max: 100 }  
+        proficiency: { type: Number, min: 0, max: 100, default: 50 }  
     }],
     courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
     careerGoals: [String],

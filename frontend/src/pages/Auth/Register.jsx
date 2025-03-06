@@ -344,17 +344,23 @@ const Register = () => {
                         </motion.div>
                     )}
 
-                    {step === 3 && userType === 'Student' && (
+                    {step === 3 && (
                         <motion.div 
-                            key="step3-student"
+                            key="step3"
                             className="space-y-6"
                             variants={formVariants}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                         >
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Tell Us About Yourself</h2>
-                            <p className="text-gray-600 mb-6">This helps us personalize your learning experience</p>
+                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                                {userType === 'Student' ? 'Tell Us About Yourself' : 'Complete Your Teacher Profile'}
+                            </h2>
+                            <p className="text-gray-600 mb-6">
+                                {userType === 'Student' 
+                                    ? 'This helps us personalize your learning experience' 
+                                    : 'Help students discover you and your expertise'}
+                            </p>
                             
                             <div className="space-y-4">
                                 <div className="relative" ref={skillInputRef}>
@@ -398,22 +404,22 @@ const Register = () => {
                                         <AnimatePresence>
                                             {formData.skills.map((skillObj, index) => (
                                                 <motion.div 
-                                                        key={`${skillObj}-${index}`}
-                                                        className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-2 rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
-                                                        variants={tagVariants}
-                                                        initial="initial"
-                                                        animate="animate"
-                                                        exit="exit"
-                                                    >
-                                                        {skillObj.name}
+                                                    key={`${skillObj.name}-${index}`}
+                                                    className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-2 rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
+                                                    variants={tagVariants}
+                                                    initial="initial"
+                                                    animate="animate"
+                                                    exit="exit"
+                                                >
+                                                    {skillObj.name}
                                                     <button 
                                                         type="button"
-                                                        onClick={() => removeSkill(skillObj.name)}
+                                                        onClick={() => removeSkill(skillObj)}
                                                         className="ml-1 bg-blue-200 hover:bg-blue-300 rounded-full p-1 text-blue-600 hover:text-blue-800 transition-colors"
                                                     >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                    </svg>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
                                                     </button>
                                                 </motion.div>
                                             ))}
@@ -428,77 +434,9 @@ const Register = () => {
                                         onChange={(e) => handleArrayChange('careerGoals', e.target.value)} 
                                         className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Career Goals (comma separated)</label>
-                                </div>
-                            </div>
-
-                            <div className="flex justify-between pt-4">
-                                <motion.button 
-                                    onClick={handlePrev} 
-                                    className="px-6 py-3 bg-gray-500 text-white rounded-lg flex items-center gap-2"
-                                    variants={buttonVariants}
-                                    whileHover="hover"
-                                    whileTap="tap"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                                    </svg>
-                                    Back
-                                </motion.button>
-                                
-                                <motion.button 
-                                    onClick={handleSubmit} 
-                                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-lg flex items-center gap-2"
-                                    variants={buttonVariants}
-                                    whileHover="hover"
-                                    whileTap="tap"
-                                    disabled={isLoading}
-                                >
-                                    {isLoading ? (
-                                        <>
-                                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                            </svg>
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            Complete Registration
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                        </>
-                                    )}
-                                </motion.button>
-                            </div>
-                        </motion.div>
-                    )}
-
-                    {step === 3 && userType === 'Teacher' && (
-                        <motion.div 
-                            key="step3-teacher"
-                            className="space-y-6"
-                            variants={formVariants}
-                            initial="initial"
-                            animate="animate"
-                            exit="exit"
-                        >
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">Complete Your Teacher Profile</h2>
-                            <p className="text-gray-600 mb-6">Help students discover you and your expertise</p>
-                            
-                            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-                                <div className="flex">
-                                    <div className="flex-shrink-0">
-                                        <svg className="h-5 w-5 text-yellow-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                                        </svg>
-                                    </div>
-                                    <div className="ml-3">
-                                        <p className="text-sm text-yellow-700">
-                                            Additional fields for teachers can go here if needed.
-                                        </p>
-                                    </div>
+                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">
+                                        {userType === 'Student' ? 'Career Goals (comma separated)' : 'Areas of Expertise (comma separated)'}
+                                    </label>
                                 </div>
                             </div>
 
