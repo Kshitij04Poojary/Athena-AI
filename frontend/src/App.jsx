@@ -45,6 +45,9 @@ const App = () => (
                 
                 <Route path="/interview/:interviewId" element={<StartInterview/>}/>
                 <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>                
+                    <Route path="/profile" element={<ProfilePage />} /> {/* Optional if you have ProfilePage */}
+                </Route>
+
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />
             </Routes>
