@@ -23,6 +23,8 @@ const SideBar = () => {
         { name: 'Profile', icon: User, path: '/profile' },
         { name: 'Courses', icon: BookOpen, path:'/my-courses'},
         { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
+        { name: 'Video Conferencing', icon: HelpCircle, path: (user?.role==='mentor'?'/mentor':'/mentee')||'/None' },
+        { name: 'Settings', icon: Settings, path: '/settings' },
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
         { name: 'Interviews', icon: BrainCircuit, path: '/interview' },

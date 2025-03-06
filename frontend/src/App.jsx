@@ -3,8 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Register from './pages/Auth/Register';
 import Login from './pages/Auth/Login';
 import Home from './pages/Home';
+import StudentDashboard from './pages/VideoConferencing/StudentDashboard';
+import ConsultationRoom from './pages/VideoConferencing/ConsultationRoom';
+import TeacherDashboard from './pages/VideoConferencing/TeacherDashboard';
 import { UserProvider } from './context/UserContext';
+// import { SocketProvider } from './context/SocketContext';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 import CreateCourse from './pages/CourseGen/CreateCourse';
 import CourseDetails from './pages/CourseGen/CourseDetails';
 import MyCourses from './pages/CourseGen/MyCourses';
@@ -21,13 +26,23 @@ import ProfilePage from './pages/Auth/ProfilePage';
 
 const App = () => (
     <UserProvider>
-        <Router>
-            <Routes>
-                <Route path="/" element={<Navigate to="/register" />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/home" element={<Home />} />
-                
+            <Router>
+                <ToastContainer />
+                <Routes>
+                    <Route path="/" element={<Navigate to="/register" />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/home" element={<Home />} />
+                    
+                    if(useUser().user.role==='mentee'){   
+                        <Route path="/mentee" element={<StudentDashboard />} />
+                    }
+                    if(useUser().user.role==='mentor'){
+                        <Route path="/mentor" element={<TeacherDashboard />} />
+                    }
+                    
+                    <Route path="/consultation-room/:roomId" element={<ConsultationRoom />} />
+                    
                 <Route element={<MainLayout />}>
 
                     <Route path="/profile" element={<ProfilePage />} />
@@ -46,7 +61,7 @@ const App = () => (
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />
             </Routes>
-        </Router>
+            </Router>
     </UserProvider>
 );
 
