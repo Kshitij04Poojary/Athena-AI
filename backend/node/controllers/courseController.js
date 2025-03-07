@@ -70,8 +70,24 @@ exports.getCourseById = async (req, res) => {
     }
 };
 
+//// Update Course
+exports.updateCourse = async (req, res) => {
+    const { courseId } = req.params;
+    const updateData = req.body;
 
-// Update Course
+    try {
+        const updatedCourse = await Course.findByIdAndUpdate(courseId, updateData, { new: true });
+        if (!updatedCourse) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+        res.status(200).json(updatedCourse);
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating course', error });
+    }
+};
+
+
+// Update Chapter
 exports.updateChapter = async (req, res) => {
     try {
         const { courseId, chapterId } = req.params;

@@ -5,15 +5,9 @@ const User = require('../models/UserModel');
 // Mentor Controllers
 exports.getMentorMentees = async (req, res) => {
     try {
-        console.log(req.user.id);
+        // console.log(req.user.id);
         const mentor = await Mentor.findOne({ user: req.user.id })
-            // .populate({
-            //     path: 'mentees',
-            //     populate: {
-            //         path: 'user',
-            //         select: 'name email userType skills courses careerGoals'
-            //     }
-            // });
+           
 
         if (!mentor) {
             return res.status(404).json({ message: 'Mentor not found' });
@@ -51,13 +45,13 @@ exports.getMentorDetails = async (req, res) => {
 exports.getMenteeMentor = async (req, res) => {
     try {
         const mentee = await Mentee.findOne({ user: req.user.id })
-            // .populate({
-            //     path: 'mentor',
-            //     populate: {
-            //         path: 'user',
-            //         select: 'name email userType skills courses achievements'
-            //     }
-            // });
+            .populate({
+                path: 'mentor',
+                populate: {
+                    path: 'user',
+                    select: 'name email userType skills courses achievements'
+                }
+            });
 
         if (!mentee || !mentee.mentor) {
             return res.status(404).json({ message: 'Mentor not found for this mentee' });

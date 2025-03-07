@@ -13,6 +13,7 @@ const generateChapterContentRoutes = require('./routes/generateChapterContentRou
 const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
 const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
+const assignmentRouter=require('./routes/assignmentRouter')
 
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
@@ -26,9 +27,14 @@ const server = http.createServer(app);
 // Middleware setup
 app.use(express.json());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  origin: [
+    process.env.FRONTEND_URL,
+    'http://localhost:5173',
+    'http://localhost:5174'
+  ],
   credentials: true
 }));
+
 
 // Connect to MongoDB
 connectDB();
@@ -42,6 +48,7 @@ app.use('/api', generateChapterContentRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/lectures', lectureRoutes);
 app.use('/api/users', mentorMenteeRouter);
+app.use('/api/assign',assignmentRouter)
 
 // Initialize Socket.IO
 const io = new Server(server, {

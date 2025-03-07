@@ -3,6 +3,7 @@ import CourseCard from '../../components/course/CourseCard';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import { PlusCircle, BookOpen } from 'lucide-react';
+import AssignedCourses from './AssignedCourses';
 
 const MyCourses = () => {
     const { user } = useUser();
@@ -51,7 +52,7 @@ const MyCourses = () => {
     return (
         <div className='bg-gray-50 min-h-screen w-full'>
             <div className="container mx-auto px-4 py-8">
-                <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+                <div className="bg-white shadow-xl rounded-2xl overflow-visible">
                     <div className="p-6 bg-gradient-to-r from-blue-600 to-purple-600">
                         <div className="flex justify-between items-center">
                             <h2 className="text-3xl font-extrabold text-white flex items-center gap-3">
@@ -96,6 +97,9 @@ const MyCourses = () => {
                         )}
                     </div>
                 </div>
+                {
+                    user?.userType!='Mentor' && <AssignedCourses />
+                }                
             </div>
         </div>
     );

@@ -156,14 +156,14 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
              <div className="container mx-auto px-4 py-8">
                 {/* Welcome Banner */}
                 <div className="welcome-banner mb-8">
-      <h1 className="text-4xl font-bold mb-2">{user?.name}</h1>
+      <h1 className="text-4xl  font-bold mb-2">{user?.name}</h1>
       <p className="text-lg">Track your learning progress</p>
     </div>
                 <div className="max-w-7xl mx-auto">
                     {/* Header with Mentor Info */}
                     <div className="mb-8">
-                        <h1 className="text-4xl font-bold text-gray-500 mb-2">Welcome Back!</h1>
-                        <p className="text-gray-600">Track your learning progress and upcoming lectures</p>
+                        <h1 className="text-4xl font-bold text-gray-400 mb-2">Welcome Back!</h1>
+                        {/* <p className="text-gray-600">Track your learning progress and upcoming lectures</p> */}
                     </div>
 
                     {/* Mentor Card */}
@@ -175,11 +175,11 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
                             </h2>
                             <div className="flex items-center gap-6">
                                 <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                                    {mentor.name}
+                                    {mentor.user.name}
                                 </div>
                                 <div>
-                                    <h3 className="text-2xl font-semibold text-gray-800">{mentor.name}</h3>
-                                    <p className="text-gray-600">{mentor.email}</p>
+                                    <h3 className="text-2xl font-semibold text-gray-800">{mentor.user.name}</h3>
+                                    <p className="text-gray-600">{mentor.user.email}</p>
                                     <div className="mt-2 flex gap-2">
                                         <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
                                             Expert Mentor
@@ -228,36 +228,7 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
                         </DashboardCard>
 
                         {/* Tabs for different views */}
-                        <DashboardCard className="p-6">
-            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Video size={24} className="text-red-600" />
-                Live Lectures
-            </h2>
-            <div className="space-y-4">
-                {liveLectures.map(lecture => (
-                    <div 
-                        key={lecture.lectureId} 
-                        className={`live-lecture-card ${liveLectures.length > 0 ? 'active' : ''}`}
-                    >
-                        <div className="flex justify-between items-center">
-                            <div>
-                                <h3 className="font-semibold">{lecture.title}</h3>
-                                <p className="text-sm text-red-600">Live Now!</p>
-                            </div>
-                            <button
-                                onClick={() => joinLecture(lecture)}
-                                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                            >
-                                Join Now
-                            </button>
-                        </div>
-                    </div>
-                ))}
-                {liveLectures.length === 0 && (
-                    <p className="text-gray-500 text-center">No live lectures at the moment</p>
-                )}
-            </div>
-        </DashboardCard>
+                      
     
                             {/* Tab Content */}
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">

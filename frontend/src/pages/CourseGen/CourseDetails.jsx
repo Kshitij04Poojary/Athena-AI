@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-import { 
-  ArrowLeft, 
-  BookOpen, 
-  Clock, 
-  Target, 
-  Layers, 
-  Star 
+import {
+    ArrowLeft,
+    BookOpen,
+    Clock,
+    Target,
+    Layers,
+    Star,
+    Lock,
+    Unlock,
+    CheckCircle
 } from 'lucide-react';
 
 const CourseDetails = () => {
@@ -17,45 +20,96 @@ const CourseDetails = () => {
     const token = user?.token;
 
     const [course, setCourse] = useState(null);
+    const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
 
     useEffect(() => {
-        const fetchCourseDetails = async () => {
-            if (!token) {
-                console.error('No auth token found');
-                return;
-            }
-            console.log("Token: ",token);
-
-            try {
-                const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setCourse(data);
-                } else {
-                    console.error('Failed to fetch course data');
-                }
-            } catch (error) {
-                console.error('Error fetching course data:', error);
-            }
-        };
-
+        if (!token) {
+            console.error('No auth token found');
+            return;
+        }
         fetchCourseDetails();
+        checkFinalAssessment();
     }, [courseId, token]);
+
+    const fetchCourseDetails = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setCourse(data);
+            } else {
+                console.error('Failed to fetch course data');
+            }
+        } catch (error) {
+            console.error('Error fetching course data:', error);
+        }
+    };
+
+    const checkFinalAssessment = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/assessment/${courseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const assessments = await response.json();
+                if (assessments.length > 0) {
+                    const bestScore = Math.max(...assessments.map(a => a.score || 0));
+                    setBestAssessmentScore(bestScore);
+
+                    if (bestScore >= 70 && course?.passedFinal === false) {
+                        await updateCoursePassedFinal(true);
+                        fetchCourseDetails();
+                    }
+                }
+            } else {
+                console.log('No assessments found for this course.');
+            }
+        } catch (error) {
+            console.error('Error fetching assessments:', error);
+        }
+    };
+
+    const updateCoursePassedFinal = async (status) => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ passedFinal: status }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to update course passedFinal status');
+            }
+        } catch (error) {
+            console.error('Error updating course status:', error);
+        }
+    };
 
     const handleChapterClick = (chapterId) => {
         navigate(`/course/${courseId}/chapter/${chapterId}`);
     };
 
-    if (!course) return (
-        <div className="flex justify-center items-center h-screen">
-            <div className="animate-pulse text-blue-600 text-xl">Loading Course Details...</div>
-        </div>
-    );
+    const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
+    const { passedFinal } = course || {};
+
+    if (!course) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <div className="animate-pulse text-blue-600 text-xl">Loading Course Details...</div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
@@ -79,7 +133,7 @@ const CourseDetails = () => {
                                 <BookOpen className="mr-3 text-blue-600" size={24} />
                                 <p className="text-gray-700"><strong>Description:</strong> {course.description}</p>
                             </div>
-                            
+
                             <div className="flex items-center mb-4">
                                 <Layers className="mr-3 text-blue-600" size={24} />
                                 <p className="text-gray-700">
@@ -117,8 +171,8 @@ const CourseDetails = () => {
                     </h2>
                     <div className="space-y-4">
                         {course.chapters.map((chapter) => (
-                            <div 
-                                key={chapter._id} 
+                            <div
+                                key={chapter._id}
                                 className="bg-white border border-blue-100 rounded-xl p-5 
                                            shadow-sm hover:shadow-md transition-all duration-300 
                                            cursor-pointer hover:border-blue-300 
@@ -137,6 +191,48 @@ const CourseDetails = () => {
                                 </div>
                             </div>
                         ))}
+                    </div>
+
+                    {/* Final Assessment Section */}
+                    <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700 border-b pb-3">
+                        Final Assessment
+                    </h2>
+
+                    <div
+                        className={`flex items-center justify-between p-5 rounded-xl shadow-md border
+                                    ${passedFinal
+                                        ? 'bg-green-50 border-green-200 text-green-700'
+                                        : allChaptersCompleted
+                                            ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
+                                            : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
+                                    }`}
+                        onClick={() => {
+                            if (allChaptersCompleted) {
+                                navigate(`/course/${courseId}/course-assessment`, {
+                                    state: {
+                                        topic: course.courseName,
+                                        skills: course.skills,
+                                        difficultyLevel: course.level,
+                                    }
+                                });
+                            }
+                        }}
+                    >
+                        <div className="flex items-center space-x-3">
+                            {passedFinal ? (
+                                <CheckCircle size={24} className="text-green-600" />
+                            ) : allChaptersCompleted ? (
+                                <Unlock size={24} className="text-blue-600" />
+                            ) : (
+                                <Lock size={24} className="text-gray-500" />
+                            )}
+                            <span className="font-medium text-lg">
+                                {course.courseName} Final Assessment
+                            </span>
+                        </div>
+                        <span className="font-semibold">
+                            {passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}
+                        </span>
                     </div>
                 </div>
             </div>

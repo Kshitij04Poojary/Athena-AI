@@ -37,6 +37,9 @@ const courseSchema = new mongoose.Schema({
     },
     video: { type: Boolean, default: true },
     certificate: { type: String },
+    passedFinal: { type: Boolean, default: false },
+    assignedMentees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mentee' }],
+    assignedMentor: { type: mongoose.Schema.Types.ObjectId, ref: 'Mentor' },  // Track the mentor
 }, { timestamps: true });
 
 module.exports = mongoose.model('Course', courseSchema);

@@ -10,7 +10,6 @@ const menteeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Mentor'
   },
-  learningGoals: [String],
   progress: {
     totalHoursLearned: {
       type: Number,
@@ -25,10 +24,7 @@ const menteeSchema = new mongoose.Schema({
       default: 0
     }
   },
-  preferences: {
-    preferredTiming: [String],
-    topics: [String]
-  }
+ 
 }, { timestamps: true });
 
 const Mentee =mongoose.model('Mentee', menteeSchema);

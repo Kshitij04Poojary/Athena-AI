@@ -29,7 +29,7 @@ const mentorSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Mentee'
     },
-    rating: Number,
+  rating: Number,
     comment: String,
     date: {
       type: Date,
