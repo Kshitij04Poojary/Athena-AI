@@ -20,35 +20,81 @@ const CourseDetails = () => {
     const token = user?.token;
 
     const [course, setCourse] = useState(null);
+    const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
 
     useEffect(() => {
-        const fetchCourseDetails = async () => {
-            if (!token) {
-                console.error('No auth token found');
-                return;
-            }
-            console.log("Token: ", token);
-
-            try {
-                const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setCourse(data);
-                } else {
-                    console.error('Failed to fetch course data');
-                }
-            } catch (error) {
-                console.error('Error fetching course data:', error);
-            }
-        };
-
+        if (!token) {
+            console.error('No auth token found');
+            return;
+        }
         fetchCourseDetails();
+        checkFinalAssessment();
     }, [courseId, token]);
+
+    const fetchCourseDetails = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setCourse(data);
+            } else {
+                console.error('Failed to fetch course data');
+            }
+        } catch (error) {
+            console.error('Error fetching course data:', error);
+        }
+    };
+
+    const checkFinalAssessment = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/assessment/${courseId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (response.ok) {
+                const assessments = await response.json();
+                if (assessments.length > 0) {
+                    const bestScore = Math.max(...assessments.map(a => a.score || 0));
+                    setBestAssessmentScore(bestScore);
+
+                    if (bestScore >= 70 && course?.passedFinal === false) {
+                        await updateCoursePassedFinal(true);
+                        fetchCourseDetails();
+                    }
+                }
+            } else {
+                console.log('No assessments found for this course.');
+            }
+        } catch (error) {
+            console.error('Error fetching assessments:', error);
+        }
+    };
+
+    const updateCoursePassedFinal = async (status) => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ passedFinal: status }),
+            });
+
+            if (!response.ok) {
+                console.error('Failed to update course passedFinal status');
+            }
+        } catch (error) {
+            console.error('Error updating course status:', error);
+        }
+    };
 
     const handleChapterClick = (chapterId) => {
         navigate(`/course/${courseId}/chapter/${chapterId}`);
@@ -160,17 +206,17 @@ const CourseDetails = () => {
                                             ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
                                             : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
                                     }`}
-                                    onClick={() => {
-                                        if (allChaptersCompleted) {
-                                            navigate(`/course/${courseId}/course-assessment`, {
-                                                state: {
-                                                    topic: course.courseName,
-                                                    skills: course.skills,
-                                                    difficultyLevel: course.level,
-                                                }
-                                            });
-                                        }
-                                    }}
+                        onClick={() => {
+                            if (allChaptersCompleted) {
+                                navigate(`/course/${courseId}/course-assessment`, {
+                                    state: {
+                                        topic: course.courseName,
+                                        skills: course.skills,
+                                        difficultyLevel: course.level,
+                                    }
+                                });
+                            }
+                        }}
                     >
                         <div className="flex items-center space-x-3">
                             {passedFinal ? (
@@ -185,11 +231,7 @@ const CourseDetails = () => {
                             </span>
                         </div>
                         <span className="font-semibold">
-                            {passedFinal
-                                ? "Completed"
-                                : allChaptersCompleted
-                                    ? "Unlocked"
-                                    : "Locked"}
+                            {passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}
                         </span>
                     </div>
                 </div>

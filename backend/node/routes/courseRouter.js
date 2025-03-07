@@ -3,6 +3,7 @@ const {
     createCourse,
     getAllCourses,
     getCourseById,
+    updateCourse,
     updateChapter,
     deleteCourse,
     getChapterById,
@@ -94,6 +95,7 @@ router.get('/get-assigned/:courseId', async (req, res) => {
 });
 router.get('/:id', authMiddleware, getCourseById);                        // Public - Get single course
 router.put('/:courseId/chapters/:chapterId', authMiddleware, updateChapter);         // Update (requires auth)
+router.put('/:courseId', updateCourse);
 router.delete('/:id', authMiddleware, deleteCourse);      // Delete (requires auth)
 router.get('/:courseId/chapters/:chapterId', getChapterById);
 router.get('/:courseId/chapters/:chapterId/sections/:sectionId', getSectionById);

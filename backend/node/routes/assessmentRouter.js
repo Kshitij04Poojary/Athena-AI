@@ -122,4 +122,21 @@ router.post("/:id/course-end-assessment", async (req, res) => {
   }
 });
 
+//GET course assessments
+router.get("/:courseId", async (req, res) => {
+  try {
+      const { courseId } = req.params;
+
+      const assessments = await Assessment.find({ course: courseId });
+
+      if (assessments.length === 0) {
+          return res.status(404).json({ message: "No assessments found for this course." });
+      }
+
+      res.json(assessments);
+  } catch (error) {
+      console.error("Error fetching assessments by courseId:", error);
+      res.status(500).json({ message: "Server error", error });
+  }
+});
 
