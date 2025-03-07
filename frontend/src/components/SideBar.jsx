@@ -11,7 +11,8 @@ import {
   ChevronLeft, 
   ChevronRight,
   ClipboardList,
-  BrainCircuit 
+  BrainCircuit,
+  Briefcase 
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -28,7 +29,7 @@ const SideBar = () => {
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
         { name: 'Interviews', icon: BrainCircuit, path: '/interview' },
-        { name: 'Help', icon: HelpCircle, path: '/help' },
+        { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
 
     return (

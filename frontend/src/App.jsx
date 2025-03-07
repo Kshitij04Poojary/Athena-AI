@@ -27,6 +27,7 @@ import Similarity from './pages/MentorMenteeConnect/Similarity';
 import AIProjectRecommendations from './pages/ProjectRecommendation/AIProjectRecommendations';
 import CourseAssessment from './pages/CourseGen/CourseAssessment';
 import { useUser } from './context/UserContext';
+import InternshipListings from './components/InternshipListings';
 
 
 const App = () => (
@@ -60,6 +61,7 @@ const App = () => (
                     <Route path="/assessment" element={<ExamDashboard />} />
                     <Route path="/interview" element={<InterviewDashboard />} />
                     <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
+                    <Route path='/internships' element={<InternshipListings/>}/>
 
                 </Route>
 
