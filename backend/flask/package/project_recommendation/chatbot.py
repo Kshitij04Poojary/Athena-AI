@@ -1,10 +1,11 @@
 import json
 import re
+import os
 from groq import Groq
 import random
 
 def chat(data):
-    client = Groq(api_key="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")
+    client = Groq(api_key=os.getenv("GROQ_API"))
     completion = client.chat.completions.create(
         model="mixtral-8x7b-32768",
         messages=[
