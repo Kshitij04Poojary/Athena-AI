@@ -72,7 +72,7 @@ const CourseAssessment = () => {
       }
     });
     setScore(totalScore);
-    return totalScore;
+    return totalScore*10;
   };
 
   const handleSubmit = async () => {
