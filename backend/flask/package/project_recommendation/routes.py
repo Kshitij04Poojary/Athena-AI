@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
-
+import json
+import ast
 project_recomm = Blueprint("project_recomm", __name__)
 from bson.objectid import ObjectId
 import random
@@ -26,7 +27,7 @@ def search_github_projects(keyword, sort='stars', order='desc', per_page=8):
             "stars": repo["stargazers_count"],
             # "description": repo.get("description", "No description available"),
             "url": repo["html_url"],
-            "domain": keyword
+            "domain": json.loads(keyword)
         } for repo in response.json().get("items", [])]
     else:
         print(f"Error fetching data: {response.status_code}")
@@ -70,7 +71,8 @@ def get_projects():
     keywords = user["skills"]#request.get_json().get("keywords")
     fp = ""
     for skill in keywords:
-        fp += skill
+        print(skill)
+        fp += skill["name"]
     df = pd.read_csv(f"package/project-data/{fp}.csv")
 
     # Sample 5 random rows from the dataframe
@@ -78,16 +80,30 @@ def get_projects():
 
     # Function to get the project idea (accepting a positional index argument)
     def fetch_project_idea(positional_index):
+        # Get the 'readme' and 'domain' from the row
         readme = sampled_rows.iloc[positional_index]["readme"]
         domain = sampled_rows.iloc[positional_index]["domain"]  # Extract the domain for the current row
         
+        # Parse the domain string to a Python dictionary
+        domain = domain.replace("'", '"')  # Ensure the string is valid JSON (replace single quotes with double quotes)
+        domain = domain.replace('ObjectId', '')  # Remove ObjectId
+        domain = domain.replace('(', '').replace(')', '')  # Clean up any remaining parentheses
+        
+        # Safely evaluate the string into a Python dictionary
+        domain_dict = ast.literal_eval(domain)
+        
+        # Extract only the 'name' from the domain, assuming 'name' holds the title you need
+        domain_title = domain_dict.get('name', None)
+
+        # Fetch response from the chat function
         response = chat(readme)
-        # print("Response from chat:", response)
+        
+        # Return the final dictionary including the parsed domain title
         return {
             "title": response["title"],
             "description": response["description"],
             "key_features": response["key_features"],
-            "domain": domain  # Include the domain in the response
+            "domain": domain_title  # Include only the 'name' from the domain
         }
 
     # Using ThreadPoolExecutor to fetch 5 responses in parallel
@@ -109,7 +125,7 @@ def load_df():
     # keywords = ['Web Development', 'Machine Learning', 'AI', 'Data Science']
     fp =""
     for skill in keywords:
-        fp += skill
+        fp += skill["name"]
     # Get recommendations
     p = 10 if len(keywords) < 3 else 5
     recommended_projects = recommend_projects(keywords, per_page=p)

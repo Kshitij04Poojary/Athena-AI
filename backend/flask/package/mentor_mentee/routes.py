@@ -19,7 +19,7 @@ def get_score():
 
     # Query to find the mentor
     mentors = list(users.find({"userType": "Mentor"}))
-    print("Mentors are: ", mentors)
+    # print("Mentors are: ", mentors)
     mentee = user
     # print("Mentors are: ")
     # for mentor in mentors:
@@ -31,12 +31,12 @@ def get_score():
             mentee_skills += ", "
         mentee_skills += skill["name"]
     mentee_texts = [mentee_skills]
-    print("Mentee text: ",mentee_texts)
+    # print("Mentee text: ",mentee_texts)
 
 
     mentor_texts = []
     for mentor in mentors:
-        print(mentor["name"])
+        # print(mentor["name"])
         mentor_skills = ""
         for skill in mentor["skills"]:
             if mentor_skills != "":
@@ -45,17 +45,17 @@ def get_score():
         mentor_texts.append(mentor_skills)
 
     # mentor_texts = [mentor['skills'] for mentor in mentors]
-    print("Mentor text: ",mentor_texts)
+    # print("Mentor text: ",mentor_texts)
     mentee_embeddings = model.encode(mentee_texts)
     mentor_embeddings = model.encode(mentor_texts)
-    print("Mentee Embeddings:", mentee_embeddings)
-    print("Mentor Embeddings:", mentor_embeddings)
+    # print("Mentee Embeddings:", mentee_embeddings)
+    # print("Mentor Embeddings:", mentor_embeddings)
 
     # Compute similarity scores
     similarity_matrix = cosine_similarity(mentee_embeddings, mentor_embeddings)
-    print(similarity_matrix)
+    # print(similarity_matrix)
     # Add similarity scores to the mentor objects
-    print("Mentors are: ", len(mentors))
+    # print("Mentors are: ", len(mentors))
 
     i=0
     filtered_mentors = []
@@ -71,7 +71,7 @@ def get_score():
         filtered_mentors.append(filtered_mentor)
         i+=1
 
-    print("Filtered mentors are: ",filtered_mentors)
+    # print("Filtered mentors are: ",filtered_mentors)
 
     sorted_mentors = sorted(filtered_mentors, key=lambda x: x['similarity_score'], reverse=True)
     # print(filtered_mentor)

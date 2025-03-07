@@ -22,27 +22,31 @@ import StartInterview from './pages/Interview/StartInterview';
 import MainInterview from './pages/Interview/MainInterview'
 import Feedback from './pages/Interview/Feedback';
 import InterviewDashboard from './pages/Interview/InterviewDashboard';
-import ProfilePage from './pages/Auth/ProfilePage'; 
+import ProfilePage from './pages/Auth/ProfilePage';
+import Similarity from './pages/MentorMenteeConnect/Similarity';
+import AIProjectRecommendations from './pages/ProjectRecommendation/AIProjectRecommendations';
 
 const App = () => (
     <UserProvider>
-            <Router>
-                <ToastContainer />
-                <Routes>
-                    <Route path="/" element={<Navigate to="/register" />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/home" element={<Home />} />
-                    
-                    if(useUser().user.role==='mentee'){   
+        <Router>
+            <ToastContainer />
+            <Routes>
+                <Route path="/" element={<Navigate to="/register" />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/home" element={<Home />} />
+
+                if(useUser().user.role==='mentee'){
+                    <>
                         <Route path="/mentee" element={<StudentDashboard />} />
-                    }
-                    if(useUser().user.role==='mentor'){
-                        <Route path="/mentor" element={<TeacherDashboard />} />
-                    }
-                    
-                    <Route path="/consultation-room/:roomId" element={<ConsultationRoom />} />
-                    
+                    </>
+                }
+                if(useUser().user.role==='mentor'){
+                    <Route path="/mentor" element={<TeacherDashboard />} />
+                }
+
+                <Route path="/consultation-room/:roomId" element={<ConsultationRoom />} />
+
                 <Route element={<MainLayout />}>
 
                     <Route path="/profile" element={<ProfilePage />} />
@@ -51,17 +55,20 @@ const App = () => (
                     <Route path="/course/:courseId" element={<CourseDetails />} />
                     <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails />} />
                     <Route path="/assessment" element={<ExamDashboard />} />
-                    <Route path="/interview" element={<InterviewDashboard/>} />
-                    <Route path='/interview/:interviewId/feedback' element={<Feedback/>}/>
-                    
+                    <Route path="/interview" element={<InterviewDashboard />} />
+                    <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
+
                 </Route>
-                
-                <Route path="/interview/:interviewId" element={<StartInterview/>}/>
-                <Route path='/interview/:interviewId/start' element={<MainInterview/>}/>          
+
+                <Route path="/interview/:interviewId" element={<StartInterview />} />
+                <Route path='/interview/:interviewId/start' element={<MainInterview />} />
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/examreview" element={<ExamReview />} />
+                <Route path='/similarity' element={<Similarity/>}/>
+                <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
+
             </Routes>
-            </Router>
+        </Router>
     </UserProvider>
 );
 
