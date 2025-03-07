@@ -7,9 +7,9 @@ const Home = () => {
     const { user } = useUser();
     console.log(user);
     return (
-        <div className="flex min-h-max bg-gradient-to-br from-gray-50 to-gray-100 min-w-full">
+        <div className="flex min-h-max bg-gradient-to-br from-gray-50 to-gray-100">
             <SideBar />
-            <main className="flex-1 p-8 transition-all duration-300 min-w-full">
+            <main className="flex-1 p-8 transition-all duration-300">
                 <div className="max-w-5xl mx-auto">
                     <header className="mb-12">
                         <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome, {user?.name || 'Explorer'}!</h1>

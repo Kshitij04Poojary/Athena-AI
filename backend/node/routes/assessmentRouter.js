@@ -123,7 +123,7 @@ router.post("/:id/course-end-assessment", async (req, res) => {
 });
 
 //GET course assessments
-router.get("/:courseId", async (req, res) => {
+router.get("a/:courseId", async (req, res) => {
   try {
       const { courseId } = req.params;
 
