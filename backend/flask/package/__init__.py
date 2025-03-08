@@ -25,11 +25,13 @@ def create_app():
     from package.mentor_mentee.routes import mentor_mentee
     from package.internships.routes import internship_bp
     from package.users.routes import user_bp
+    from package.genetic_algorithm.routes import genetic_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(project_recomm, url_prefix="/recommendations")
     app.register_blueprint(mentor_mentee, url_prefix="/mentor-mentee")
     app.register_blueprint(internship_bp, url_prefix="/api/internships")
     app.register_blueprint(user_bp, url_prefix="/users")
+    app.register_blueprint(genetic_bp, url_prefix="/genetic-algorithm")
 
     return app
