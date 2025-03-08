@@ -3,11 +3,12 @@ import { motion } from 'framer-motion';
 import { Edit2, BookOpen, Briefcase, Award, Target, ArrowLeft } from 'lucide-react';
 
 const MenteeProfileView = ({ profile, onEdit, onBack }) => {
+    console.log(profile);
     return (
-        <div className="max-w-4xl mx-auto p-6 space-y-8">
+        <div className="max-w-4xl mx-auto p-6 space-y-8 student-dashboard min-h-screen">
             {/* Profile Header */}
             <div className="flex justify-between items-start">
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -19,8 +20,8 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                     <h1 className="text-3xl font-bold bg-blue-600 bg-clip-text text-transparent">
                         My Profile
                     </h1>
-                </div>
-                <motion.button
+                </div> */}
+                {/* <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={onEdit}
@@ -28,7 +29,7 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                 >
                     <Edit2 size={18} />
                     Edit Profile
-                </motion.button>
+                </motion.button> */}
             </div>
 
             {/* Academic Information */}
@@ -41,28 +42,28 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                     {/* Class 10 */}
                     <div>
                         <h3 className="font-medium text-gray-700 mb-2">Class 10</h3>
-                        <p className="text-gray-900">{profile.academics.class10.school}</p>
-                        <p className="text-gray-600">Percentage: {profile.academics.class10.percentage}%</p>
-                        <p className="text-gray-600">Year: {profile.academics.class10.yearOfCompletion}</p>
+                        <p className="text-gray-900">{profile?.academics?.class10?.school}</p>
+                        <p className="text-gray-600">Percentage: {profile?.academics?.class10?.percentage}%</p>
+                        <p className="text-gray-600">Year: {profile?.academics?.class10?.yearOfCompletion}</p>
                     </div>
 
                     {/* Class 12 */}
                     <div>
                         <h3 className="font-medium text-gray-700 mb-2">Class 12</h3>
-                        <p className="text-gray-900">{profile.academics.class12.school}</p>
-                        <p className="text-gray-600">Percentage: {profile.academics.class12.percentage}%</p>
-                        <p className="text-gray-600">Year: {profile.academics.class12.yearOfCompletion}</p>
+                        <p className="text-gray-900">{profile?.academics?.class12.school}</p>
+                        <p className="text-gray-600">Percentage: {profile?.academics?.class12.percentage}%</p>
+                        <p className="text-gray-600">Year: {profile?.academics?.class12.yearOfCompletion}</p>
                     </div>
 
                     {/* Current Education */}
                     <div className="md:col-span-2">
                         <h3 className="font-medium text-gray-700 mb-2">Current Education</h3>
-                        <p className="text-gray-900">{profile.academics.currentEducation.institution}</p>
+                        <p className="text-gray-900">{profile?.academics?.currentEducation?.institution}</p>
                         <p className="text-gray-600">
-                            {profile.academics.currentEducation.course} - {profile.academics.currentEducation.specialization}
+                            {profile?.academics?.currentEducation?.course} - {profile?.academics?.currentEducation?.specialization}
                         </p>
                         <p className="text-gray-600">
-                            Year: {profile.academics.currentEducation.yearOfStudy} | CGPA: {profile.academics.currentEducation.cgpa}
+                            Year: {profile?.academics?.currentEducation?.yearOfStudy} | CGPA: {profile?.academics?.currentEducation?.cgpa}
                         </p>
                     </div>
                 </div>
@@ -76,16 +77,16 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                 </h2>
 
                 {/* Extracurricular Activities */}
-                {profile.extracurricular?.length > 0 && (
+                {profile?.extracurricular?.length > 0 && (
                     <div className="mb-6">
                         <h3 className="font-medium text-gray-700 mb-4">Extracurricular Activities</h3>
                         <div className="space-y-4">
                             {profile.extracurricular.map((activity, index) => (
                                 <div key={index} className="p-4 bg-white/50 rounded-lg">
-                                    <h4 className="font-medium">{activity.activity}</h4>
-                                    <p className="text-gray-600">{activity.role}</p>
-                                    <p className="text-sm text-gray-500">{activity.duration}</p>
-                                    <p className="text-sm text-gray-600 mt-2">{activity.description}</p>
+                                    <h4 className="font-medium">{activity?.activity}</h4>
+                                    <p className="text-gray-600">{activity?.role}</p>
+                                    <p className="text-sm text-gray-500">{activity?.duration}</p>
+                                    <p className="text-sm text-gray-600 mt-2">{activity?.description}</p>
                                 </div>
                             ))}
                         </div>
@@ -93,7 +94,7 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                 )}
 
                 {/* Internships */}
-                {profile.internships?.length > 0 && (
+                {profile?.internships?.length > 0 && (
                     <div className="mb-6">
                         <h3 className="font-medium text-gray-700 mb-4">Internships</h3>
                         <div className="space-y-4">
@@ -110,7 +111,7 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                 )}
 
                 {/* Achievements */}
-                {profile.achievements?.length > 0 && (
+                {profile?.achievements?.length > 0 && (
                     <div>
                         <h3 className="font-medium text-gray-700 mb-4">Achievements</h3>
                         <div className="space-y-4">
@@ -141,7 +142,7 @@ const MenteeProfileView = ({ profile, onEdit, onBack }) => {
                         <h3 className="font-medium text-gray-700 mb-2">Long Term Goals</h3>
                         <p className="text-gray-600">{profile.futureGoals.longTerm}</p>
                     </div>
-                    {profile.futureGoals.dreamCompanies?.length > 0 && (
+                    {profile?.futureGoals?.dreamCompanies?.length > 0 && (
                         <div>
                             <h3 className="font-medium text-gray-700 mb-2">Dream Companies</h3>
                             <div className="flex flex-wrap gap-2">
