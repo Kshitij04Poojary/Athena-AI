@@ -9,6 +9,7 @@ import {
     Code, 
     BookOpen 
 } from 'lucide-react';
+import Chatbot from '../../components/Chatbot';
 
 const ChapterDetails = () => {
     const { courseId, chapterId } = useParams();
@@ -216,6 +217,7 @@ const ChapterDetails = () => {
                     </div>
                 </div>
             </div>
+            <Chatbot/>
         </div>
     );
 };

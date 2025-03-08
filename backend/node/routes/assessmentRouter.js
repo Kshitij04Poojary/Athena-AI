@@ -128,7 +128,7 @@ router.get("/course/:courseId", authMiddleware, async (req, res) => {
   try {
       const { courseId } = req.params;
       const userId = req.user.id;  // Assuming you have user authentication middleware
-      console.log("Fetching assessments for user:", userId, "and course:", courseId);
+      // console.log("Fetching assessments for user:", userId, "and course:", courseId);
       const assessments = await Assessment.find({ course: courseId, user: userId });
 
       if (assessments.length === 0) {
