@@ -14,6 +14,7 @@ const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
 const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
 const assignmentRouter=require('./routes/assignmentRouter')
+const assignedCourseRouter = require('./routes/assignedCourseRouter');
 
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
@@ -48,13 +49,14 @@ app.use('/api', generateChapterContentRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/lectures', lectureRoutes);
 app.use('/api/users', mentorMenteeRouter);
-app.use('/api/assign',assignmentRouter)
+app.use('/api/assign',assignmentRouter);
+app.use('/api/assigned',assignedCourseRouter);
 
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH'],
     credentials: true
   }
 });

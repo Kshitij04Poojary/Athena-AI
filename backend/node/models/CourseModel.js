@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const sectionSchema = new mongoose.Schema({
     title: { type: String, required: true },
     explanation: { type: String, required: true },
-    codeExample: { type: String }  // Optional, might not exist for theory-only sections
+    codeExample: { type: String }
 });
 
 const chapterSchema = new mongoose.Schema({
@@ -11,8 +11,8 @@ const chapterSchema = new mongoose.Schema({
     about: { type: String, required: true },
     duration: { type: String, required: true },
     sections: [sectionSchema],
-    video: { 
-        url: { type: String },    
+    video: {
+        url: { type: String },
         thumbnail: { type: String }
     },
     isCompleted: { type: Boolean, default: false }
@@ -38,8 +38,7 @@ const courseSchema = new mongoose.Schema({
     video: { type: Boolean, default: true },
     certificate: { type: String },
     passedFinal: { type: Boolean, default: false },
-    assignedMentees: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Mentee' }],
-    assignedMentor: { type: mongoose.Schema.Types.ObjectId, ref: 'Mentor' },  // Track the mentor
+    assignedCopy: { type: Boolean, default: false } 
 }, { timestamps: true });
 
 module.exports = mongoose.model('Course', courseSchema);

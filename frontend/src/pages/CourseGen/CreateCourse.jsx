@@ -177,6 +177,10 @@ const CreateCourse = () => {
             const courseId = response.data?.course?._id;
 
             if (courseId) {
+                if (user?.userType === 'Mentor') {
+                    await createAssignedCourseForMentor(courseId);
+                }
+
                 navigate(`/course/${courseId}`);
             } else {
                 toast.error("Course created, but unable to retrieve course ID.");
@@ -195,6 +199,25 @@ const CreateCourse = () => {
         toast.error("Error generating course. Please try again.");
     } finally {
         setGeneratingChapters(false);
+    }
+};
+
+// Function to create assigned course for mentor
+const createAssignedCourseForMentor = async (courseId) => {
+    try {
+        const assignedCoursePayload = {
+            mentor: user._id,  // Assuming user object has _id
+            assigns: [],       // No mentees initially
+            orgCourseId: courseId,
+            dueDate: null      // You can change this if you want to set a default
+        };
+
+        await axios.post('http://localhost:8000/api/assigned/', assignedCoursePayload);
+
+        toast.success("Assigned course created for mentor.");
+    } catch (error) {
+        console.error("Failed to create assigned course for mentor:", error);
+        toast.error("Failed to create assigned course for mentor.");
     }
 };
 

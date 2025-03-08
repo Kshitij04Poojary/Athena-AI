@@ -10,31 +10,27 @@ const AssignedCourses = () => {
     const navigate = useNavigate();
     const [assignedCourses, setAssignedCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+
     useEffect(() => {
         if (!user?.token || !user?._id) {
             setIsLoading(false);
             return;
         }
-    
+
         const fetchAssignedCourses = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/courses/assigned-courses/${user._id}`, {
-                    headers: {
-                        Authorization: `Bearer ${user.token}`
-                    }
-                });
-    
+                const response = await axios.get(`http://localhost:8000/api/assigned/assigned-courses/${user._id}`);
+
                 if (response.data && response.data.courses) {
                     const formattedCourses = response.data.courses.map(course => ({
                         id: course._id,
                         name: course.courseName,
-                        topic: course.skills.join(', '),
+                        topic: course.skills?.join(', '),
                         level: course.level,
                         description: course.description,
                         passedFinal: course.passedFinal,
-                        assignedBy: course.assignedMentor,
-                        assignedDate: new Date(course.updatedAt).toLocaleDateString()
+                        assignedBy: course.mentor,
+                        assignedDate: new Date(course.assignedDate).toLocaleDateString()
                     }));
                     setAssignedCourses(formattedCourses);
                 }
@@ -44,7 +40,7 @@ const AssignedCourses = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchAssignedCourses();
     }, [user?.token, user?._id]);
 
@@ -91,7 +87,7 @@ const AssignedCourses = () => {
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-1 flex-wrap">
                                                 <span className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
-                                                    course.level === 'Beginner' ? 'bg-blue-100 text-blue-700' :
+                                                    course.level === 'Basic' ? 'bg-blue-100 text-blue-700' :
                                                     course.level === 'Intermediate' ? 'bg-yellow-100 text-yellow-700' :
                                                     'bg-red-100 text-red-700'
                                                 }`}>

@@ -10,13 +10,13 @@ const MyCourses = () => {
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+
     useEffect(() => {
         if (!user?.token) {
             setIsLoading(false);
             return;
         }
-    
+
         const fetchCourses = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/courses/courselist', {
@@ -24,7 +24,7 @@ const MyCourses = () => {
                         Authorization: `Bearer ${user.token}`
                     }
                 });
-    
+
                 if (response.ok) {
                     const data = await response.json();
                     const formattedCourses = data.map(course => ({
@@ -33,9 +33,14 @@ const MyCourses = () => {
                         topic: course.skills.join(', '),
                         level: course.level,
                         completedChapters: course.chapters.filter(ch => ch.isCompleted).length,
-                        totalChapters: course.chapters.length
+                        totalChapters: course.chapters.length,
+                        assignedCopy: course.assignedCopy // ✅ Capture the assignedCopy flag
                     }));
-                    setCourses(formattedCourses);
+                    
+                    // ✅ Filter out the courses that have assignedCopy: true
+                    const filteredCourses = formattedCourses.filter(course => !course.assignedCopy);
+
+                    setCourses(filteredCourses);
                 } else {
                     console.error('Failed to fetch courses');
                 }
@@ -45,7 +50,7 @@ const MyCourses = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchCourses();
     }, [user?.token]);
 
@@ -97,9 +102,9 @@ const MyCourses = () => {
                         )}
                     </div>
                 </div>
-                {
-                    user?.userType!='Mentor' && <AssignedCourses />
-                }                
+
+                {/* ✅ Only show AssignedCourses for non-mentors */}
+                {user?.userType !== 'Mentor' && <AssignedCourses />}
             </div>
         </div>
     );

@@ -28,20 +28,18 @@ const CourseDetails = () => {
             return;
         }
         fetchCourseDetails();
-        checkFinalAssessment();
     }, [courseId, token]);
 
     const fetchCourseDetails = async () => {
         try {
             const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+                headers: { 'Authorization': `Bearer ${token}` },
             });
 
             if (response.ok) {
                 const data = await response.json();
                 setCourse(data);
+                checkFinalAssessment(data); // Fetch assessment data after course loads
             } else {
                 console.error('Failed to fetch course data');
             }
@@ -50,24 +48,20 @@ const CourseDetails = () => {
         }
     };
 
-    const checkFinalAssessment = async () => {
+    const checkFinalAssessment = async (courseData) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/assessment/${courseId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
+            const response = await fetch(`http://localhost:8000/api/assessment/course/${courseId}`, {
+                headers: { 'Authorization': `Bearer ${token}` },
             });
 
             if (response.ok) {
                 const assessments = await response.json();
-                if (assessments.length > 0) {
-                    const bestScore = Math.max(...assessments.map(a => a.score || 0));
-                    setBestAssessmentScore(bestScore);
+                const bestScore = Math.max(...assessments.map(a => a.score || 0));
+                setBestAssessmentScore(bestScore);
 
-                    if (bestScore >= 70 && course?.passedFinal === false) {
-                        await updateCoursePassedFinal(true);
-                        fetchCourseDetails();
-                    }
+                if (bestScore >= 70 && courseData?.passedFinal === false) {
+                    await updateCoursePassedFinal(true);
+                    fetchCourseDetails();  // Re-fetch course after updating status
                 }
             } else {
                 console.log('No assessments found for this course.');
@@ -79,8 +73,9 @@ const CourseDetails = () => {
 
     const updateCoursePassedFinal = async (status) => {
         try {
+            console.log("Updating course passedFinal status to:", status);
             const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -193,7 +188,6 @@ const CourseDetails = () => {
                         ))}
                     </div>
 
-                    {/* Final Assessment Section */}
                     <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700 border-b pb-3">
                         Final Assessment
                     </h2>
@@ -219,20 +213,16 @@ const CourseDetails = () => {
                         }}
                     >
                         <div className="flex items-center space-x-3">
-                            {passedFinal ? (
-                                <CheckCircle size={24} className="text-green-600" />
-                            ) : allChaptersCompleted ? (
-                                <Unlock size={24} className="text-blue-600" />
-                            ) : (
-                                <Lock size={24} className="text-gray-500" />
-                            )}
-                            <span className="font-medium text-lg">
-                                {course.courseName} Final Assessment
-                            </span>
+                            {passedFinal ? <CheckCircle size={24} className="text-green-600" />
+                                : allChaptersCompleted ? <Unlock size={24} className="text-blue-600" />
+                                    : <Lock size={24} className="text-gray-500" />
+                            }
+                            <div>
+                                <span className="font-medium text-lg">{course.courseName} Final Assessment</span>
+                                {bestAssessmentScore !== null && <div className="text-sm">Best Score: {bestAssessmentScore}%</div>}
+                            </div>
                         </div>
-                        <span className="font-semibold">
-                            {passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}
-                        </span>
+                        <span className="font-semibold">{passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}</span>
                     </div>
                 </div>
             </div>
