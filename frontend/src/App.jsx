@@ -62,6 +62,7 @@ const App = () => (
                     <Route path="/interview" element={<InterviewDashboard />} />
                     <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
                     <Route path='/internships' element={<InternshipListings/>}/>
+                    <Route path='/similarity' element={<Similarity/>}/>
 
                 </Route>
 
@@ -70,7 +71,7 @@ const App = () => (
                 <Route path="/assessment/:examId" element={<Exam />} />
                 <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />}/>
                 <Route path="/examreview" element={<ExamReview />} />
-                <Route path='/similarity' element={<Similarity/>}/>
+                
                 <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
 
             </Routes>
