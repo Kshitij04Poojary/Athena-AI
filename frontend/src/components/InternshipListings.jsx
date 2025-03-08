@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, Clock, DollarSign, Calendar, ExternalLink, Loader2, Briefcase, Filter } from 'lucide-react';
+import { Search, MapPin, WalletCards,Clock, DollarSign, Calendar, ExternalLink, Loader2, Briefcase, Filter } from 'lucide-react';
 
 const InternshipCard = ({ internship }) => {
   return (
@@ -22,7 +22,7 @@ const InternshipCard = ({ internship }) => {
         </div>
         
         <div className="flex items-center text-gray-700">
-          <DollarSign size={16} className="mr-2 text-green-500" />
+          <WalletCards size={16} className="mr-2 text-green-500" />
           <span className="font-medium">{internship.stipend}</span>
         </div>
         
@@ -221,7 +221,7 @@ const InternshipListings = () => {
           <div className="inline-block px-6 py-3 bg-white rounded-lg shadow-sm">
             <p className="text-gray-500">
               <span className="font-medium text-indigo-600">Internship Explorer</span> • 
-              Data sourced from Internshala • Last updated {new Date().toLocaleDateString()}
+              Last updated {new Date().toLocaleDateString()}
             </p>
           </div>
         </div>
