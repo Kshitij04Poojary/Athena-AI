@@ -10,7 +10,8 @@ import {
     Star,
     Lock,
     Unlock,
-    CheckCircle
+    CheckCircle,
+    Pencil
 } from 'lucide-react';
 
 const CourseDetails = () => {
@@ -21,7 +22,9 @@ const CourseDetails = () => {
 
     const [course, setCourse] = useState(null);
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
-
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+    const [modalContent, setModalContent] = useState(null); // State to manage content for the modal
+    console.log(user.role)
     useEffect(() => {
         if (!token) {
             console.error('No auth token found');
@@ -98,6 +101,15 @@ const CourseDetails = () => {
     const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
     const { passedFinal } = course || {};
 
+    const handleEditClick = () => {
+        setModalContent(course); // Set the current course content for the modal
+        setIsModalOpen(true); // Open the modal
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false); // Close the modal
+    };
+
     if (!course) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -118,6 +130,15 @@ const CourseDetails = () => {
                             <ArrowLeft className="text-white" size={24} />
                         </button>
                         <h1 className="text-3xl font-bold flex-grow">{course.courseName}</h1>
+                        {
+                            user.role=="mentor"?
+                        <>
+                            <button onClick={handleEditClick} className="text-white p-2 rounded-full hover:bg-white/30">
+                                <Pencil size={24} />
+                            </button>
+                        </>:""
+                        }
+
                     </div>
                 </div>
 
@@ -195,11 +216,11 @@ const CourseDetails = () => {
                     <div
                         className={`flex items-center justify-between p-5 rounded-xl shadow-md border
                                     ${passedFinal
-                                        ? 'bg-green-50 border-green-200 text-green-700'
-                                        : allChaptersCompleted
-                                            ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
-                                            : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
-                                    }`}
+                                ? 'bg-green-50 border-green-200 text-green-700'
+                                : allChaptersCompleted
+                                    ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
+                                    : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
                         onClick={() => {
                             if (allChaptersCompleted) {
                                 navigate(`/course/${courseId}/course-assessment`, {
@@ -226,7 +247,29 @@ const CourseDetails = () => {
                     </div>
                 </div>
             </div>
-            
+
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-8 rounded-xl shadow-xl max-w-lg w-full">
+                        <h2 className="text-2xl font-semibold mb-4">Edit Course</h2>
+                        {/* Render course content for editing */}
+                        <textarea
+                            className="w-full p-4 border rounded-xl mb-4"
+                            defaultValue={JSON.stringify(course, null, 2)}
+                            rows={10}
+                        />
+                        <div className="flex justify-end space-x-4">
+                            <button onClick={handleCloseModal} className="bg-gray-500 text-white py-2 px-4 rounded-lg">
+                                Close
+                            </button>
+                            <button onClick={handleCloseModal} className="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
