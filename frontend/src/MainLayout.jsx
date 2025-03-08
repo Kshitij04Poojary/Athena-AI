@@ -4,7 +4,7 @@ import SideBar from "./components/SideBar";  // Adjust the path based on your fo
 
 const MainLayout = () => {
     return (
-        <div style={{ display: "flex", minHeight: "100vh" }}>
+        <div style={{ display: "flex" }}>
             <SideBar />
             <div style={{ flex: 1, padding: "20px" }}> 
                 <Outlet /> 

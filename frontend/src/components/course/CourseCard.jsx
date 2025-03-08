@@ -1,7 +1,12 @@
-import React from 'react';
-import { BookOpen, CheckCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { BookOpen, CheckCircle, ChevronDown } from 'lucide-react';
+import AssignMentees from './AssignMentees';
+import { useUser } from '../../context/UserContext';
 
 const CourseCard = ({ course, onClick }) => {
+    const { user } = useUser();
+    const [showDropdown, setShowDropdown] = useState(false);
+
     const progress = course.totalChapters > 0 
         ? (course.completedChapters / course.totalChapters) * 100 
         : 0;
@@ -28,7 +33,7 @@ const CourseCard = ({ course, onClick }) => {
             </div>
 
             <div className="mt-4">
-                <div className="h-3 w-full bg-gray-200 rounded-full overflow-hidden mb-2">
+                <div className="h-3 w-full bg-gray-200 rounded-full overflow-auto mb-2">
                     <div
                         className={`h-full ${getProgressColor()} transition-all`}
                         style={{ width: `${progress}%` }}
@@ -44,8 +49,35 @@ const CourseCard = ({ course, onClick }) => {
                     </p>
                 </div>
             </div>
+
+            {/* Assign Mentees Section - Only for Mentors */}
+            {user?.userType === "Mentor" && (
+                <div 
+                    className="relative"
+                    onClick={(e) => e.stopPropagation()} // Prevents card click when interacting with dropdown
+                >
+                    <button 
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+                        onClick={(e) => {
+                            e.stopPropagation(); 
+                            setShowDropdown(!showDropdown)
+                        }}
+                    >
+                        Assign
+                        <ChevronDown className="w-4 h-4" />
+                    </button>
+
+                    {showDropdown && (
+                        <AssignMentees 
+                            courseId={course.id}
+                            closeDropdown={() => setShowDropdown(false)}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 };
 
 export default CourseCard;
+

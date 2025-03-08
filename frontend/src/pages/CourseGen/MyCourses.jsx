@@ -3,19 +3,20 @@ import CourseCard from '../../components/course/CourseCard';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import { PlusCircle, BookOpen } from 'lucide-react';
+import AssignedCourses from './AssignedCourses';
 
 const MyCourses = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [courses, setCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    
+
     useEffect(() => {
         if (!user?.token) {
             setIsLoading(false);
             return;
         }
-    
+
         const fetchCourses = async () => {
             try {
                 const response = await fetch('http://localhost:8000/api/courses/courselist', {
@@ -23,7 +24,7 @@ const MyCourses = () => {
                         Authorization: `Bearer ${user.token}`
                     }
                 });
-    
+
                 if (response.ok) {
                     const data = await response.json();
                     const formattedCourses = data.map(course => ({
@@ -32,9 +33,14 @@ const MyCourses = () => {
                         topic: course.skills.join(', '),
                         level: course.level,
                         completedChapters: course.chapters.filter(ch => ch.isCompleted).length,
-                        totalChapters: course.chapters.length
+                        totalChapters: course.chapters.length,
+                        assignedCopy: course.assignedCopy // ✅ Capture the assignedCopy flag
                     }));
-                    setCourses(formattedCourses);
+                    
+                    // ✅ Filter out the courses that have assignedCopy: true
+                    const filteredCourses = formattedCourses.filter(course => !course.assignedCopy);
+
+                    setCourses(filteredCourses);
                 } else {
                     console.error('Failed to fetch courses');
                 }
@@ -44,14 +50,14 @@ const MyCourses = () => {
                 setIsLoading(false);
             }
         };
-    
+
         fetchCourses();
     }, [user?.token]);
 
     return (
         <div className='bg-gray-50 min-h-screen w-full'>
             <div className="container mx-auto px-4 py-8">
-                <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+                <div className="bg-white shadow-xl rounded-2xl overflow-visible">
                     <div className="p-6 bg-gradient-to-r from-blue-600 to-purple-600">
                         <div className="flex justify-between items-center">
                             <h2 className="text-3xl font-extrabold text-white flex items-center gap-3">
@@ -96,6 +102,9 @@ const MyCourses = () => {
                         )}
                     </div>
                 </div>
+
+                {/* ✅ Only show AssignedCourses for non-mentors */}
+                {user?.userType !== 'Mentor' && <AssignedCourses />}
             </div>
         </div>
     );

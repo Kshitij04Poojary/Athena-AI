@@ -23,9 +23,13 @@ def create_app():
     from package.main.routes import main_bp
     from package.project_recommendation.routes import project_recomm
     from package.mentor_mentee.routes import mentor_mentee
+    from package.internships.routes import internship_bp
+    from package.users.routes import user_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(project_recomm, url_prefix="/recommendations")
     app.register_blueprint(mentor_mentee, url_prefix="/mentor-mentee")
+    app.register_blueprint(internship_bp, url_prefix="/api/internships")
+    app.register_blueprint(user_bp, url_prefix="/users")
 
     return app

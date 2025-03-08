@@ -11,7 +11,8 @@ import {
   ChevronLeft, 
   ChevronRight,
   ClipboardList,
-  BrainCircuit 
+  BrainCircuit,
+  Briefcase 
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -28,14 +29,14 @@ const SideBar = () => {
         { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Analytics', icon: BarChart2, path: '/analytics' },
         { name: 'Interviews', icon: BrainCircuit, path: '/interview' },
-        { name: 'Help', icon: HelpCircle, path: '/help' },
+        { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
 
     return (
         <div 
-            className={`flex max-h-screen bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
+            className={`flex bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative ${
                 collapsed ? 'w-20' : 'w-72'
-            } h-screen flex flex-col`}
+            } flex flex-col`}
         >
             {/* Collapsible button positioned outside sidebar */}
             <button 
