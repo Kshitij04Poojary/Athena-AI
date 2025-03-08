@@ -28,6 +28,7 @@ import AIProjectRecommendations from './pages/ProjectRecommendation/AIProjectRec
 import CourseAssessment from './pages/CourseGen/CourseAssessment';
 import { useUser } from './context/UserContext';
 import InternshipListings from './components/InternshipListings';
+import TeamsStyleCalendar from './pages/TimeTable/TeamsStyleCalendar';
 
 
 const App = () => (
@@ -63,6 +64,7 @@ const App = () => (
                     <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
                     <Route path='/internships' element={<InternshipListings/>}/>
                     <Route path='/similarity' element={<Similarity/>}/>
+                    <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
 
                 </Route>
 

@@ -27,7 +27,7 @@ def search_github_projects(keyword, sort='stars', order='desc', per_page=8):
             "stars": repo["stargazers_count"],
             # "description": repo.get("description", "No description available"),
             "url": repo["html_url"],
-            "domain": json.loads(keyword)
+            "domain": keyword
         } for repo in response.json().get("items", [])]
     else:
         print(f"Error fetching data: {response.status_code}")
@@ -74,7 +74,7 @@ def get_projects():
         print(skill)
         fp += skill["name"]
     df = pd.read_csv(f"package/project-data/{fp}.csv")
-
+    # print("File path: ", fp)
     # Sample 5 random rows from the dataframe
     sampled_rows = df.sample(n= min(5, len(df)))  # Get 5 random rows from the DataFrame
 
@@ -90,10 +90,10 @@ def get_projects():
         domain = domain.replace('(', '').replace(')', '')  # Clean up any remaining parentheses
         
         # Safely evaluate the string into a Python dictionary
-        domain_dict = ast.literal_eval(domain)
-        
+        # domain_dict = ast.literal_eval(domain)
+        # print("Dmain is",domain)
         # Extract only the 'name' from the domain, assuming 'name' holds the title you need
-        domain_title = domain_dict.get('name', None)
+        # domain_title = domain_dict.get('name', None)
 
         # Fetch response from the chat function
         response = chat(readme)
@@ -103,7 +103,7 @@ def get_projects():
             "title": response["title"],
             "description": response["description"],
             "key_features": response["key_features"],
-            "domain": domain_title  # Include only the 'name' from the domain
+            "domain": domain  # Include only the 'name' from the domain
         }
 
     # Using ThreadPoolExecutor to fetch 5 responses in parallel
@@ -124,11 +124,15 @@ def load_df():
     keywords = user["skills"]#request.get_json().get("keywords")
     # keywords = ['Web Development', 'Machine Learning', 'AI', 'Data Science']
     fp =""
+    new_keywords = []
     for skill in keywords:
         fp += skill["name"]
+        new_keywords.append(skill["name"])
+    print("New Skills are: ",new_keywords)
+    
     # Get recommendations
     p = 10 if len(keywords) < 3 else 5
-    recommended_projects = recommend_projects(keywords, per_page=p)
+    recommended_projects = recommend_projects(new_keywords, per_page=p)
 
     # Prepare DataFrame with parallel fetching of README files
     # columns = ['name', 'domain', 'owner', 'stars', 'description', 'url', 'readme']
