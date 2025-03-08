@@ -7,7 +7,6 @@ import { ArrowLeft } from 'lucide-react';
 import io from 'socket.io-client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./Style.css";
 import { motion } from "framer-motion";
 import { PhoneOff, Video } from "lucide-react";
 
@@ -168,14 +167,6 @@ function ConsultationRoom() {
         setRecordingTime(Math.floor((Date.now() - startTime) / 1000));
       }, 1000);
 
-      // // Auto-stop after 1 hour
-      // setTimeout(() => {
-      //   if (recorder.state === 'recording') {
-      //     recorder.stop();
-      //     toast.info("Recording stopped automatically after 1 hour");
-      //   }
-      // }, 3600000);
-
       toast.success("Recording started!");
 
     } catch (error) {
@@ -187,7 +178,6 @@ function ConsultationRoom() {
     try {
       const formData = new FormData();
       formData.append('file', blob);
-      console.log("Nilay");
       formData.append('upload_preset', "Live_Lectures");
       
       const response = await axios.post(
@@ -228,18 +218,18 @@ function ConsultationRoom() {
   };
 
   return (
-    <div className="consultation-room-container">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1c2e] to-[#2b2f4c]">
       <ToastContainer position="top-right" />
       
-      <header className="video-header p-6 mb-6">
-        <div className="max-w-7xl mx-auto">
+      <header className="bg-white/[0.03] backdrop-blur-md border-b border-white/[0.05] p-6 mb-6">
+        <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(-1)}
-                className="control-button p-3 rounded-xl"
+                className="bg-white/10 backdrop-blur-sm border border-white/10 text-white p-3 rounded-lg transition-all duration-300 cursor-pointer"
               >
                 <ArrowLeft size={24} />
               </motion.button>
@@ -262,7 +252,7 @@ function ConsultationRoom() {
                 className="flex items-center gap-4"
               >
                 {isRecording ? (
-                  <div className="recording-indicator flex items-center gap-2 bg-red-600/20 px-4 py-2 rounded-xl">
+                  <div className="flex items-center gap-2 bg-red-600/20 py-2 px-4 rounded-lg animate-pulse">
                     <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                     <span className="text-red-400 font-medium">
                       Recording ({formatTime(recordingTime)})
@@ -273,7 +263,7 @@ function ConsultationRoom() {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={startLocalRecording}
-                    className="control-button flex items-center gap-2 px-4 py-2 rounded-xl"
+                    className="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 text-white py-2 px-4 rounded-lg transition-all duration-300 cursor-pointer"
                   >
                     <Video size={20} />
                     Start Recording
@@ -300,7 +290,7 @@ function ConsultationRoom() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="bg-red-500/10 backdrop-blur-md p-8 rounded-xl max-w-md text-center"
+            className="bg-red-500/10 backdrop-blur-md p-8 rounded-lg max-w-md text-center"
           >
             <h2 className="text-2xl font-bold text-red-500 mb-4">Error</h2>
             <p className="text-gray-300">{error}</p>
@@ -309,33 +299,35 @@ function ConsultationRoom() {
       )}
 
       {!isLoading && !error && (
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="video-container h-[calc(100vh-180px)]"
+            className="bg-black/20 backdrop-blur-sm border border-white/5 rounded-2xl overflow-hidden h-[calc(100vh-180px)]"
           >
             <div id="zego-container" className="w-full h-full" />
           </motion.div>
 
-          {/*  <motion.div
+          {/* End Call Button - Commented out in original code
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
             className="fixed bottom-8 left-1/2 transform -translate-x-1/2"
           >
-            <div className="flex items-center gap-4 bg-black/20 backdrop-blur-md p-4 rounded-2xl">
+            <div className="flex items-center gap-4 bg-black/20 backdrop-blur-md p-4 rounded-lg">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleEndCall}
-                className="px-6 py-3 bg-red-600 text-white rounded-xl flex items-center gap-2 hover:bg-red-700 transition-colors"
+                className="py-3 px-6 bg-red-600 text-white rounded-lg flex items-center gap-2 transition-all duration-300 cursor-pointer border-none"
               >
                 <PhoneOff size={20} />
                 End Call
               </motion.button>
             </div>
-          </motion.div> */ }
+          </motion.div>
+          */}
         </div>
       )}
     </div>

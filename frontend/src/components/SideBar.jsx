@@ -27,8 +27,9 @@ const SideBar = () => {
         { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
         { name: 'Video Conferencing', icon: HelpCircle, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
         { name: 'Project Recommendations', icon: Lightbulb, path: '/recommend-projects' },
-        // { name: 'Matching', icon: Link, path: '/similarity'},
         { name: 'Schedule', icon: Calendar, path: '/calendar' },
+        // { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
+        // { name: 'Analytics', icon: BarChart2, path: '/analytics' },
         { name: 'Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
