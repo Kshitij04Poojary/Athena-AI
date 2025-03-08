@@ -104,18 +104,32 @@ def generate_timetable():
     population_size = 20
 
     # Sample lectures
+    # lectures = [
+    #     Lecture("Machine Learning", "mentor1", ["mentee1", "mentee2"], 60),
+    #     Lecture("Data Science", "mentor2", ["mentee1", "mentee3"], 90),
+    #     Lecture("Deep Learning", "mentor3", ["mentee5", "mentee4"], 120),
+    #     Lecture("Artificial Intelligence", "mentor1", ["mentee2", "mentee3"], 90),
+    #     Lecture("Computer Vision", "mentor2", ["mentee1", "mentee4"], 75),
+    #     Lecture("Natural Language Processing", "mentor4", ["mentee5", "mentee3"], 90),
+    #     # Lecture("Reinforcement Learning", "mentor3", ["mentee4"], 60),
+    #     # Lecture("Big Data Analytics", "mentor3", ["mentee1"], 120),
+    #     # Lecture("Robotics", "mentor1", ["mentee2"], 90),
+    #     # Lecture("Cloud Computing", "mentor2", ["mentee3"], 60),
+    #     # Lecture("Quantum Computing", "mentor4", ["mentee4", "mentee5"], 60)
+    # ]
+    
     lectures = [
-        Lecture("Machine Learning", "mentor1", ["mentee1", "mentee2"], 60),
-        Lecture("Data Science", "mentor2", ["mentee1", "mentee3"], 90),
-        Lecture("Deep Learning", "mentor3", ["mentee5", "mentee4"], 120),
-        Lecture("Artificial Intelligence", "mentor1", ["mentee2", "mentee3"], 90),
-        Lecture("Computer Vision", "mentor2", ["mentee1", "mentee4"], 75),
-        Lecture("Natural Language Processing", "mentor4", ["mentee5", "mentee3"], 90),
-        # Lecture("Reinforcement Learning", "mentor3", ["mentee4"], 60),
-        # Lecture("Big Data Analytics", "mentor3", ["mentee1"], 120),
-        # Lecture("Robotics", "mentor1", ["mentee2"], 90),
-        # Lecture("Cloud Computing", "mentor2", ["mentee3"], 60),
-        # Lecture("Quantum Computing", "mentor4", ["mentee4", "mentee5"], 60)
+    Lecture("Machine Learning", "Nilay Rathod", ["Malhar Bhensjariya", "Kshitij Poojary", "Joshua Menezes"], 60),
+    Lecture("Data Science", "Prof. Ashok", ["Malhar Bhensjariya", "Joshua Menezes"], 90),
+    Lecture("Deep Learning", "Cain", ["Mokshit"], 120),
+    Lecture("Artificial Intelligence", "Prof Andrew", ["Joshua Menezes"], 90),
+    Lecture("Computer Vision", "Prof. Ashok", ["Malhar Bhensjariya", "Jason Bourne", "Kshitij Poojary"], 75),
+    Lecture("Natural Language Processing", "Prof Andrew", ["Jason Bourne", "Mokshit", "Joshua Menezes"], 90),
+    # Lecture("Reinforcement Learning", "Dr. Anil Patel", ["Chaya"], 60),
+    # Lecture("Big Data Analytics", "Dr. Anil Patel", ["Aarav"], 120),
+    # Lecture("Robotics", "Dr. Rajesh Kumar", ["Ananya"], 90),
+    # Lecture("Cloud Computing", "Prof. Priya Sharma", ["Bhavesh"], 60),
+    # Lecture("Quantum Computing", "Dr. Sneha Reddy", ["Chaya", "Dhruv"], 60)
     ]
 
     # Generate available time slots
