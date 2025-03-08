@@ -1,0 +1,9 @@
+// ...existing imports...
+const menteeProfileRouter = require('./routes/menteeProfileRouter');
+
+// ...existing middleware setup...
+
+// Routes
+app.use('/api/mentee', menteeProfileRouter);
+
+// ...rest of existing code...

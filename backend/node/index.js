@@ -13,6 +13,8 @@ const generateChapterContentRoutes = require('./routes/generateChapterContentRou
 const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
 const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
+const menteeProfileRouter = require('./routes/menteeProfileRouter');
+
 
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
@@ -42,6 +44,7 @@ app.use('/api', generateChapterContentRoutes);
 app.use('/api/interview', interviewRoutes);
 app.use('/api/lectures', lectureRoutes);
 app.use('/api/users', mentorMenteeRouter);
+app.use('/api/mentee', menteeProfileRouter);
 
 // Initialize Socket.IO
 const io = new Server(server, {

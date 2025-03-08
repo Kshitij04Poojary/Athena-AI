@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import "./DashboardCard.css";
+import "../pages/VideoConferencing/Style.css";
 
 const DashboardCard = ({ children, className = "",category }) => {
   return (

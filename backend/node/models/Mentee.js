@@ -10,28 +10,57 @@ const menteeSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Mentor'
   },
-  progress: {
-    totalHoursLearned: {
-      type: Number,
-      default: 0
+  profileCompleted: {
+    type: Boolean,
+    default: false
+  },
+  academics: {
+    class10: {
+      school: String,
+      percentage: Number,
+      yearOfCompletion: Number
     },
-    lecturesAttended: {
-      type: Number,
-      default: 0
+    class12: {
+      school: String,
+      percentage: Number,
+      yearOfCompletion: Number
     },
-    completionRate: {
-      type: Number,
-      default: 0
+    currentEducation: {
+      institution: String,
+      course: String,
+      specialization: String,
+      yearOfStudy: Number,
+      cgpa: Number
     }
   },
- 
+  extracurricular: [{
+    activity: String,
+    role: String,
+    description: String,
+    duration: String
+  }],
+  internships: [{
+    company: String,
+    role: String,
+    duration: String,
+    description: String
+  }],
+  achievements: [{
+    title: String,
+    description: String,
+    year: Number
+  }],
+  futureGoals: {
+    shortTerm: String,
+    longTerm: String,
+    dreamCompanies: [String]
+  },
+  progress: {
+    totalHoursLearned: { type: Number, default: 0 },
+    lecturesAttended: { type: Number, default: 0 },
+    completionRate: { type: Number, default: 0 }
+  }
 }, { timestamps: true });
 
-const Mentee =mongoose.model('Mentee', menteeSchema);
+const Mentee = mongoose.model('Mentee', menteeSchema);
 module.exports = Mentee;
-
-// Mentee.syncIndexes().then(() => {
-//   console.log('Indexes are synchronized');
-// }).catch(err => {
-//   console.error('Error synchronizing indexes', err);
-// });

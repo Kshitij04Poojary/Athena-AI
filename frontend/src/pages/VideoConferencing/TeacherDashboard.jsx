@@ -5,13 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import DashboardCard from '../../components/DashboardCard';
-// import { useSocket } from '../../context/SocketContext';
+import './Style.css';
+// import "./Style.css"; - We'll now use the consolidated styles
 
 const TeacherDashboard = () => {
     const [lectures, setLectures] = useState([]);
     const [showScheduleModal, setShowScheduleModal] = useState(false);
     const [mentees, setMentees] = useState([]);
-    // const socket=useSocket();
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -61,7 +61,7 @@ const TeacherDashboard = () => {
     const handleScheduleLecture = async (e) => {
         e.preventDefault();
         try {
-            const res=await axios.post('http://localhost:8000/api/lectures/schedule', 
+            const res = await axios.post('http://localhost:8000/api/lectures/schedule', 
                 formData,
                 {
                     headers: {
@@ -89,13 +89,6 @@ const TeacherDashboard = () => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-              // Emit lecture started event
-            // socket.emit('lecture_started', {
-                
-            //     roomId: lecture.roomId,
-            //     lectureId: lecture._id,
-            //     title: lecture.title
-            // });
             navigate(`/consultation-room/${lecture.roomId}`);
         } catch (error) {
             console.error('Error starting lecture:', error);
@@ -127,11 +120,6 @@ const TeacherDashboard = () => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            // socket.emit('lecture_started', {
-            //     roomId: lecture.roomId,
-            //     lectureId: lecture._id,
-            //     title: lecture.title
-            // });
             setShowLiveModal(false);
             navigate(`/consultation-room/${response.data.roomId}`);
         } catch (error) {
@@ -147,116 +135,124 @@ const TeacherDashboard = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">    <div className="w-full px-4 py-8">
-                 <div className="container mx-auto px-4 py-8">
-                    {/* Header section with both buttons */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                    <div>
-                        <h1 className="text-4xl font-bold text-gray-500 dark:text-white mb-2">Educator Dashboard</h1>
-                        <p className="text-gray-500 dark:text-gray-300">Manage your teaching sessions</p>
-                    </div>
+        <div className="min-h-screen teacher-dashboard">
+            <div className="w-full px-6 py-8">
+                <div className="max-w-7xl mx-auto">
+                    {/* Enhanced Header */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+                        <div className="glass-card p-6 rounded-2xl w-full md:w-auto">
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                Welcome, Educator
+                            </h1>
+                            <p className="text-gray-600 mt-2">
+                                Inspiring minds, one lecture at a time
+                            </p>
+                        </div>
                         <div className="flex gap-4">
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={() => setShowLiveModal(true)}
-                                className="bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:shadow-lg transition-all"
+                                className="live-button text-white px-8 py-4 rounded-xl flex items-center gap-3 transform hover:-translate-y-1 transition-all"
                             >
-                                <Play size={20} />
-                                Start Live Lecture
+                                <div className="relative">
+                                    <Play size={24} />
+                                    <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-ping" />
+                                </div>
+                                Start Live Session
                             </motion.button>
                             <motion.button
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                                 onClick={() => setShowScheduleModal(true)}
-                                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 hover:shadow-lg transition-all"
+                                className="gradient-button text-white px-8 py-4 rounded-xl flex items-center gap-3"
                             >
-                                <Calendar size={20} />
-                                Schedule Lecture
+                                <Calendar size={24} />
+                                Schedule Session
                             </motion.button>
                         </div>
                     </div>
 
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-      {stats.map((stat, index) => (
-        <DashboardCard key={index} className="p-5 bg-opacity-90 hover:bg-opacity-100">
-          <div className="flex items-center gap-4">
-            <div className="p-3 rounded-lg bg-white/10">
-              {stat.icon}
-            </div>
-            <div>
-              <p className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</p>
-              <p className="text-2xl font-bold text-gray-800 dark:text-white">{stat.value}</p>
-            </div>
-          </div>
-        </DashboardCard>
-      ))}
-    </div>
+                    {/* Enhanced Stats Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        {stats.map((stat, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="glass-card stat-card p-6 rounded-xl"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="p-4 rounded-lg bg-gradient-to-br from-indigo-50 to-white">
+                                        {stat.icon}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600">{stat.label}</p>
+                                        <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
 
-
-                    {/* Main Content */}
-                    <div className="space-y-6">
-                        {/* Tabs */}
-                        <div className="flex gap-4 border-b">
+                    {/* Enhanced Content Tabs */}
+                    <div className="glass-card rounded-xl p-8">
+                        <div className="flex gap-4 mb-8">
                             {['upcoming', 'past', 'analytics'].map(tab => (
                                 <button
                                     key={tab}
-                                    className={`px-4 py-2 font-medium ${
-                                        activeTab === tab 
-                                            ? 'text-blue-600 border-b-2 border-blue-600' 
-                                            : 'text-gray-600'
-                                    }`}
                                     onClick={() => setActiveTab(tab)}
+                                    className={`tab-button ${activeTab === tab ? 'active' : ''}`}
                                 >
                                     {tab.charAt(0).toUpperCase() + tab.slice(1)}
                                 </button>
                             ))}
                         </div>
 
-                        {/* Tab Content */}
-                        <div className="bg-white rounded-xl shadow-md p-6">
-                            {/* Content based on active tab */}
+                        {/* Tab Content Container */}
+                        <div className="bg-white/50 backdrop-blur-sm rounded-xl p-6">
+                            {/* Tab Content */}
                             {activeTab === 'upcoming' && (
-                                 <DashboardCard className="p-6 lecture-list-container">
-                                 <h2 className="text-2xl font-semibold mb-6 text-blue-600 dark:text-blue-400">
-                                   <BookOpen size={24} className="mr-2 inline-block" />
-                                   Scheduled Sessions
-                                 </h2>
-                                    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                                        {lectures
-                                            .filter(l => l.status === 'scheduled')
-                                            .map(lecture => (
-                                                <motion.div
-                                                    key={lecture._id}
-                                                    initial={{ opacity: 0, x: -20 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    className="border border-gray-100 rounded-lg p-4 hover:border-blue-200 transition-colors"
-                                                >
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <h3 className="font-semibold">{lecture.title}</h3>
-                                                            <p className="text-sm text-gray-600">
+                                <div className="space-y-6">
+                                    {lectures
+                                        .filter(l => l.status === 'scheduled')
+                                        .map((lecture, index) => (
+                                            <motion.div
+                                                key={lecture._id}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                transition={{ delay: index * 0.1 }}
+                                                className="lecture-card glass-card p-6 rounded-xl hover:shadow-lg transition-all"
+                                            >
+                                                <div className="flex justify-between items-center">
+                                                    <div className="space-y-2">
+                                                        <h3 className="text-xl font-semibold text-gray-800">
+                                                            {lecture.title}
+                                                        </h3>
+                                                        <div className="flex items-center gap-4 text-sm text-gray-600">
+                                                            <div className="flex items-center gap-2">
+                                                                <Clock size={16} />
                                                                 {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
-                                                            </p>
-                                                            <p className="text-sm text-gray-600">
-                                                                Duration: {lecture.duration} minutes
-                                                            </p>
-                                                            <p className="text-sm text-gray-600">
-                                                                Student: {lecture.mentee.name}
-                                                            </p>
+                                                            </div>
+                                                            <div className="flex items-center gap-2">
+                                                                <Users size={16} />
+                                                                {lecture.mentee.length} Students
+                                                            </div>
                                                         </div>
-                                                        <button
-                                                            onClick={() => startLecture(lecture)}
-                                                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                                                        >
-                                                            Start
-                                                        </button>
                                                     </div>
-                                                </motion.div>
-                                            ))}
-                                    </div>
-                                </DashboardCard>
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => startLecture(lecture)}
+                                                        className="gradient-button px-6 py-3 rounded-lg text-white font-medium"
+                                                    >
+                                                        Start Session
+                                                    </motion.button>
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                </div>
                             )}
 
                             {activeTab === 'past' && (
@@ -301,6 +297,7 @@ const TeacherDashboard = () => {
                     </div>
                 </div>
             </div>
+                       
 
             {/* Live Modal */}
             {showLiveModal && (
@@ -308,58 +305,72 @@ const TeacherDashboard = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4"
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
+                        initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white rounded-xl p-6 w-full max-w-md m-4"
+                        className="modal-content w-full max-w-md rounded-2xl overflow-hidden"
                     >
-                        <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-                            <Play className="text-red-600" size={24} />
-                            Start Live Lecture
-                        </h2>
-                        <form onSubmit={startLiveLecture} className="space-y-4">
+                        <div className="modal-header p-6">
+                            <h2 className="text-2xl font-semibold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                                Start Live Session
+                            </h2>
+                            <p className="text-gray-600 mt-1">Begin teaching in real-time</p>
+                        </div>
+                        
+                        <form onSubmit={startLiveLecture} className="p-6 space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Title
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Session Title
                                 </label>
                                 <input
                                     type="text"
                                     value={liveFormData.title}
                                     onChange={(e) => setLiveFormData({...liveFormData, title: e.target.value})}
-                                    className="w-full p-2 border rounded-lg"
+                                    className="modal-input w-full p-3 rounded-lg text-gray-800"
+                                    placeholder="Enter session title"
                                     required
                                 />
                             </div>
+
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Estimated Duration (minutes)
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Estimated Duration
                                 </label>
-                                <input
-                                    type="number"
+                                <select
                                     value={liveFormData.duration}
-                                    onChange={(e) => setLiveFormData({...liveFormData, duration: e.target.value})}
-                                    className="w-full p-2 border rounded-lg"
+                                    onChange={(e) => setLiveFormData({...liveFormData, duration: Number(e.target.value)})}
+                                    className="modal-input w-full p-3 rounded-lg text-gray-800"
                                     required
-                                    min="15"
-                                    step="15"
-                                />
+                                >
+                                    <option value={30}>30 minutes</option>
+                                    <option value={45}>45 minutes</option>
+                                    <option value={60}>1 hour</option>
+                                    <option value={90}>1.5 hours</option>
+                                    <option value={120}>2 hours</option>
+                                </select>
                             </div>
-                            <div className="flex justify-end gap-4 mt-6">
-                                <button
+
+                            <div className="flex justify-end gap-4 pt-4 border-t border-gray-100">
+                                <motion.button
                                     type="button"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
                                     onClick={() => setShowLiveModal(false)}
-                                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                    className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     type="submit"
-                                    className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="live-button px-6 py-2 text-white rounded-lg font-medium flex items-center gap-2"
                                 >
-                                    Start Now
-                                </button>
+                                    <Play size={18} />
+                                    Go Live
+                                </motion.button>
                             </div>
                         </form>
                     </motion.div>
@@ -372,67 +383,84 @@ const TeacherDashboard = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                    className="fixed inset-0 modal-overlay flex items-center justify-center z-50 p-4"
                 >
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
+                        initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
-                        className="bg-white rounded-xl p-6 w-full max-w-md m-4"
+                        className="modal-content w-full max-w-md rounded-2xl overflow-hidden"
                     >
-                        <h2 className="text-2xl font-semibold mb-4">Schedule New Lecture</h2>
-                        <form onSubmit={handleScheduleLecture} className="space-y-4">
+                        <div className="modal-header p-6">
+                            <h2 className="text-2xl font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                Schedule New Lecture
+                            </h2>
+                            <p className="text-gray-600 mt-1">Plan your next teaching session</p>
+                        </div>
+                        
+                        <form onSubmit={handleScheduleLecture} className="p-6 space-y-6">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Title
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Lecture Title
                                 </label>
                                 <input
                                     type="text"
                                     value={formData.title}
                                     onChange={(e) => setFormData({...formData, title: e.target.value})}
-                                    className="w-full p-2 border rounded-lg"
+                                    className="modal-input w-full p-3 rounded-lg text-gray-800"
+                                    placeholder="Enter lecture title"
                                     required
                                 />
                             </div>
+
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Start Time
                                 </label>
                                 <input
                                     type="datetime-local"
                                     value={formData.startTime}
                                     onChange={(e) => setFormData({...formData, startTime: e.target.value})}
-                                    className="w-full p-2 border rounded-lg"
+                                    className="modal-input w-full p-3 rounded-lg text-gray-800"
                                     required
                                 />
                             </div>
+
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
                                     Duration (minutes)
                                 </label>
-                                <input
-                                    type="number"
+                                <select
                                     value={formData.duration}
-                                    onChange={(e) => setFormData({...formData, duration: e.target.value})}
-                                    className="w-full p-2 border rounded-lg"
+                                    onChange={(e) => setFormData({...formData, duration: Number(e.target.value)})}
+                                    className="modal-input w-full p-3 rounded-lg text-gray-800"
                                     required
-                                    min="15"
-                                    step="15"
-                                />
+                                >
+                                    <option value={30}>30 minutes</option>
+                                    <option value={45}>45 minutes</option>
+                                    <option value={60}>1 hour</option>
+                                    <option value={90}>1.5 hours</option>
+                                    <option value={120}>2 hours</option>
+                                </select>
                             </div>
-                            <div className="flex justify-end gap-4 mt-6">
-                                <button
+
+                            <div className="flex justify-end gap-4 pt-4 border-t border-gray-100">
+                                <motion.button
                                     type="button"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
                                     onClick={() => setShowScheduleModal(false)}
-                                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                                    className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium"
                                 >
                                     Cancel
-                                </button>
-                                <button
+                                </motion.button>
+                                <motion.button
                                     type="submit"
-                                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="gradient-button px-6 py-2 text-white rounded-lg font-medium"
                                 >
-                                    Schedule
-                                </button>
+                                    Schedule Lecture
+                                </motion.button>
                             </div>
                         </form>
                     </motion.div>
