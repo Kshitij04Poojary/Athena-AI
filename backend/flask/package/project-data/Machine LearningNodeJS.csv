@@ -1,5 +1,1781 @@
 ,domain,url,readme,stars
-2,"{'name': 'Machine Learning', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f8')}",https://github.com/ai/nanoid,"nanoid/README.md at main · ai/nanoid · GitHub
+1,Machine Learning,https://github.com/huggingface/transformers,"transformers/README.md at main · huggingface/transformers · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+
+     ",140818
+3,Machine Learning,https://github.com/microsoft/ML-For-Beginners,"ML-For-Beginners/README.md at main · microsoft/ML-For-Beginners · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+",71351
+6,Machine Learning,https://github.com/gradio-app/gradio,"gradio/README.md at main · gradio-app/gradio · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+
+      Nonprofits
+
+",36651
+8,Machine Learning,https://github.com/lutzroeder/netron,"netron/README.md at main · lutzroeder/netron · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+
+      Nonprofits
+
+",29585
+9,Machine Learning,https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes,"linkedin-skill-assessments-quizzes/README.md at main · Ebazhanov/linkedin-skill-assessments-quizzes · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium te",28592
+10,NodeJS,https://github.com/freeCodeCamp/freeCodeCamp,"freeCodeCamp/README.md at main · freeCodeCamp/freeCodeCamp · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+
+    ",410891
+12,NodeJS,https://github.com/electron/electron,"electron/README.md at main · electron/electron · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
+    
+
+
+
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    
+
+
+
+      Nonprofits",115748
+13,NodeJS,https://github.com/nodejs/node,"node/README.md at main · nodejs/node · GitHub
 
 
 
@@ -259,8 +2035,8 @@ By company size
 
 
 
-",25248
-8,"{'name': 'Machine Learning', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f8')}",https://github.com/instantX-research/InstantID,"InstantID/README.md at main · instantX-research/InstantID · GitHub
+",110033
+14,NodeJS,https://github.com/axios/axios,"axios/README.md at main · axios/axios · GitHub
 
 
 
@@ -514,257 +2290,13 @@ By company size
 
 
 
-     ",11449
-9,"{'name': 'Machine Learning', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f8')}",https://github.com/lstprjct/IDM-Activation-Script,"IDM-Activation-Script/README.md at main · lstprjct/IDM-Activation-Script · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
+      Nonprofits
 
     
 
 
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-      Startups",11236
-12,"{'name': 'NodeJS', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f9')}",https://github.com/ai/nanoid,"nanoid/README.md at main · ai/nanoid · GitHub
+",106448
+17,NodeJS,https://github.com/oven-sh/bun,"bun/README.md at main · oven-sh/bun · GitHub
 
 
 
@@ -1024,508 +2556,5 @@ By company size
 
 
 
-",25248
-18,"{'name': 'NodeJS', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f9')}",https://github.com/instantX-research/InstantID,"InstantID/README.md at main · instantX-research/InstantID · GitHub
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
-    
-
-
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-      Startups
-
-    
-
-
-
-     ",11449
-19,"{'name': 'NodeJS', 'proficiency': 50, '_id': ObjectId('67c5c4b6ee979a1d4e8db9f9')}",https://github.com/lstprjct/IDM-Activation-Script,"IDM-Activation-Script/README.md at main · lstprjct/IDM-Activation-Script · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
-    
-
-
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-      Startups",11236
+",76630

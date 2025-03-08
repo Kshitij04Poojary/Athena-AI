@@ -29,8 +29,7 @@ import CourseAssessment from './pages/CourseGen/CourseAssessment';
 import { useUser } from './context/UserContext';
 import InternshipListings from './components/InternshipListings';
 import TeamsStyleCalendar from './pages/TimeTable/TeamsStyleCalendar';
-import Landing from './pages/Landing.jsx';
-
+import Landing from './pages/Landing'
 
 const App = () => (
     <UserProvider>
@@ -66,6 +65,7 @@ const App = () => (
                     <Route path='/internships' element={<InternshipListings/>}/>
                     <Route path='/similarity' element={<Similarity/>}/>
                     <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
+                    <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
 
                 </Route>
 
@@ -75,7 +75,7 @@ const App = () => (
                 <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />}/>
                 <Route path="/examreview" element={<ExamReview />} />
                 
-                <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
+             
 
             </Routes>
         </Router>
