@@ -29,6 +29,7 @@ import CourseAssessment from './pages/CourseGen/CourseAssessment';
 import { useUser } from './context/UserContext';
 import InternshipListings from './components/InternshipListings';
 import TeamsStyleCalendar from './pages/TimeTable/TeamsStyleCalendar';
+import Landing from './pages/Landing.jsx';
 
 
 const App = () => (
@@ -36,7 +37,7 @@ const App = () => (
         <Router>
             <ToastContainer />
             <Routes>
-                <Route path="/" element={<Navigate to="/register" />} />
+                <Route path="/" element={<Landing/>} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
