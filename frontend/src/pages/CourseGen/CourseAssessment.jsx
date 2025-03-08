@@ -18,6 +18,7 @@ const CourseAssessment = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
+  const [examId, setExamId] = useState("");  // <-- Store examId in state
 
   useEffect(() => {
     const generateCourseEndAssessment = async () => {
@@ -33,6 +34,7 @@ const CourseAssessment = () => {
           }
         );
         setQuiz(res.data.questions);
+        setExamId(res.data._id);  // <-- Save examId here
       } catch (error) {
         console.error("Error generating course-end assessment:", error);
       }
@@ -72,14 +74,18 @@ const CourseAssessment = () => {
       }
     });
     setScore(totalScore);
-    return totalScore*10;
+    return totalScore * 10;
   };
 
   const handleSubmit = async () => {
     const finalScore = calculateScore();
     setShowResults(true);
+    if (!examId) {
+      console.error("Missing examId, cannot update score");
+      return;
+    }
     try {
-      await axios.patch(`http://localhost:8000/api/assessment/${courseId}`, {
+      await axios.patch(`http://localhost:8000/api/assessment/${examId}`, {
         score: finalScore,
       });
     } catch (error) {
@@ -151,9 +157,10 @@ const CourseAssessment = () => {
               <button
                 onClick={handlePrevious}
                 disabled={currentQuestion === 0}
-                className={`px-6 py-3 rounded-xl font-medium transition-all ${currentQuestion === 0
-                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                  : "bg-white text-indigo-600 border border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50"
+                className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                  currentQuestion === 0
+                    ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                    : "bg-white text-indigo-600 border border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50"
                 }`}
               >
                 Previous

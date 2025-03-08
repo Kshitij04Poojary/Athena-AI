@@ -3,6 +3,7 @@ const router = express.Router();
 const Assessment = require("../models/AssessmentModel");
 const User = require("../models/UserModel");
 const { generateExamModel } = require("../config/AIModel"); 
+const authMiddleware = require('../middleware/authMiddleware');
 
 router.post("/generate", async (req, res) => {
   try {
@@ -123,11 +124,12 @@ router.post("/:id/course-end-assessment", async (req, res) => {
 });
 
 //GET course assessments
-router.get("a/:courseId", async (req, res) => {
+router.get("/course/:courseId", authMiddleware, async (req, res) => {
   try {
       const { courseId } = req.params;
-
-      const assessments = await Assessment.find({ course: courseId });
+      const userId = req.user.id;  // Assuming you have user authentication middleware
+      console.log("Fetching assessments for user:", userId, "and course:", courseId);
+      const assessments = await Assessment.find({ course: courseId, user: userId });
 
       if (assessments.length === 0) {
           return res.status(404).json({ message: "No assessments found for this course." });
@@ -139,4 +141,5 @@ router.get("a/:courseId", async (req, res) => {
       res.status(500).json({ message: "Server error", error });
   }
 });
+
 

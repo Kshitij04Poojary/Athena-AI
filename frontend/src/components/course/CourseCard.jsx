@@ -58,7 +58,10 @@ const CourseCard = ({ course, onClick }) => {
                 >
                     <button 
                         className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-                        onClick={() => setShowDropdown(!showDropdown)}
+                        onClick={(e) => {
+                            e.stopPropagation(); 
+                            setShowDropdown(!showDropdown)
+                        }}
                     >
                         Assign
                         <ChevronDown className="w-4 h-4" />

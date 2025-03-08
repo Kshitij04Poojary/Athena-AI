@@ -6,7 +6,6 @@ const mentorSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  expertise: [String],
   rating: {
     type: Number,
     default: 0

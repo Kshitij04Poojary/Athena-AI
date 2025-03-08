@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Clock, Video,Calendar, User, BookOpen, GraduationCap } from 'lucide-react';
+import { Clock, Video, Calendar, User, BookOpen, GraduationCap, Trophy } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-// import { motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import DashboardCard from '../../components/DashboardCard';
 import { useUser } from '../../context/UserContext';
-// import { useSocket } from '../../context/SocketContext';
+import MenteeProfileForm from '../../components/MenteeProfileForm';
+import MenteeProfileView from '../../components/MenteeProfileView';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./StudentDashboard.css";
+import "./Style.css";
 
 const StudentDashboard = () => {
     const { user } = useUser();
     console.log(user);
-    // const  socket  = useSocket();
     const [lectures, setLectures] = useState([]);
     const [mentor, setMentor] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -27,33 +27,25 @@ const StudentDashboard = () => {
         lastActivity: null
     });
     const [liveLectures, setLiveLectures] = useState([]);
-    // const liveLectures = lectures.filter(l => l.status === 'ongoing');
-const pastLectures = lectures.filter(l => l.status === 'completed');
+    const [showProfileForm, setShowProfileForm] = useState(false);
+    const [profileData, setProfileData] = useState(null);
+    const [isEditingProfile, setIsEditingProfile] = useState(false);
+    const [isViewingProfile, setIsViewingProfile] = useState(false);
+    const pastLectures = lectures.filter(l => l.status === 'completed');
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchInitialData = async () => {
-          await fetchLectures();
-          await fetchMentorInfo();
-          
-          // Fetch initial live lectures
-        //   try {
-        //     const [lecturesRes, liveRes] = await Promise.all([
-        //       axios.get('/api/lectures/mentee'),
-        //       axios.get('/api/lectures/live')
-        //     ]);
-        //     setLectures(lecturesRes.data);
-        //     setLiveLectures(liveRes.data);
-        //   } catch (error) {
-        //     console.error('Error fetching data:', error);
-        //   }
+            await fetchLectures();
+            await fetchMentorInfo();
         };
         
         fetchInitialData();
-      }, []);
+    }, []);
 
-      
-    
+    useEffect(() => {
+        fetchProfileData();
+    }, []);
 
     const fetchLectures = async () => {
         try {
@@ -62,7 +54,7 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            const liveres=await axios.get('http://localhost:8000/api/lectures/live',{
+            const liveres = await axios.get('http://localhost:8000/api/lectures/live',{
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -87,9 +79,55 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
         }
     };
 
+    const fetchProfileData = async () => {
+        try {
+            const response = await axios.get('http://localhost:8000/api/mentee/profile', {
+                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+            });
+            setProfileData(response.data);
+            setShowProfileForm(response.data.profileCompleted);
+        } catch (error) {
+            console.error('Error fetching profile:', error);
+        }
+    };
+
     const joinLecture = (lecture) => {
         navigate(`/consultation-room/${lecture.roomId}`);
     };
+
+    const handleProfileEdit = () => {
+        setIsEditingProfile(true);
+        setIsViewingProfile(false);
+    };
+
+    const handleProfileUpdate = async (updatedData) => {
+        try {
+            const response = await axios.put(
+                'http://localhost:8000/api/mentee/profile',
+                updatedData,
+                {
+                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+                }
+            );
+            setProfileData(response.data);
+            setIsEditingProfile(false);
+            toast.success('Profile updated successfully!');
+        } catch (error) {
+            toast.error('Failed to update profile');
+        }
+    };
+
+    const renderProfileButton = () => (
+        <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsViewingProfile(true)}
+            className="glass-card px-4 py-2 rounded-lg flex items-center gap-2 text-blue-600"
+        >
+            <User size={18} />
+            View Profile
+        </motion.button>
+    );
 
     const upcomingLecture = lectures.find(l => l.status === 'scheduled');
     const totalHours = lectures.reduce((acc, lecture) => acc + (lecture.duration / 60), 0).toFixed(1);
@@ -117,192 +155,253 @@ const pastLectures = lectures.filter(l => l.status === 'completed');
         }
     ];
 
-    const LiveLecturesSection = () => (
-        <DashboardCard className="p-6">
-        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Video size={24} className="text-red-600" />
-            Live Lectures
-        </h2>
-        <div className="space-y-4">
-            {liveLectures.map(lecture => (
-                <div 
-                    key={lecture.lectureId} 
-                    className={`live-lecture-card ${liveLectures.length > 0 ? 'active' : ''}`}
-                >
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <h3 className="font-semibold">{lecture.title}</h3>
-                            <p className="text-sm text-red-600">Live Now!</p>
-                        </div>
-                        <button
-                            onClick={() => joinLecture(lecture)}
-                            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
-                        >
-                            Join Now
-                        </button>
+    if (isViewingProfile) {
+        return <MenteeProfileView 
+            profile={profileData} 
+            onEdit={handleProfileEdit}
+            onBack={() => setIsViewingProfile(false)}
+        />;
+    }
+
+    if (isEditingProfile) {
+        return <MenteeProfileForm 
+            initialData={profileData}
+            onComplete={(updatedData) => {
+                handleProfileUpdate(updatedData);
+                setIsViewingProfile(true);
+            }}
+        />;
+    }
+
+    if (showProfileForm) {
+        return (
+            <div className="min-h-screen student-dashboard">
+                <div className="container mx-auto py-8">
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                            Complete Your Profile
+                        </h1>
+                        <p className="text-gray-600 mt-2">
+                            Let's get to know you better to enhance your learning journey
+                        </p>
                     </div>
+                    <MenteeProfileForm 
+                        initialData={profileData} 
+                        onComplete={() => {
+                            setShowProfileForm(false);
+                            fetchProfileData();
+                        }}
+                    />
                 </div>
-            ))}
-            {liveLectures.length === 0 && (
-                <p className="text-gray-500 text-center">No live lectures at the moment</p>
-            )}
-        </div>
-    </DashboardCard>
-);
+            </div>
+        );
+    }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-             <ToastContainer />
-             <div className="container mx-auto px-4 py-8">
-                {/* Welcome Banner */}
-                <div className="welcome-banner mb-8">
-      <h1 className="text-4xl  font-bold mb-2">{user?.name}</h1>
-      <p className="text-lg">Track your learning progress</p>
-    </div>
+        <div className="min-h-screen student-dashboard">
+            <div className="w-full px-6 py-8">
                 <div className="max-w-7xl mx-auto">
-                    {/* Header with Mentor Info */}
-                    <div className="mb-8">
-                        <h1 className="text-4xl font-bold text-gray-400 mb-2">Welcome Back!</h1>
-                        {/* <p className="text-gray-600">Track your learning progress and upcoming lectures</p> */}
-                    </div>
-
-                    {/* Mentor Card */}
-                    {mentor && (
-                        <DashboardCard className="p-6 mb-8">
-                            <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                                <User size={24} className="text-blue-600" />
-                                Your Mentor
-                            </h2>
-                            <div className="flex items-center gap-6">
-                                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                                    {mentor.user.name}
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-semibold text-gray-800">{mentor.user.name}</h3>
-                                    <p className="text-gray-600">{mentor.user.email}</p>
-                                    <div className="mt-2 flex gap-2">
-                                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                                            Expert Mentor
-                                        </span>
-                                        <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm">
+                    {/* Enhanced Header */}
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+                        <div className="glass-card p-6 rounded-2xl w-full md:w-auto">
+                            <h1 className="text-4xl font-bold bg-blue-600 bg-clip-text text-transparent">
+                                Welcome back, {user?.name}
+                            </h1>
+                            <p className="text-gray-600 mt-2">
+                                Your learning journey continues here
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            
+                            {mentor && (
+                                <div className="glass-card p-4 rounded-xl flex items-center gap-4">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                                        {mentor.user.name}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600">Your Mentor</p>
+                                        <h3 className="font-semibold text-gray-800">{mentor.user.name}</h3>
+                                        <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full mt-1">
                                             Available
                                         </span>
                                     </div>
                                 </div>
-                            </div>
-                        </DashboardCard>
-                    )}
-
-                    <div className="space-y-8">
-                       
-                        {/* Stats Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-                        {stats.map((stat, index) => (
-                            <DashboardCard key={index} className="p-5 hover:bg-opacity-90">
-                            <div className="flex items-center gap-4">
-                                <div className="p-3 rounded-lg bg-white/10">
-                                {stat.icon}
-                                </div>
-                                <div>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</p>
-                                <p className="text-2xl font-bold text-gray-800 dark:text-white">{stat.value}</p>
-                                </div>
-                            </div>
-                            </DashboardCard>
-                        ))}
+                                
+                            )}
+                            {renderProfileButton()}
                         </div>
-                        <LiveLecturesSection />
+                    </div>
 
-                        {/* Progress Overview */}
-                        <DashboardCard className="p-6">
-                            <h2 className="text-xl font-semibold mb-4">Learning Progress</h2>
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-4 bg-blue-50 rounded-lg">
-                                    <p className="text-sm text-blue-600">Attendance Rate</p>
-                                    <p className="text-2xl font-bold text-blue-700">
-                                        {progress.attendanceRate}%
-                                    </p>
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                        {stats.map((stat, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="glass-card stat-card p-6 rounded-xl"
+                            >
+                                <div className="flex items-center gap-4">
+                                    <div className="p-4 rounded-lg bg-gradient-to-br from-blue-50 to-white">
+                                        {stat.icon}
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600">{stat.label}</p>
+                                        <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
+                                    </div>
                                 </div>
-                                {/* Add more progress metrics */}
-                            </div>
-                        </DashboardCard>
+                            </motion.div>
+                        ))}
+                    </div>
 
-                        {/* Tabs for different views */}
-                      
-    
-                            {/* Tab Content */}
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
-                                {/* Upcoming Lectures */}
-                                {/* Upcoming Lectures */}
-                                <DashboardCard className="p-6 mt-6">
-                                <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-blue-600">
-                                    <Calendar size={24} />
-                                    Upcoming Sessions
+                    {/* Live Lectures Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                        {/* Live Lectures */}
+                        <div className="lg:col-span-2">
+                            <DashboardCard className="p-6">
+                                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                                    <Video className="text-red-600" size={24} />
+                                    <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                                        Live Sessions
+                                    </span>
                                 </h2>
-                                    <div className="space-y-4">
-                                        {lectures
-                                            .filter(l => l.status === 'scheduled')
-                                            .map(lecture => (
-                                                <div key={lecture._id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <h3 className="font-semibold">{lecture.title}</h3>
-                                                            <p className="text-sm text-gray-600">
-                                                                {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
-                                                            </p>
-                                                            <p className="text-sm text-gray-600">
-                                                                Duration: {lecture.duration} minutes
-                                                            </p>
-                                                        </div>
-                                                        {new Date(lecture.startTime) <= new Date() && (
-                                                            <button
-                                                                onClick={() => joinLecture(lecture)}
-                                                                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                                                            >
-                                                                Join
-                                                            </button>
-                                                        )}
+                                <div className="space-y-4">
+                                    {liveLectures.map(lecture => (
+                                        <motion.div
+                                            key={lecture.lectureId}
+                                            className="live-lecture-card glass-card p-6 rounded-xl relative overflow-hidden"
+                                            whileHover={{ scale: 1.02 }}
+                                        >
+                                            <div className="absolute top-0 right-0 w-24 h-24 bg-red-500 opacity-10 rounded-full -mr-6 -mt-6" />
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <h3 className="font-semibold text-lg">{lecture.title}</h3>
+                                                    <div className="flex items-center gap-2 mt-2">
+                                                        <span className="flex items-center gap-1">
+                                                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                                                            <span className="text-red-600 text-sm">Live Now</span>
+                                                        </span>
                                                     </div>
                                                 </div>
-                                            ))}
-                                    </div>
-                                </DashboardCard>
+                                                <motion.button
+                                                    whileHover={{ scale: 1.05 }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    onClick={() => joinLecture(lecture)}
+                                                    className="px-6 py-2 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all"
+                                                >
+                                                    Join Now
+                                                </motion.button>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                    {liveLectures.length === 0 && (
+                                        <div className="text-center py-8 text-gray-500">
+                                            <Video size={40} className="mx-auto mb-2 opacity-50" />
+                                            No live sessions at the moment
+                                        </div>
+                                    )}
+                                </div>
+                            </DashboardCard>
+                        </div>
 
-                                {/* Past Lectures */}
-                                <DashboardCard className="p-6">
-                                    <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                        <Video size={24} className="text-purple-600" />
-                                        Past Lectures
-                                    </h2>
-                                    <div className="space-y-4">
-                                        {lectures
-                                            .filter(l => l.status === 'completed')
-                                            .map(lecture => (
-                                                <div key={lecture._id} className="border rounded-lg p-4">
+                        {/* Progress Card */}
+                        <div className="lg:col-span-1">
+                            <DashboardCard className="p-6">
+                                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                                    <Trophy className="text-yellow-600" size={24} />
+                                    Your Progress
+                                </h2>
+                                <div className="space-y-4">
+                                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
+                                        <p className="text-sm text-gray-600">Completion Rate</p>
+                                        <p className="text-3xl font-bold text-blue-600">
+                                            {Math.round((lectures.filter(l => l.status === 'completed').length / lectures.length) * 100) || 0}%
+                                        </p>
+                                        <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
+                                            <div 
+                                                className="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
+                                                style={{ 
+                                                    width: `${(lectures.filter(l => l.status === 'completed').length / lectures.length) * 100}%` 
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </DashboardCard>
+                        </div>
+                    </div>
+
+                    {/* Upcoming and Past Lectures */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {/* Upcoming Lectures */}
+                        <DashboardCard className="p-6 mt-6">
+                            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-blue-600">
+                                <Calendar size={24} />
+                                Upcoming Sessions
+                            </h2>
+                            <div className="space-y-4">
+                                {lectures
+                                    .filter(l => l.status === 'scheduled')
+                                    .map(lecture => (
+                                        <div key={lecture._id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                            <div className="flex justify-between items-start">
+                                                <div>
                                                     <h3 className="font-semibold">{lecture.title}</h3>
                                                     <p className="text-sm text-gray-600">
                                                         {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
                                                     </p>
-                                                    {lecture.recordingUrl && (
-                                                        <a
-                                                            href={lecture.recordingUrl}
-                                                            className="text-blue-600 hover:underline text-sm inline-block mt-2"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            View Recording
-                                                        </a>
-                                                    )}
+                                                    <p className="text-sm text-gray-600">
+                                                        Duration: {lecture.duration} minutes
+                                                    </p>
                                                 </div>
-                                            ))}
-                                    </div>
-                                </DashboardCard>
+                                                {new Date(lecture.startTime) <= new Date() && (
+                                                    <button
+                                                        onClick={() => joinLecture(lecture)}
+                                                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                                                    >
+                                                        Join
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
                             </div>
-                        </div>
+                        </DashboardCard>
+
+                        {/* Past Lectures */}
+                        <DashboardCard className="p-6">
+                            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                                <Video size={24} className="text-purple-600" />
+                                Past Lectures
+                            </h2>
+                            <div className="space-y-4">
+                                {lectures
+                                    .filter(l => l.status === 'completed')
+                                    .map(lecture => (
+                                        <div key={lecture._id} className="border rounded-lg p-4">
+                                            <h3 className="font-semibold">{lecture.title}</h3>
+                                            <p className="text-sm text-gray-600">
+                                                {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
+                                            </p>
+                                            {lecture.recordingUrl && (
+                                                <a
+                                                    href={lecture.recordingUrl}
+                                                    className="text-blue-600 hover:underline text-sm inline-block mt-2"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    View Recording
+                                                </a>
+                                            )}
+                                        </div>
+                                    ))}
+                            </div>
+                        </DashboardCard>
                     </div>
                 </div>
             </div>
-        
+        </div>
     );
 };
 
