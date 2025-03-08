@@ -42,14 +42,7 @@ const App = () => (
                 <Route path="/login" element={<Login />} />
                 <Route path="/home" element={<Home />} />
 
-                if(useUser().user.role==='mentee'){
-                    <>
-                        <Route path="/mentee" element={<StudentDashboard />} />
-                    </>
-                }
-                if(useUser().user.role==='mentor'){
-                    <Route path="/mentor" element={<TeacherDashboard />} />
-                }
+                
 
                 <Route path="/consultation-room/:roomId" element={<ConsultationRoom />} />
 
@@ -66,6 +59,15 @@ const App = () => (
                     <Route path='/internships' element={<InternshipListings/>}/>
                     <Route path='/similarity' element={<Similarity/>}/>
                     <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
+                    
+                    if(useUser().user.role==='mentee'){
+                        <>
+                            <Route path="/mentee" element={<StudentDashboard />} />
+                        </>
+                    }
+                    if(useUser().user.role==='mentor'){
+                        <Route path="/mentor" element={<TeacherDashboard />} />
+                    }
 
                 </Route>
 
