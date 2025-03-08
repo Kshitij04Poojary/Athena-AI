@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Clock, Video, Calendar, User, BookOpen, GraduationCap, Trophy } from 'lucide-react';
+import { Clock, Video, Calendar, User, BookOpen, GraduationCap, Trophy, Award, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import DashboardCard from '../../components/DashboardCard';
 import { useUser } from '../../context/UserContext';
-import MenteeProfileForm from '../../components/MenteeProfileForm';
-import MenteeProfileView from '../../components/MenteeProfileView';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./Style.css";
 
 const StudentDashboard = () => {
     const { user } = useUser();
-    console.log(user);
     const [lectures, setLectures] = useState([]);
     const [mentor, setMentor] = useState(null);
     const [messages, setMessages] = useState([]);
@@ -27,48 +24,47 @@ const StudentDashboard = () => {
         lastActivity: null
     });
     const [liveLectures, setLiveLectures] = useState([]);
-    const [showProfileForm, setShowProfileForm] = useState(false);
-    const [profileData, setProfileData] = useState(null);
-    const [isEditingProfile, setIsEditingProfile] = useState(false);
-    const [isViewingProfile, setIsViewingProfile] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    
     const pastLectures = lectures.filter(l => l.status === 'completed');
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchInitialData = async () => {
-            await fetchLectures();
-            await fetchMentorInfo();
+            setIsLoading(true);
+            await Promise.all([fetchLectures(), fetchMentorInfo()]);
+            setIsLoading(false);
         };
         
         fetchInitialData();
     }, []);
 
-    useEffect(() => {
-        fetchProfileData();
-    }, []);
-
     const fetchLectures = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/lectures/mentee',{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            const liveres = await axios.get('http://localhost:8000/api/lectures/live',{
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-            setLiveLectures(liveres.data);
-            setLectures(response.data);
+            const [lecturesRes, liveRes] = await Promise.all([
+                axios.get('http://localhost:8000/api/lectures/mentee', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                }),
+                axios.get('http://localhost:8000/api/lectures/live', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`
+                    }
+                })
+            ]);
+            
+            setLiveLectures(liveRes.data);
+            setLectures(lecturesRes.data);
         } catch (error) {
             console.error('Error fetching lectures:', error);
+            toast.error('Failed to load lecture data');
         }
     };
 
     const fetchMentorInfo = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/users/mentee/mentor',{
+            const response = await axios.get('http://localhost:8000/api/users/mentee/mentor', {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -76,18 +72,7 @@ const StudentDashboard = () => {
             setMentor(response.data);
         } catch (error) {
             console.error('Error fetching mentor info:', error);
-        }
-    };
-
-    const fetchProfileData = async () => {
-        try {
-            const response = await axios.get('http://localhost:8000/api/mentee/profile', {
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-            });
-            setProfileData(response.data);
-            setShowProfileForm(response.data.profileCompleted);
-        } catch (error) {
-            console.error('Error fetching profile:', error);
+            toast.error('Failed to load mentor information');
         }
     };
 
@@ -95,116 +80,66 @@ const StudentDashboard = () => {
         navigate(`/consultation-room/${lecture.roomId}`);
     };
 
-    const handleProfileEdit = () => {
-        setIsEditingProfile(true);
-        setIsViewingProfile(false);
-    };
-
-    const handleProfileUpdate = async (updatedData) => {
-        try {
-            const response = await axios.put(
-                'http://localhost:8000/api/mentee/profile',
-                updatedData,
-                {
-                    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-                }
-            );
-            setProfileData(response.data);
-            setIsEditingProfile(false);
-            toast.success('Profile updated successfully!');
-        } catch (error) {
-            toast.error('Failed to update profile');
-        }
-    };
-
-    const renderProfileButton = () => (
-        <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsViewingProfile(true)}
-            className="glass-card px-4 py-2 rounded-lg flex items-center gap-2 text-blue-600"
-        >
-            <User size={18} />
-            View Profile
-        </motion.button>
-    );
-
     const upcomingLecture = lectures.find(l => l.status === 'scheduled');
     const totalHours = lectures.reduce((acc, lecture) => acc + (lecture.duration / 60), 0).toFixed(1);
+    const completionRate = Math.round((lectures.filter(l => l.status === 'completed').length / (lectures.length || 1)) * 100);
 
     const stats = [
         {
-            icon: <Clock className="text-blue-500" />,
+            icon: <Clock className="text-indigo-500" />,
             label: "Next Lecture",
             value: upcomingLecture ? format(new Date(upcomingLecture.startTime), "MMM d, h:mm a") : "No upcoming lectures"
         },
         {
-            icon: <Video className="text-purple-500" />,
+            icon: <Video className="text-violet-500" />,
             label: "Total Lectures",
             value: lectures.length
         },
         {
-            icon: <BookOpen className="text-green-500" />,
+            icon: <BookOpen className="text-emerald-500" />,
             label: "Completed",
             value: lectures.filter(l => l.status === 'completed').length
         },
         {
-            icon: <GraduationCap className="text-yellow-500" />,
+            icon: <GraduationCap className="text-amber-500" />,
             label: "Hours Learned",
             value: `${totalHours} hrs`
         }
     ];
 
-    if (isViewingProfile) {
-        return <MenteeProfileView 
-            profile={profileData} 
-            onEdit={handleProfileEdit}
-            onBack={() => setIsViewingProfile(false)}
-        />;
-    }
-
-    if (isEditingProfile) {
-        return <MenteeProfileForm 
-            initialData={profileData}
-            onComplete={(updatedData) => {
-                handleProfileUpdate(updatedData);
-                setIsViewingProfile(true);
-            }}
-        />;
-    }
-
-    if (showProfileForm) {
-        return (
-            <div className="min-h-screen student-dashboard">
-                <div className="container mx-auto py-8">
-                    <div className="text-center mb-8">
-                        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                            Complete Your Profile
-                        </h1>
-                        <p className="text-gray-600 mt-2">
-                            Let's get to know you better to enhance your learning journey
-                        </p>
-                    </div>
-                    <MenteeProfileForm 
-                        initialData={profileData} 
-                        onComplete={() => {
-                            setShowProfileForm(false);
-                            fetchProfileData();
-                        }}
-                    />
-                </div>
+    const LoadingSkeleton = () => (
+        <div className="animate-pulse">
+            <div className="h-8 bg-gray-200 rounded w-1/3 mb-4"></div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                {[1, 2, 3, 4].map(i => (
+                    <div key={i} className="h-32 bg-gray-200 rounded-xl"></div>
+                ))}
             </div>
-        );
-    }
-
+            <div className="h-64 bg-gray-200 rounded-xl mb-8"></div>
+        </div>
+    );
+    
+    if (isLoading) return (
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
+            <div className="max-w-7xl mx-auto">
+                <LoadingSkeleton />
+            </div>
+        </div>
+    );
+    
     return (
-        <div className="min-h-screen student-dashboard">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 student-dashboard overflow-hidden">
             <div className="w-full px-6 py-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Enhanced Header */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
-                        <div className="glass-card p-6 rounded-2xl w-full md:w-auto">
-                            <h1 className="text-4xl font-bold bg-blue-600 bg-clip-text text-transparent">
+                    <motion.div 
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5 }}
+                        className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6"
+                    >
+                        <div className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-8 rounded-2xl w-full md:w-auto">
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
                                 Welcome back, {user?.name}
                             </h1>
                             <p className="text-gray-600 mt-2">
@@ -212,25 +147,32 @@ const StudentDashboard = () => {
                             </p>
                         </div>
                         <div className="flex items-center gap-4">
-                            
                             {mentor && (
-                                <div className="glass-card p-4 rounded-xl flex items-center gap-4">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xl font-bold">
-                                        {mentor.user.name}
+                                <motion.div 
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-6 rounded-2xl flex items-center gap-4"
+                                >
+                                    <div className="relative">
+                                        <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                                            {mentor.user.name.charAt(0)}
+                                        </div>
+                                        <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+                                            <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-green-400 opacity-75"></span>
+                                        </div>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">Your Mentor</p>
-                                        <h3 className="font-semibold text-gray-800">{mentor.user.name}</h3>
-                                        <span className="inline-block px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full mt-1">
-                                            Available
+                                        <p className="text-sm text-gray-500 font-medium">Your Mentor</p>
+                                        <h3 className="font-semibold text-gray-800 text-lg">{mentor.user.name}</h3>
+                                        <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full mt-1 font-medium">
+                                            Available Now
                                         </span>
                                     </div>
-                                </div>
-                                
+                                </motion.div>
                             )}
-                            {renderProfileButton()}
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
@@ -240,14 +182,15 @@ const StudentDashboard = () => {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="glass-card stat-card p-6 rounded-xl"
+                                whileHover={{ y: -5, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                                className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-6 rounded-2xl transition-all duration-300"
                             >
                                 <div className="flex items-center gap-4">
-                                    <div className="p-4 rounded-lg bg-gradient-to-br from-blue-50 to-white">
+                                    <div className="p-4 rounded-xl bg-gradient-to-br from-gray-50 to-white shadow-inner">
                                         {stat.icon}
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600">{stat.label}</p>
+                                        <p className="text-sm text-gray-500 font-medium">{stat.label}</p>
                                         <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
                                     </div>
                                 </div>
@@ -255,152 +198,264 @@ const StudentDashboard = () => {
                         ))}
                     </div>
 
-                    {/* Live Lectures Section */}
+                    {/* Live Lectures & Progress Section */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                         {/* Live Lectures */}
-                        <div className="lg:col-span-2">
-                            <DashboardCard className="p-6">
+                        <motion.div 
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="lg:col-span-2"
+                        >
+                            <div className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-8 rounded-2xl h-full">
                                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                                    <Video className="text-red-600" size={24} />
-                                    <span className="bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent">
+                                    <Video className="text-red-500" size={24} />
+                                    <span className="bg-gradient-to-r from-red-500 to-pink-500 bg-clip-text text-transparent">
                                         Live Sessions
                                     </span>
                                 </h2>
                                 <div className="space-y-4">
-                                    {liveLectures.map(lecture => (
-                                        <motion.div
-                                            key={lecture.lectureId}
-                                            className="live-lecture-card glass-card p-6 rounded-xl relative overflow-hidden"
-                                            whileHover={{ scale: 1.02 }}
-                                        >
-                                            <div className="absolute top-0 right-0 w-24 h-24 bg-red-500 opacity-10 rounded-full -mr-6 -mt-6" />
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h3 className="font-semibold text-lg">{lecture.title}</h3>
-                                                    <div className="flex items-center gap-2 mt-2">
-                                                        <span className="flex items-center gap-1">
-                                                            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                                                            <span className="text-red-600 text-sm">Live Now</span>
-                                                        </span>
+                                    <AnimatePresence>
+                                        {liveLectures.map(lecture => (
+                                            <motion.div
+                                                key={lecture.lectureId}
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                exit={{ opacity: 0, scale: 0.95 }}
+                                                whileHover={{ scale: 1.02 }}
+                                                className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-100 p-6 rounded-xl relative overflow-hidden shadow-sm"
+                                            >
+                                                <div className="absolute top-0 right-0 w-32 h-32 bg-red-400 opacity-10 rounded-full -mr-10 -mt-10" />
+                                                <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-400 opacity-10 rounded-full -ml-10 -mb-10" />
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <h3 className="font-semibold text-lg text-gray-800">{lecture.title}</h3>
+                                                        <div className="flex items-center gap-3 mt-2">
+                                                            <span className="flex items-center gap-2">
+                                                                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                                                                <span className="text-red-600 text-sm font-medium">Live Now</span>
+                                                            </span>
+                                                            <span className="h-4 w-px bg-gray-300"></span>
+                                                            <span className="text-gray-500 text-sm">Join now to participate</span>
+                                                        </div>
                                                     </div>
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={() => joinLecture(lecture)}
+                                                        className="px-6 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-lg hover:shadow-lg transition-all font-medium flex items-center gap-2"
+                                                    >
+                                                        Join Now
+                                                        <ArrowRight size={16} />
+                                                    </motion.button>
                                                 </div>
-                                                <motion.button
-                                                    whileHover={{ scale: 1.05 }}
-                                                    whileTap={{ scale: 0.95 }}
-                                                    onClick={() => joinLecture(lecture)}
-                                                    className="px-6 py-2 bg-gradient-to-r from-red-600 to-pink-600 text-white rounded-lg hover:shadow-lg transition-all"
-                                                >
-                                                    Join Now
-                                                </motion.button>
-                                            </div>
-                                        </motion.div>
-                                    ))}
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
                                     {liveLectures.length === 0 && (
-                                        <div className="text-center py-8 text-gray-500">
-                                            <Video size={40} className="mx-auto mb-2 opacity-50" />
-                                            No live sessions at the moment
-                                        </div>
+                                        <motion.div 
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="text-center py-12 text-gray-400 bg-gray-50 rounded-xl"
+                                        >
+                                            <Video size={48} className="mx-auto mb-4 opacity-50" />
+                                            <p className="text-lg font-medium">No live sessions at the moment</p>
+                                            <p className="text-sm mt-2">Check your schedule for upcoming lectures</p>
+                                        </motion.div>
                                     )}
                                 </div>
-                            </DashboardCard>
-                        </div>
+                            </div>
+                        </motion.div>
 
                         {/* Progress Card */}
-                        <div className="lg:col-span-1">
-                            <DashboardCard className="p-6">
+                        <motion.div 
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.4 }}
+                            className="lg:col-span-1"
+                        >
+                            <div className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-8 rounded-2xl h-full">
                                 <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                                    <Trophy className="text-yellow-600" size={24} />
-                                    Your Progress
+                                    <Trophy className="text-amber-500" size={24} />
+                                    <span className="bg-gradient-to-r from-amber-500 to-yellow-500 bg-clip-text text-transparent">
+                                        Your Progress
+                                    </span>
                                 </h2>
-                                <div className="space-y-4">
-                                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-                                        <p className="text-sm text-gray-600">Completion Rate</p>
-                                        <p className="text-3xl font-bold text-blue-600">
-                                            {Math.round((lectures.filter(l => l.status === 'completed').length / lectures.length) * 100) || 0}%
+                                <div className="space-y-8">
+                                    <div className="p-6 rounded-xl border border-indigo-100 bg-gradient-to-br from-indigo-50 to-purple-50">
+                                        <div className="flex justify-between items-center mb-2">
+                                            <p className="text-sm font-medium text-gray-600">Completion Rate</p>
+                                            <div className="flex items-center gap-1">
+                                                <Award size={16} className="text-amber-500" />
+                                                <span className="text-sm font-medium text-amber-500">
+                                                    {completionRate >= 75 ? 'Advanced' : 
+                                                     completionRate >= 50 ? 'Intermediate' : 'Beginner'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <p className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                                            {completionRate}%
                                         </p>
-                                        <div className="w-full h-2 bg-gray-200 rounded-full mt-2">
-                                            <div 
-                                                className="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full"
-                                                style={{ 
-                                                    width: `${(lectures.filter(l => l.status === 'completed').length / lectures.length) * 100}%` 
-                                                }}
+                                        <div className="w-full h-3 bg-gray-200 rounded-full mt-4 overflow-hidden">
+                                            <motion.div 
+                                                initial={{ width: 0 }}
+                                                animate={{ width: `${completionRate}%` }}
+                                                transition={{ delay: 0.6, duration: 1.5, ease: "easeOut" }}
+                                                className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full"
                                             />
                                         </div>
                                     </div>
+                                    
+                                    <div className="p-6 rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-teal-50">
+                                        <p className="text-sm font-medium text-gray-600 mb-2">Learning Streak</p>
+                                        <div className="flex items-center gap-3">
+                                            <p className="text-3xl font-bold text-emerald-600">7</p>
+                                            <p className="text-sm text-gray-500">Days in a row</p>
+                                        </div>
+                                        <div className="flex gap-1 mt-4">
+                                            {[1, 2, 3, 4, 5, 6, 7].map(day => (
+                                                <div 
+                                                    key={day} 
+                                                    className={`h-2 flex-1 rounded-full ${day <= 7 ? 'bg-emerald-500' : 'bg-gray-200'}`}
+                                                ></div>
+                                            ))}
+                                        </div>
+                                    </div>
                                 </div>
-                            </DashboardCard>
-                        </div>
+                            </div>
+                        </motion.div>
                     </div>
 
                     {/* Upcoming and Past Lectures */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {/* Upcoming Lectures */}
-                        <DashboardCard className="p-6 mt-6">
-                            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2 text-blue-600">
-                                <Calendar size={24} />
-                                Upcoming Sessions
-                            </h2>
-                            <div className="space-y-4">
-                                {lectures
-                                    .filter(l => l.status === 'scheduled')
-                                    .map(lecture => (
-                                        <div key={lecture._id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="font-semibold">{lecture.title}</h3>
-                                                    <p className="text-sm text-gray-600">
-                                                        {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
-                                                    </p>
-                                                    <p className="text-sm text-gray-600">
-                                                        Duration: {lecture.duration} minutes
-                                                    </p>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                        >
+                            <div className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-8 rounded-2xl">
+                                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                                    <Calendar size={24} className="text-indigo-500" />
+                                    <span className="bg-gradient-to-r from-indigo-500 to-blue-500 bg-clip-text text-transparent">
+                                        Upcoming Sessions
+                                    </span>
+                                </h2>
+                                <div className="space-y-4">
+                                    {lectures
+                                        .filter(l => l.status === 'scheduled')
+                                        .map((lecture, index) => (
+                                            <motion.div 
+                                                key={lecture._id}
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.1 * index }}
+                                                whileHover={{ y: -3, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                                                className="border border-indigo-100 rounded-xl p-5 hover:bg-indigo-50/50 transition-all"
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <h3 className="font-semibold text-gray-800">{lecture.title}</h3>
+                                                        <div className="flex items-center gap-3 mt-2">
+                                                            <span className="flex items-center gap-1 text-gray-500 text-sm">
+                                                                <Calendar size={14} />
+                                                                {format(new Date(lecture.startTime), "MMM d, yyyy")}
+                                                            </span>
+                                                            <span className="h-3 w-px bg-gray-300"></span>
+                                                            <span className="flex items-center gap-1 text-gray-500 text-sm">
+                                                                <Clock size={14} />
+                                                                {format(new Date(lecture.startTime), "h:mm a")}
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-sm text-gray-500 mt-2">
+                                                            Duration: {lecture.duration} minutes
+                                                        </p>
+                                                    </div>
+                                                    {new Date(lecture.startTime) <= new Date() && (
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.05 }}
+                                                            whileTap={{ scale: 0.95 }}
+                                                            onClick={() => joinLecture(lecture)}
+                                                            className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-lg shadow-sm hover:shadow-md transition-all font-medium"
+                                                        >
+                                                            Join
+                                                        </motion.button>
+                                                    )}
                                                 </div>
-                                                {new Date(lecture.startTime) <= new Date() && (
-                                                    <button
-                                                        onClick={() => joinLecture(lecture)}
-                                                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
-                                                    >
-                                                        Join
-                                                    </button>
-                                                )}
-                                            </div>
+                                            </motion.div>
+                                        ))}
+                                    {lectures.filter(l => l.status === 'scheduled').length === 0 && (
+                                        <div className="text-center py-8 text-gray-400 bg-gray-50 rounded-xl">
+                                            <Calendar size={40} className="mx-auto mb-2 opacity-50" />
+                                            <p>No upcoming sessions scheduled</p>
                                         </div>
-                                    ))}
+                                    )}
+                                </div>
                             </div>
-                        </DashboardCard>
+                        </motion.div>
 
                         {/* Past Lectures */}
-                        <DashboardCard className="p-6">
-                            <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                                <Video size={24} className="text-purple-600" />
-                                Past Lectures
-                            </h2>
-                            <div className="space-y-4">
-                                {lectures
-                                    .filter(l => l.status === 'completed')
-                                    .map(lecture => (
-                                        <div key={lecture._id} className="border rounded-lg p-4">
-                                            <h3 className="font-semibold">{lecture.title}</h3>
-                                            <p className="text-sm text-gray-600">
-                                                {format(new Date(lecture.startTime), "MMM d, yyyy 'at' h:mm a")}
-                                            </p>
-                                            {lecture.recordingUrl && (
-                                                <a
-                                                    href={lecture.recordingUrl}
-                                                    className="text-blue-600 hover:underline text-sm inline-block mt-2"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    View Recording
-                                                </a>
-                                            )}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                        >
+                            <div className="backdrop-blur-md bg-white/70 shadow-sm border border-gray-100 p-8 rounded-2xl">
+                                <h2 className="text-xl font-semibold mb-6 flex items-center gap-2">
+                                    <Video size={24} className="text-violet-500" />
+                                    <span className="bg-gradient-to-r from-violet-500 to-purple-500 bg-clip-text text-transparent">
+                                        Past Sessions
+                                    </span>
+                                </h2>
+                                <div className="space-y-4">
+                                    {lectures
+                                        .filter(l => l.status === 'completed')
+                                        .map((lecture, index) => (
+                                            <motion.div 
+                                                key={lecture._id} 
+                                                initial={{ opacity: 0, y: 10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                transition={{ delay: 0.1 * index }}
+                                                className="border border-violet-100 rounded-xl p-5 hover:bg-violet-50/50 transition-all"
+                                            >
+                                                <h3 className="font-semibold text-gray-800">{lecture.title}</h3>
+                                                <div className="flex items-center gap-3 mt-2">
+                                                    <span className="flex items-center gap-1 text-gray-500 text-sm">
+                                                        <Calendar size={14} />
+                                                        {format(new Date(lecture.startTime), "MMM d, yyyy")}
+                                                    </span>
+                                                    <span className="h-3 w-px bg-gray-300"></span>
+                                                    <span className="flex items-center gap-1 text-gray-500 text-sm">
+                                                        <Clock size={14} />
+                                                        {format(new Date(lecture.startTime), "h:mm a")}
+                                                    </span>
+                                                </div>
+                                                {lecture.recordingUrl && (
+                                                    <a
+                                                        href={lecture.recordingUrl}
+                                                        className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-800 text-sm font-medium mt-3 transition-colors"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        <Video size={14} />
+                                                        View Recording
+                                                    </a>
+                                                )}
+                                            </motion.div>
+                                        ))}
+                                    {lectures.filter(l => l.status === 'completed').length === 0 && (
+                                        <div className="text-center py-8 text-gray-400 bg-gray-50 rounded-xl">
+                                            <Video size={40} className="mx-auto mb-2 opacity-50" />
+                                            <p>No past sessions yet</p>
                                         </div>
-                                    ))}
+                                    )}
+                                </div>
                             </div>
-                        </DashboardCard>
+                        </motion.div>
                     </div>
                 </div>
             </div>
+            <ToastContainer position="bottom-right" />
         </div>
     );
 };
