@@ -131,8 +131,10 @@ const Register = () => {
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
+            console.log("Form Data:", formData);
             const response = await axios.post('http://localhost:8000/api/auth/register', formData);
             const { user, token } = response.data;
+            console.log(response);
 
             toast.success(response.data.message || 'Registration successful!');
 
