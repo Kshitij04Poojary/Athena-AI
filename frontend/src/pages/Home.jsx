@@ -24,7 +24,7 @@ const Home = () => {
     }, [user])
     return (
         <div className="flex min-h-max bg-gradient-to-br from-gray-50 to-gray-100">
-            <SideBar />
+            {/* <SideBar /> */}
             <main className="flex-1 p-8 transition-all duration-300">
                 <div className="max-w-5xl mx-auto">
                     <header className="mb-12">

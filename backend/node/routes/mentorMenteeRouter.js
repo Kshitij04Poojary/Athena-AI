@@ -18,20 +18,25 @@ router.get("/mentees/:userId", async (req, res) => {
     try {
         const { userId } = req.params;
 
-        // Find mentor by user ID (without populating)
+        // Find the mentor by user ID
         const mentor = await Mentor.findOne({ user: userId });
-       
+
         if (!mentor) {
             return res.status(404).json({ error: "Mentor not found or no assigned mentees" });
         }
-        const menteeUserIds = mentor.mentees.map(mentee => mentee.toString());
-        const menteeUsers = await User.find({ _id: { $in: menteeUserIds } }).select("name email");
+
+        // Find all mentees assigned to the mentor and populate the user details (name, email)
+        const menteeUsers = await Mentee.find({ _id: { $in: mentor.mentees } })
+            .populate("user", "name email") // Populate the 'user' field and fetch 'name' and 'email'
+            .select("user"); // Only return the populated user field
+
         res.json({ mentees: menteeUsers });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Server error" });
     }
 });
+
 
 
 module.exports = router;

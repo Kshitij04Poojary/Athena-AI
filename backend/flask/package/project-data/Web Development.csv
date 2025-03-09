@@ -1,514 +1,5 @@
 ,domain,url,readme,stars
-1,Machine Learning,https://github.com/huggingface/transformers,"transformers/README.md at main · huggingface/transformers · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
-    
-
-
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-      Startups
-
-    
-
-
-
-     ",140826
-3,Machine Learning,https://github.com/microsoft/ML-For-Beginners,"ML-For-Beginners/README.md at main · microsoft/ML-For-Beginners · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
-    
-
-
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-      Startups
-
-    
-
-
-",71358
-6,Machine Learning,https://github.com/gradio-app/gradio,"gradio/README.md at main · gradio-app/gradio · GitHub
+1,Web Development,https://github.com/sveltejs/svelte,"svelte/README.md at main · sveltejs/svelte · GitHub
 
 
 
@@ -764,8 +255,8 @@ By company size
 
       Nonprofits
 
-",36657
-8,Machine Learning,https://github.com/lutzroeder/netron,"netron/README.md at main · lutzroeder/netron · GitHub
+  ",81670
+4,Web Development,https://github.com/kataras/iris,"iris/README.md at main · kataras/iris · GitHub
 
 
 
@@ -1021,500 +512,11 @@ By company size
 
       Nonprofits
 
-",29587
-9,Machine Learning,https://github.com/Ebazhanov/linkedin-skill-assessments-quizzes,"linkedin-skill-assessments-quizzes/README.md at main · Ebazhanov/linkedin-skill-assessments-quizzes · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
     
 
 
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium te",28592
-11,Data Science,https://github.com/microsoft/Data-Science-For-Beginners,"Data-Science-For-Beginners/README.md at main · microsoft/Data-Science-For-Beginners · GitHub
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Skip to content
-
-
-
-
-
-
-
-
-
-
-
-
-
-Navigation Menu
-
-Toggle navigation
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-            Sign in
-          
-
-
-
-
-
-
-
-
-        Product
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-GitHub Copilot
-        Write better code with AI
-      
-
-
-
-
-
-
-
-Security
-        Find and fix vulnerabilities
-      
-
-
-
-
-
-
-
-Actions
-        Automate any workflow
-      
-
-
-
-
-
-
-
-Codespaces
-        Instant dev environments
-      
-
-
-
-
-
-
-
-Issues
-        Plan and track work
-      
-
-
-
-
-
-
-
-Code Review
-        Manage code changes
-      
-
-
-
-
-
-
-
-Discussions
-        Collaborate outside of code
-      
-
-
-
-
-
-
-
-Code Search
-        Find more, search less
-      
-
-
-
-
-
-
-Explore
-
-
-
-      All features
-
-    
-
-
-
-      Documentation
-
-    
-
-
-
-
-
-      GitHub Skills
-
-    
-
-
-
-
-
-      Blog
-
-    
-
-
-
-
-
-
-
-
-
-
-        Solutions
-        
-
-
-
-
-
-
-By company size
-
-
-
-      Enterprises
-
-    
-
-
-
-      Small and medium teams
-
-    
-
-
-
-   ",28987
-13,Data Science,https://github.com/eugeneyan/applied-ml,"applied-ml/README.md at main · eugeneyan/applied-ml · GitHub
+",25401
+5,Web Development,https://github.com/responsively-org/responsively-app,"responsively-app/README.md at main · responsively-org/responsively-app · GitHub
 
 
 
@@ -1764,12 +766,259 @@ By company size
 
       Startups
 
+",23096
+6,Web Development,https://github.com/jhipster/generator-jhipster,"generator-jhipster/README.md at main · jhipster/generator-jhipster · GitHub
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Skip to content
+
+
+
+
+
+
+
+
+
+
+
+
+
+Navigation Menu
+
+Toggle navigation
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Sign in
+          
+
+
+
+
+
+
+
+
+        Product
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+GitHub Copilot
+        Write better code with AI
+      
+
+
+
+
+
+
+
+Security
+        Find and fix vulnerabilities
+      
+
+
+
+
+
+
+
+Actions
+        Automate any workflow
+      
+
+
+
+
+
+
+
+Codespaces
+        Instant dev environments
+      
+
+
+
+
+
+
+
+Issues
+        Plan and track work
+      
+
+
+
+
+
+
+
+Code Review
+        Manage code changes
+      
+
+
+
+
+
+
+
+Discussions
+        Collaborate outside of code
+      
+
+
+
+
+
+
+
+Code Search
+        Find more, search less
+      
+
+
+
+
+
+
+Explore
+
+
+
+      All features
+
     
 
 
 
-      Nonpr",27796
-15,Data Science,https://github.com/datasciencemasters/go,"go/README.md at main · datasciencemasters/go · GitHub
+      Documentation
+
+    
+
+
+
+
+
+      GitHub Skills
+
+    
+
+
+
+
+
+      Blog
+
+    
+
+
+
+
+
+
+
+
+
+
+        Solutions
+        
+
+
+
+
+
+
+By company size
+
+
+
+      Enterprises
+
+    
+
+
+
+      Small and medium teams
+
+    
+
+
+
+      Startups
+
+    ",21779
+7,Web Development,https://github.com/sveltejs/kit,"kit/README.md at main · sveltejs/kit · GitHub
 
 
 
@@ -2025,4 +1274,8 @@ By company size
 
       Nonprofits
 
-",25259
+    
+
+
+
+",19064
