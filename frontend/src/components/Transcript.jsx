@@ -6,19 +6,7 @@ function Transcript() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    async function fetchData() {
-        try {
-            setLoading(true);
-            setError(null);
-            const resp = await axios.post("http://127.0.0.1:5004/api/transcript/",{"path": "https://res.cloudinary.com/dhk1v7s3d/video/upload/v1741483165/New_Recordings/d7ksepdunzakxnbfewre.mp4"},{withCredentials: true});
-            setText(resp.data);
-        } catch (error) {
-            console.error("Error fetching transcript:", error);
-            setError("Failed to load transcript. Please try again.");
-        } finally {
-            setLoading(false);
-        }
-    }
+   
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">

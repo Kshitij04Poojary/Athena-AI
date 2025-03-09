@@ -6,7 +6,8 @@ const User = require('../models/UserModel');
 exports.getMentorMentees = async (req, res) => {
     try {
         // console.log(req.user.id);
-        const mentor = await Mentor.findOne({ user: req.user.id })
+        const mentor = await Mentor.findOne({ user: req.user.id }).populate('mentees.user').exec();
+
            
 
         if (!mentor) {

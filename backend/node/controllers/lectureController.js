@@ -47,12 +47,12 @@ exports.getMentorLectures = async (req, res) => {
         .populate({
           path: 'mentee',
           populate: { path: 'user' }
-        })
-        .populate('mentor')
+        }).populate({path:'attendance',populate:{path:'user'}})
         .sort({ startTime: 1 });
         // console.log(lectures);
         res.json(lectures);
     } catch (error) {
+      console.log(error);
         res.status(500).json({ message: error.message });
     }
 };

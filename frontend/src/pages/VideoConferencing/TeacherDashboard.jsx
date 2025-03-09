@@ -43,7 +43,7 @@ const TeacherDashboard = () => {
             console.error('Error fetching lectures:', error);
         }
     };
-
+    console.log(mentees);
     const fetchMentees = async () => {
         try {
             const response = await axios.get('http://localhost:8000/api/users/mentor/mentees',{
@@ -371,7 +371,7 @@ const TeacherDashboard = () => {
                                                         </div>
                                                         <div className="flex items-center text-sm text-gray-600">
                                                             <Users size={14} className="mr-2 text-gray-500" />
-                                                            Student: 
+                                                            Student: {lecture.attendance.map((u)=>u.user.name)}
                                                         </div>
                                                     </div>
                                                     {lecture.recordingUrl && (
@@ -386,6 +386,27 @@ const TeacherDashboard = () => {
                                                             <ChevronRight size={16} />
                                                         </a>
                                                     )}
+                                                 { lecture.transcript && (
+                                            <>
+                                                <button
+                                                onClick={() => setShowTranscript(!showTranscript)}
+                                                className="flex items-center gap-2 text-indigo-600 hover:text-indigo-800 font-medium text-sm mt-3 bg-indigo-50 rounded-lg p-2 hover:bg-indigo-100 transition-all"
+                                                >
+                                                <FileText size={16} />
+                                                {showTranscript ? 'Hide Transcript' : 'View Transcript'}
+                                                <ChevronRight size={16} className={`transition-transform ${showTranscript ? 'rotate-90' : ''}`} />
+                                                </button>
+                                                
+                                                {showTranscript && (
+                                                <div className="mt-3 bg-gray-50 p-3 rounded-lg max-h-64 overflow-y-auto">
+                                                    <p className="text-gray-700 text-sm whitespace-pre-line">
+                                                    {lecture.transcript}
+                                                    </p>
+                                                </div>
+                                                )}
+                                                </>
+                                             )}
+                                                    
                                                 </motion.div>
                                             ))
                                         ) : (

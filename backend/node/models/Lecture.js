@@ -6,14 +6,24 @@ const lectureSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    mentor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentor',
+        required: true
+    },
+    mentee: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentee',
+        required: true
+    }],
+
     startTime: {
         type: Date,
         required: true
     },
     duration: {
         type: Number, // in minutes
-        required: true,
-        default: 60
+        required: true
     },
     status: {
         type: String,
@@ -27,20 +37,22 @@ const lectureSchema = new mongoose.Schema({
     },
     recordingUrl: {
         type: String
-    },transcriptPdfUrl: {
+    },
+    transcript: {
         type: String
     },
     attendance: [{
-        student: {
+        
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Mentee',
-          },
+            // required: true
+          
     }],
+    // Lecture.js
+
     
 }, { timestamps: true });
 
 
 const Lecture = mongoose.model('Lecture', lectureSchema);
 module.exports = Lecture;
-
-
