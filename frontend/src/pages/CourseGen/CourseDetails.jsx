@@ -24,7 +24,7 @@ const CourseDetails = () => {
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
     const [editableCourse, setEditableCourse] = useState(null); // State to manage editable course data
-
+    console.log(editableCourse)
     useEffect(() => {
         if (!token) {
             console.error('No auth token found');
@@ -261,7 +261,11 @@ const CourseDetails = () => {
                             <div className="mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
                                 <div className="bg-blue-600 text-white p-6">
                                     <div className="flex items-center space-x-4 mb-4">
-                                        <h1 className="text-3xl font-bold flex-grow">{course.courseName}</h1>
+                                        <input
+                                            className="text-3xl font-bold flex-grow p-2 border rounded-xl"
+                                            value={editableCourse?.courseName || ''}
+                                            onChange={(e) => setEditableCourse({ ...editableCourse, courseName: e.target.value })}
+                                        />
                                     </div>
                                 </div>
 
@@ -270,24 +274,42 @@ const CourseDetails = () => {
                                         <div>
                                             <div className="flex items-center mb-4">
                                                 <BookOpen className="mr-3 text-blue-600" size={24} />
-                                                <p className="text-gray-700"><strong>Description:</strong> {course.description}</p>
+                                                <textarea
+                                                    className="w-full p-2 border rounded-xl"
+                                                    rows="4"
+                                                    value={editableCourse?.description || ''}
+                                                    onChange={(e) => setEditableCourse({ ...editableCourse, description: e.target.value })}
+                                                />
                                             </div>
 
                                             <div className="flex items-center mb-4">
                                                 <Layers className="mr-3 text-blue-600" size={24} />
-                                                <p className="text-gray-700">
-                                                    <strong>Skills:</strong> {course.skills.join(', ')}
-                                                </p>
+                                                <input
+                                                    className="w-full p-2 border rounded-xl"
+                                                    value={editableCourse?.skills.join(', ') || ''}
+                                                    onChange={(e) => setEditableCourse({
+                                                        ...editableCourse,
+                                                        skills: e.target.value.split(',').map(skill => skill.trim())
+                                                    })}
+                                                />
                                             </div>
 
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="flex items-center">
                                                     <Star className="mr-2 text-blue-600" size={20} />
-                                                    <span><strong>Level:</strong> {course.level}</span>
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={editableCourse?.level || ''}
+                                                        onChange={(e) => setEditableCourse({ ...editableCourse, level: e.target.value })}
+                                                    />
                                                 </div>
                                                 <div className="flex items-center">
                                                     <Clock className="mr-2 text-blue-600" size={20} />
-                                                    <span><strong>Duration:</strong> {course.duration}</span>
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={editableCourse?.duration || ''}
+                                                        onChange={(e) => setEditableCourse({ ...editableCourse, duration: e.target.value })}
+                                                    />
                                                 </div>
                                             </div>
                                         </div>
@@ -297,11 +319,15 @@ const CourseDetails = () => {
                                                 <Target className="mr-3 text-blue-600" size={24} />
                                                 <h2 className="text-xl font-semibold">Course Outcomes</h2>
                                             </div>
-                                            <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                                                {course.courseOutcomes.map((outcome, index) => (
-                                                    <li key={index} className="pl-2">{outcome}</li>
-                                                ))}
-                                            </ul>
+                                            <textarea
+                                                className="w-full p-2 border rounded-xl"
+                                                rows="4"
+                                                value={editableCourse?.courseOutcomes.join('\n') || ''}
+                                                onChange={(e) => setEditableCourse({
+                                                    ...editableCourse,
+                                                    courseOutcomes: e.target.value.split('\n').map(outcome => outcome.trim())
+                                                })}
+                                            />
                                         </div>
                                     </div>
 
@@ -309,24 +335,44 @@ const CourseDetails = () => {
                                         Course Chapters
                                     </h2>
                                     <div className="space-y-4">
-                                        {course.chapters.map((chapter) => (
+                                        {editableCourse?.chapters.map((chapter, index) => (
                                             <div
                                                 key={chapter._id}
-                                                className="bg-white border border-blue-100 rounded-xl p-5 
-                                           shadow-sm hover:shadow-md transition-all duration-300 
-                                           cursor-pointer hover:border-blue-300 
-                                           transform hover:-translate-y-1"
-                                                onClick={() => handleChapterClick(chapter._id)}
+                                                className="bg-white border border-blue-100 rounded-xl p-5"
                                             >
-                                                <h3 className="text-xl font-semibold text-blue-600 mb-2">
-                                                    {chapter.chapterName}
-                                                </h3>
-                                                <p className="text-gray-600 mb-2">
-                                                    <strong>About:</strong> {chapter.about}
-                                                </p>
+                                                <div className="flex items-center mb-4">
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.chapterName}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].chapterName = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="mb-4">
+                                                    <textarea
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.about}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].about = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
+                                                </div>
                                                 <div className="flex items-center text-gray-500">
                                                     <Clock className="mr-2" size={16} />
-                                                    <span>{chapter.duration}</span>
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.duration}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].duration = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
                                                 </div>
                                             </div>
                                         ))}
@@ -346,6 +392,7 @@ const CourseDetails = () => {
                     </div>
                 </div>
             )}
+
         </div>
     );
 };
