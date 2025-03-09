@@ -7,7 +7,7 @@ import {
   BookOpen, 
   ChevronLeft, 
   ChevronRight,
-  ClipboardList,BarChart2,
+  ClipboardList,
   BrainCircuit,
   Briefcase,
   Lightbulb,
