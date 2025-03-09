@@ -36,7 +36,9 @@ import InternshipListings from "./components/InternshipListings";
 import TeamsStyleCalendar from "./pages/TimeTable/TeamsStyleCalendar";
 import Landing from "./pages/Landing";
 import Transcript from "./components/Transcript";
-import CodeEditor from "./components/Coding";
+import CreateExam from "./pages/Exams/CreateExam";
+import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
+
 const App = () => (
   <UserProvider>
     <Router>
@@ -46,8 +48,6 @@ const App = () => (
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
-
-                
         <Route
           path="/consultation-room/:roomId"
           element={<ConsultationRoom />}
@@ -76,53 +76,33 @@ const App = () => (
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
           />
-          if(useUser().user.role==='mentee')
-          {
+
+          if(useUser().user.role==='mentee'){
             <>
               <Route path="/mentee" element={<StudentDashboard />} />
+              <Route path="/mentee-exam" element={<MenteeExamDashboard />} />
+             
             </>
           }
-          if(useUser().user.role==='mentor')
-          {<Route path="/mentor" element={<TeacherDashboard />} />}
+          if(useUser().user.role==='mentor'){
+            <>
+              <Route path="/mentor" element={<TeacherDashboard />} />
+         
+              <Route path='/create-exam' element={<CreateExam />} />
+            </>
+          }
+
         </Route>
 
-                <Route element={<MainLayout />}>
+        <Route path="/interview/:interviewId" element={<StartInterview />} />
+        <Route path='/interview/:interviewId/start' element={<MainInterview />} />
+        <Route path="/assessment/:examId" element={<Exam />} />
+        <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />} />
+        <Route path="/examreview" element={<ExamReview />} />
 
-                    <Route path="/profile" element={<ProfilePage />} />
-                    <Route path="/my-courses" element={<MyCourses />} />
-                    <Route path="/create-course" element={<CreateCourse />} />
-                    <Route path="/course/:courseId" element={<CourseDetails />} />
-                    <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails />} />
-                    <Route path="/assessment" element={<ExamDashboard />} />
-                    <Route path="/interview" element={<InterviewDashboard />} />
-                    <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
-                    <Route path='/internships' element={<InternshipListings/>}/>
-                    <Route path='/similarity' element={<Similarity/>}/>
-                    <Route path='/coding' element={<CodeEditor/>}/>
-                    <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
-                    
-                    if(useUser().user.role==='mentee'){
-                        <>
-                            <Route path="/mentee" element={<StudentDashboard />} />
-                        </>
-                    }
-                    if(useUser().user.role==='mentor'){
-                        <Route path="/mentor" element={<TeacherDashboard />} />
-                    }
-
-                </Route>
-
-                <Route path="/interview/:interviewId" element={<StartInterview />} />
-                <Route path='/interview/:interviewId/start' element={<MainInterview />} />
-                <Route path="/assessment/:examId" element={<Exam />} />
-                <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />}/>
-                <Route path="/examreview" element={<ExamReview />} />
-                
-                <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
-
-            </Routes>
-        </Router>
-    </UserProvider>
+      </Routes>
+    </Router>
+  </UserProvider>
 );
 
 export default App;
