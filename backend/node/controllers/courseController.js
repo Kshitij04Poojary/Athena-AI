@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Course = require('../models/CourseModel');
 const User = require('../models/UserModel');
 
@@ -192,70 +193,133 @@ exports.getSectionById = async (req, res) => {
 // Update course layout
 exports.updateCourseLayout = async (req, res) => {
     const { courseId } = req.params;
-    const { chapters } = req.body;  // Expecting array of chapters with _id and updated data
+    const { courseName, description, level, courseOutcomes, duration, chapters } = req.body;
 
     try {
-        // Find the course
+        // ✅ Find the course
         const course = await Course.findById(courseId);
         if (!course) {
             return res.status(404).json({ message: 'Course not found' });
         }
 
-        // Check if chapters exceed 5 (already handled by Mongoose validation)
-        if (chapters.length > 5) {
-            return res.status(400).json({ message: 'A course can have a maximum of 5 chapters only.' });
+        // ✅ Update Course-Level Details
+        if (courseName) course.courseName = courseName;
+        if (description) course.description = description;
+        if (level) course.level = level;
+        if (courseOutcomes) course.courseOutcomes = courseOutcomes;
+        if (duration) course.duration = duration;
+
+        // ✅ Step 1: Bulk Update Existing Chapters
+        const bulkOperations = chapters
+            .filter(chapter => chapter._id) // ✅ Only update existing chapters
+            .map(chapter => ({
+                updateOne: {
+                    filter: { _id: courseId, "chapters._id": chapter._id },
+                    update: {
+                        $set: {
+                            "chapters.$.chapterName": chapter.chapterName,
+                            "chapters.$.about": chapter.about,
+                            "chapters.$.duration": chapter.duration
+                        }
+                    }
+                }
+            }));
+
+        if (bulkOperations.length > 0) {
+            await Course.bulkWrite(bulkOperations);
         }
 
-        // Update the chapters array in the same sequence
-        course.chapters = chapters.map(chapter => ({
-            _id: chapter._id,
-            chapterName: chapter.chapterName,
-            about: chapter.about,
-            duration: chapter.duration,
-            sections: chapter.sections,
-            video: chapter.video,
-            isCompleted: chapter.isCompleted
-        }));
+        // ✅ Step 2: Push New Chapters (if any)
+        chapters
+            .filter(chapter => !chapter._id) // ✅ Only push new chapters without _id
+            .forEach(chapter => {
+                course.chapters.push({
+                    chapterName: chapter.chapterName,
+                    about: chapter.about,
+                    duration: chapter.duration
+                });
+            });
 
+        // ✅ Step 3: Save the course
         await course.save();
 
         res.status(200).json({ message: 'Course layout updated successfully', course });
     } catch (error) {
+        console.error('Error in updateCourseLayout:', error);
         res.status(500).json({ message: 'Failed to update course layout', error: error.message });
     }
 };
 
+
+
 // Update chapter layout
 exports.updateChapterLayout = async (req, res) => {
     const { courseId, chapterId } = req.params;
-    const { sections } = req.body;  // Expecting sections array
+    const { chapterName, about, duration, sections, video, ppt } = req.body;
 
     try {
-        // Find the course
+        // ✅ Find the course
         const course = await Course.findById(courseId);
         if (!course) {
             return res.status(404).json({ message: 'Course not found' });
         }
 
-        // Find the specific chapter
+        // ✅ Find the specific chapter
         const chapter = course.chapters.id(chapterId);
         if (!chapter) {
             return res.status(404).json({ message: 'Chapter not found' });
         }
 
-        // Update sections array
-        chapter.sections = sections.map(section => ({
-            _id: section._id,
-            title: section.title,
-            explanation: section.explanation,
-            codeExample: section.codeExample
-        }));
+        // ✅ Update Chapter Details (NEW!!)
+        chapter.chapterName = chapterName;
+        chapter.about = about;
+        chapter.duration = duration;
 
+        // ✅ Handle Sections (Add, Edit, Delete)
+        chapter.sections = sections.map(section => {
+            if (mongoose.isValidObjectId(section._id)) {
+                // ✅ Existing section (keep same ID)
+                return {
+                    _id: section._id,
+                    title: section.title,
+                    explanation: section.explanation,
+                    codeExample: section.codeExample
+                };
+            } else {
+                // ✅ New Section (Generate New ID)
+                return {
+                    _id: new mongoose.Types.ObjectId(),
+                    title: section.title,
+                    explanation: section.explanation,
+                    codeExample: section.codeExample
+                };
+            }
+        });
+
+        // ✅ Handle Video (if provided)
+        if (video) {
+            chapter.video.url = video.url || chapter.video.url;
+            chapter.video.thumbnail = video.thumbnail || chapter.video.thumbnail;
+        }
+
+        // ✅ Handle PPT (if provided)
+        if (ppt) {
+            chapter.ppt.title = ppt.title || chapter.ppt.title;
+            chapter.ppt.link = ppt.link || chapter.ppt.link;
+        }
+
+        // ✅ Save the course
         await course.save();
 
-        res.status(200).json({ message: 'Chapter layout updated successfully', chapter });
+        res.status(200).json({ 
+            message: 'Chapter layout updated successfully', 
+            chapter 
+        });
     } catch (error) {
-        res.status(500).json({ message: 'Failed to update chapter layout', error: error.message });
+        console.error('Error updating chapter layout:', error);
+        res.status(500).json({ 
+            message: 'Failed to update chapter layout', 
+            error: error.message 
+        });
     }
 };
-

@@ -6,6 +6,16 @@ const lectureSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    mentor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentor',
+        required: true
+    },
+    mentee: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Mentee',
+        required: true
+    }],
     startTime: {
         type: Date,
         required: true

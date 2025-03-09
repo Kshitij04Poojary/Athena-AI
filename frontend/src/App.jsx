@@ -40,6 +40,7 @@ import CreateExam from "./pages/Exams/CreateExam";
 import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
 import CodeEditor from "./components/Coding";
 
+import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 
 const App = () => (
   <UserProvider>
@@ -71,6 +72,7 @@ const App = () => (
             element={<Feedback />}
           />
           <Route path="/internships" element={<InternshipListings />} />
+          <Route path="/offline-attendance" element={<OfflineAttendance />} />
           <Route path="/similarity" element={<Similarity />} />
           <Route path="/calendar" element={<TeamsStyleCalendar />} />
           <Route path="/transcript" element={<Transcript/>} />

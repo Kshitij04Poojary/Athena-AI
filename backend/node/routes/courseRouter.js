@@ -22,6 +22,8 @@ router.put('/:courseId', updateCourse);
 router.delete('/:id', authMiddleware, deleteCourse);      // Delete (requires auth)
 router.get('/:courseId/chapters/:chapterId', getChapterById);
 router.get('/:courseId/chapters/:chapterId/sections/:sectionId', getSectionById);
+router.put('/:courseId/chapters/:chapterId/layout', authMiddleware, updateChapterLayout);
+router.put('/:courseId/layout', authMiddleware, updateCourseLayout);
 
 
 module.exports = router;

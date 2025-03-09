@@ -15,7 +15,10 @@ const chapterSchema = new mongoose.Schema({
         url: { type: String },
         thumbnail: { type: String }
     },
-    ppt : { type: String },
+    ppt : {
+        title: { type: String },
+        link: { type: String },
+    },
     isCompleted: { type: Boolean, default: false }
 });
 
