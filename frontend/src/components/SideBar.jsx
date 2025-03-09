@@ -10,7 +10,10 @@ import {
   ClipboardList,
   BrainCircuit,
   Briefcase,
-  Lightbulb, Star,Calendar,UserCheck, Link
+  Lightbulb,
+  Calendar,
+  ListChecks,
+  BarChart2 
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -22,14 +25,16 @@ const SideBar = () => {
         { name: 'Profile', icon: User, path: '/profile' },
         { name: 'Courses', icon: BookOpen, path:'/my-courses'},
         { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
+        ...(user?.role === 'mentor' ? [{ name: 'Attendance', icon: ListChecks, path: '/offline-attendance' }] : []),
         { name: 'Video Conferencing', icon: Video, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
         { name: 'Project Recommendations', icon: Lightbulb, path: '/recommend-projects' },
         { name: 'AI Schedule', icon: Calendar, path: '/calendar' },
-        // { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
-        // { name: 'Analytics', icon: BarChart2, path: '/analytics' },
+        { name: 'Coding', icon: BarChart2, path: '/coding' },
+        { name: 'Exams', icon: BarChart2, path: (user?.role==='mentor'?'/create-exam':(user?.role==='mentee'?'/mentee-exam':'/none') )},
         { name: 'Mock Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
+    
 
     return (
         <div 

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
+import { v4 as uuidv4 } from 'uuid';
 import {
     ArrowLeft,
     BookOpen,
@@ -11,8 +12,12 @@ import {
     Lock,
     Unlock,
     CheckCircle,
-    Pencil
+    Pencil,
+    Plus,
+    Trash2,
+    Download
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 const CourseDetails = () => {
     const { courseId } = useParams();
@@ -22,9 +27,9 @@ const CourseDetails = () => {
 
     const [course, setCourse] = useState(null);
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
-    const [editableCourse, setEditableCourse] = useState(null); // State to manage editable course data
-    console.log(editableCourse)
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editableCourse, setEditableCourse] = useState(null);
+
     useEffect(() => {
         if (!token) {
             console.error('No auth token found');
@@ -42,7 +47,7 @@ const CourseDetails = () => {
             if (response.ok) {
                 const data = await response.json();
                 setCourse(data);
-                checkFinalAssessment(data); // Fetch assessment data after course loads
+                checkFinalAssessment(data);
             } else {
                 console.error('Failed to fetch course data');
             }
@@ -64,7 +69,7 @@ const CourseDetails = () => {
 
                 if (bestScore >= 70 && courseData?.passedFinal === false) {
                     await updateCoursePassedFinal(true);
-                    fetchCourseDetails();  // Re-fetch course after updating status
+                    fetchCourseDetails();
                 }
             } else {
                 console.log('No assessments found for this course.');
@@ -94,28 +99,293 @@ const CourseDetails = () => {
         }
     };
 
+    const generateCertificate = () => {
+        const doc = new jsPDF({
+            orientation: 'landscape',
+            unit: 'mm',
+            format: 'a4'
+        });
+        
+        // Page dimensions
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
+        
+        // Add background color
+        doc.setFillColor(240, 248, 255); // Light blue background
+        doc.rect(0, 0, pageWidth, pageHeight, 'F');
+        
+        // Add elegant border with rounded corners
+        doc.setDrawColor(65, 105, 225); // Royal blue border
+        doc.setLineWidth(3);
+        // Using lines to create a border with more margin space
+        const margin = 15;
+        doc.roundedRect(margin, margin, pageWidth - (margin * 2), pageHeight - (margin * 2), 5, 5, 'S');
+        
+        // Add decorative corner elements
+        addCornerDecorations(doc, margin);
+        
+        // Add certificate title
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(32);
+        doc.setTextColor(25, 25, 112); // Dark blue
+        doc.text('Certificate of Completion', pageWidth / 2, 45, { align: 'center' });
+        
+        // Add decorative line
+        doc.setDrawColor(65, 105, 225);
+        doc.setLineWidth(1);
+        doc.line(pageWidth / 2 - 80, 52, pageWidth / 2 + 80, 52);
+        
+        // Add certificate text with better spacing
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('This is to certify that', pageWidth / 2, 70, { align: 'center' });
+        
+        // Add name - limit length if needed
+        const userName = user.name || 'Student Name';
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(24);
+        doc.setTextColor(25, 25, 112);
+        doc.text(limitTextLength(userName, 40), pageWidth / 2, 85, { align: 'center' });
+        
+        // Add completion text
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 0);
+        doc.text('has successfully completed the course', pageWidth / 2, 105, { align: 'center' });
+        
+        // Add course name - limit length if needed
+        const courseName = limitTextLength(course.courseName, 50);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(24);
+        doc.setTextColor(25, 25, 112);
+        
+        // Handle long course names by splitting if necessary
+        if (courseName.length > 30) {
+            const words = courseName.split(' ');
+            let line1 = '';
+            let line2 = '';
+            
+            let i = 0;
+            while (i < words.length) {
+                if ((line1 + words[i] + ' ').length <= 30) {
+                    line1 += words[i] + ' ';
+                } else {
+                    break;
+                }
+                i++;
+            }
+            
+            while (i < words.length) {
+                line2 += words[i] + ' ';
+                i++;
+            }
+            
+            doc.text(line1.trim(), pageWidth / 2, 125, { align: 'center' });
+            if (line2.trim()) {
+                doc.text(line2.trim(), pageWidth / 2, 135, { align: 'center' });
+            }
+        } else {
+            doc.text(courseName, pageWidth / 2, 125, { align: 'center' });
+        }
+        
+        // Add score if available with adjusted position
+        const scoreY = courseName.length > 30 ? 150 : 140;
+        if (bestAssessmentScore !== null) {
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(16);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`with a score of ${bestAssessmentScore}%`, pageWidth / 2, scoreY, { align: 'center' });
+        }
+        
+        // Add date
+        const currentDate = new Date();
+        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+        const formattedDate = currentDate.toLocaleDateString('en-US', dateOptions);
+        
+        // Position date based on whether score is displayed
+        const dateY = bestAssessmentScore !== null ? scoreY + 20 : scoreY + 5;
+        doc.setFontSize(14);
+        doc.text(`Issued on: ${formattedDate}`, pageWidth / 2, dateY, { align: 'center' });
+        
+        // Add signature line
+        doc.setDrawColor(65, 105, 225);
+        doc.setLineWidth(0.5);
+        doc.line(pageWidth / 2 - 50, pageHeight - 50, pageWidth / 2 + 50, pageHeight - 50);
+        
+        // Add issuer text
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(14);
+        doc.setTextColor(0, 0, 0);
+        doc.text('Issued By:', pageWidth / 2, pageHeight - 40, { align: 'center' });
+        
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(18);
+        doc.setTextColor(65, 105, 225);
+        doc.text('OdysseyAI', pageWidth / 2, pageHeight - 30, { align: 'center' });
+        
+        // Save the PDF with sanitized filename
+        doc.save(`${sanitizeFilename(course.courseName)}_Certificate.pdf`);
+    };
+    
+    // Helper function to limit text length
+    function limitTextLength(text, maxLength) {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength - 3) + '...';
+    }
+    
+    // Helper function to sanitize filename
+    function sanitizeFilename(filename) {
+        return filename.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }
+    
+    // Function to add decorative corners
+    function addCornerDecorations(doc, margin) {
+        const pageWidth = doc.internal.pageSize.width;
+        const pageHeight = doc.internal.pageSize.height;
+        const cornerSize = 10;
+        
+        doc.setDrawColor(65, 105, 225);
+        doc.setLineWidth(1);
+        
+        // Top-left corner
+        doc.line(margin - 5, margin + cornerSize, margin - 5, margin - 5); // Vertical line
+        doc.line(margin - 5, margin - 5, margin + cornerSize, margin - 5); // Horizontal line
+        
+        // Top-right corner
+        doc.line(pageWidth - margin + 5, margin + cornerSize, pageWidth - margin + 5, margin - 5); // Vertical line
+        doc.line(pageWidth - margin + 5, margin - 5, pageWidth - margin - cornerSize, margin - 5); // Horizontal line
+        
+        // Bottom-left corner
+        doc.line(margin - 5, pageHeight - margin - cornerSize, margin - 5, pageHeight - margin + 5); // Vertical line
+        doc.line(margin - 5, pageHeight - margin + 5, margin + cornerSize, pageHeight - margin + 5); // Horizontal line
+        
+        // Bottom-right corner
+        doc.line(pageWidth - margin + 5, pageHeight - margin - cornerSize, pageWidth - margin + 5, pageHeight - margin + 5); // Vertical line
+        doc.line(pageWidth - margin + 5, pageHeight - margin + 5, pageWidth - margin - cornerSize, pageHeight - margin + 5); // Horizontal line
+    }    
+
     const handleChapterClick = (chapterId) => {
         navigate(`/course/${courseId}/chapter/${chapterId}`);
     };
 
-    const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
-    const { passedFinal } = course || {};
-
     const handleEditClick = () => {
-        setEditableCourse({ ...course }); // Set the current course content for editing
-        setIsModalOpen(true); // Open the modal
+        setEditableCourse({ ...course });
+        setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
-        setIsModalOpen(false); // Close the modal
-    };
-
-    const handleSaveChanges = () => {
-        // Perform save operation (e.g., call API to save updated course data)
-        console.log("Saving changes to course:", editableCourse);
         setIsModalOpen(false);
     };
 
+    // Add a new chapter to the editable course
+    const handleAddChapter = () => {
+        if (editableCourse.chapters.length >= 5) {
+            alert("A course can have a maximum of 5 chapters only.");
+            return;
+        }
+    
+        const newChapter = {
+            _id: uuidv4(), // Temporary ID
+            chapterName: 'New Chapter',
+            about: 'Chapter description',
+            duration: '30 mins',
+            isCompleted: false
+        };
+    
+        setEditableCourse({
+            ...editableCourse,
+            chapters: [...editableCourse.chapters, newChapter]
+        });
+    };
+    
+
+    // Remove a chapter from the editable course
+    const handleRemoveChapter = async (index, chapterId) => {
+        const updatedChapters = [...editableCourse.chapters];
+        updatedChapters.splice(index, 1);
+    
+        // ✅ Immediately update the UI (temporarily)
+        setEditableCourse({
+            ...editableCourse,
+            chapters: updatedChapters
+        });
+    
+        // ✅ If chapter has a MongoDB _id, send a DELETE request
+        if (chapterId) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/courses/${courseId}/chapters/${chapterId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+    
+                if (response.ok) {
+                    // ✅ After successful delete, refetch the course from MongoDB
+                    fetchCourseDetails();  // 💯 THIS IS THE FIX!
+                } else {
+                    console.error('Failed to delete chapter from database');
+                }
+            } catch (error) {
+                console.error('Error deleting chapter:', error);
+            }
+        }
+    };
+    
+
+    const handleSaveChanges = async () => {
+        if (!editableCourse.chapters || editableCourse.chapters.length === 0) {
+            alert("A course must have at least one chapter.");
+            return;
+        }
+    
+        if (editableCourse.chapters.length > 5) {
+            alert("A course can have a maximum of 5 chapters only.");
+            return;
+        }
+    
+        // ✅ Remove Temporary _id for new chapters
+        const processedChapters = editableCourse.chapters.map(chapter => {
+            if (chapter._id?.includes('-')) delete chapter._id;
+            return chapter;
+        });
+    
+        const courseDataToSend = {
+            ...editableCourse,
+            chapters: processedChapters
+        };
+    
+        try {
+            console.log("Updating course layout:", courseDataToSend);
+            const response = await fetch(`http://localhost:8000/api/courses/${courseId}/layout`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(courseDataToSend),
+            });
+    
+            if (response.ok) {
+                alert("Course updated successfully!");
+                const data = await response.json();
+                setCourse(data.course);
+                setIsModalOpen(false);
+                fetchCourseDetails();
+            } else {
+                const errorData = await response.json();
+                alert(`Failed to update course: ${errorData.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Error updating course:', error);
+            alert(`Error updating course: ${error.message}`);
+        }
+    };
+    
     if (!course) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -123,6 +393,9 @@ const CourseDetails = () => {
             </div>
         );
     }
+
+    const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
+    const { passedFinal } = course || {};
 
     return (
         <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
@@ -224,7 +497,7 @@ const CourseDetails = () => {
                                     : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
                             }`}
                         onClick={() => {
-                            if (allChaptersCompleted) {
+                            if (!passedFinal && allChaptersCompleted) {
                                 navigate(`/course/${courseId}/course-assessment`, {
                                     state: {
                                         topic: course.courseName,
@@ -247,22 +520,35 @@ const CourseDetails = () => {
                         </div>
                         <span className="font-semibold">{passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}</span>
                     </div>
+                    
+                    {/* Certificate Download Button - Only shown when passedFinal is true */}
+                    {passedFinal && (
+                        <div className="mt-6">
+                            <button
+                                onClick={generateCertificate}
+                                className="flex items-center justify-center w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg"
+                            >
+                                <Download size={24} className="mr-2" />
+                                <span className="font-semibold text-lg">Download Certificate</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Modal */}
+            {/* Edit Course Modal */}
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-8 rounded-xl shadow-xl w-5/6 overflow-y-auto max-h-[90vh]">
                         <h2 className="text-2xl font-semibold mb-4">Edit Course</h2>
 
                         {/* Editable course content */}
                         <div className="space-y-4">
-                            <div className="mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
+                            <div className="mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
                                 <div className="bg-blue-600 text-white p-6">
                                     <div className="flex items-center space-x-4 mb-4">
                                         <input
-                                            className="text-3xl font-bold flex-grow p-2 border rounded-xl"
+                                            className="text-3xl font-bold flex-grow p-2 border rounded-xl bg-white text-gray-800"
                                             value={editableCourse?.courseName || ''}
                                             onChange={(e) => setEditableCourse({ ...editableCourse, courseName: e.target.value })}
                                         />
@@ -273,7 +559,7 @@ const CourseDetails = () => {
                                     <div className="grid md:grid-cols-2 gap-6 mb-8">
                                         <div>
                                             <div className="flex items-center mb-4">
-                                                <BookOpen className="mr-3 text-blue-600" size={24} />
+                                                <BookOpen className="mr-3 text-blue-600 flex-shrink-0" size={24} />
                                                 <textarea
                                                     className="w-full p-2 border rounded-xl"
                                                     rows="4"
@@ -283,7 +569,7 @@ const CourseDetails = () => {
                                             </div>
 
                                             <div className="flex items-center mb-4">
-                                                <Layers className="mr-3 text-blue-600" size={24} />
+                                                <Layers className="mr-3 text-blue-600 flex-shrink-0" size={24} />
                                                 <input
                                                     className="w-full p-2 border rounded-xl"
                                                     value={editableCourse?.skills.join(', ') || ''}
@@ -296,7 +582,7 @@ const CourseDetails = () => {
 
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div className="flex items-center">
-                                                    <Star className="mr-2 text-blue-600" size={20} />
+                                                    <Star className="mr-2 text-blue-600 flex-shrink-0" size={20} />
                                                     <input
                                                         className="w-full p-2 border rounded-xl"
                                                         value={editableCourse?.level || ''}
@@ -304,7 +590,7 @@ const CourseDetails = () => {
                                                     />
                                                 </div>
                                                 <div className="flex items-center">
-                                                    <Clock className="mr-2 text-blue-600" size={20} />
+                                                    <Clock className="mr-2 text-blue-600 flex-shrink-0" size={20} />
                                                     <input
                                                         className="w-full p-2 border rounded-xl"
                                                         value={editableCourse?.duration || ''}
@@ -325,22 +611,39 @@ const CourseDetails = () => {
                                                 value={editableCourse?.courseOutcomes.join('\n') || ''}
                                                 onChange={(e) => setEditableCourse({
                                                     ...editableCourse,
-                                                    courseOutcomes: e.target.value.split('\n').map(outcome => outcome.trim())
+                                                    courseOutcomes: e.target.value.split('\n').filter(line => line.trim() !== '')
                                                 })}
+                                                placeholder="Enter each outcome on a new line"
                                             />
                                         </div>
                                     </div>
 
-                                    <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b pb-3">
-                                        Course Chapters
-                                    </h2>
+                                    <div className="flex justify-between items-center mb-6">
+                                        <h2 className="text-2xl font-semibold text-blue-700">Course Chapters</h2>
+                                        <button 
+                                            onClick={handleAddChapter}
+                                            className="flex items-center bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                                        >
+                                            <Plus size={18} className="mr-1" />
+                                            Add Chapter
+                                        </button>
+                                    </div>
+                                    
                                     <div className="space-y-4">
                                         {editableCourse?.chapters.map((chapter, index) => (
                                             <div
-                                                key={chapter._id}
-                                                className="bg-white border border-blue-100 rounded-xl p-5"
+                                                key={chapter._id || chapter.tempId}
+                                                className="bg-white border border-blue-100 rounded-xl p-5 relative"
                                             >
-                                                <div className="flex items-center mb-4">
+                                                <button 
+                                                    onClick={() => handleRemoveChapter(index, chapter._id)}
+                                                    className="absolute top-3 right-3 text-red-500 hover:text-red-700"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                                
+                                                <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">Chapter Name</label>
                                                     <input
                                                         className="w-full p-2 border rounded-xl"
                                                         value={chapter.chapterName}
@@ -352,8 +655,10 @@ const CourseDetails = () => {
                                                     />
                                                 </div>
                                                 <div className="mb-4">
+                                                    <label className="block text-sm font-medium text-gray-700 mb-1">About</label>
                                                     <textarea
                                                         className="w-full p-2 border rounded-xl"
+                                                        rows="3"
                                                         value={chapter.about}
                                                         onChange={(e) => {
                                                             const updatedChapters = [...editableCourse.chapters];
@@ -363,9 +668,10 @@ const CourseDetails = () => {
                                                     />
                                                 </div>
                                                 <div className="flex items-center text-gray-500">
-                                                    <Clock className="mr-2" size={16} />
+                                                    <Clock className="mr-2 flex-shrink-0" size={16} />
                                                     <input
                                                         className="w-full p-2 border rounded-xl"
+                                                        placeholder="e.g. 30 mins"
                                                         value={chapter.duration}
                                                         onChange={(e) => {
                                                             const updatedChapters = [...editableCourse.chapters];
@@ -382,17 +688,22 @@ const CourseDetails = () => {
                         </div>
 
                         <div className="flex justify-end space-x-4 mt-6">
-                            <button onClick={handleCloseModal} className="bg-gray-500 text-white py-2 px-4 rounded-lg">
-                                Close
+                            <button 
+                                onClick={handleCloseModal} 
+                                className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+                            >
+                                Cancel
                             </button>
-                            <button onClick={handleSaveChanges} className="bg-blue-600 text-white py-2 px-4 rounded-lg">
-                                Save
+                            <button 
+                                onClick={handleSaveChanges} 
+                                className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+                            >
+                                Save Changes
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

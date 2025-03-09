@@ -12,9 +12,11 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
     const [hasDueDate, setHasDueDate] = useState(false);
 
     useEffect(() => {
+        if(user?._id)
+        {
         const fetchMentees = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/users/mentees/${user._id}`, {
+                const response = await fetch(`http://localhost:8000/api/users/mentees/${user?._id}`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
 
@@ -26,6 +28,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
                 setMentees([]);
             }
         };
+
 
         const checkDueDate = async () => {
             try {
@@ -46,7 +49,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
 
         fetchMentees();
         checkDueDate();
-    }, [user._id, user.token, courseId]);
+}}, [user._id, user.token, courseId]);
 
     const handleCheckboxChange = (menteeId) => {
         setSelectedMentees(prev =>

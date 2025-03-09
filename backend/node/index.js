@@ -18,6 +18,7 @@ const menteeProfileRouter = require('./routes/menteeProfileRouter');
 const assignmentRouter=require('./routes/assignmentRouter')
 const assignedCourseRouter = require('./routes/assignedCourseRouter');
 const chatbotRouter=require('./routes/chatbotRouter')
+const examRouter=require('./routes/examRouter')
 
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
@@ -57,6 +58,7 @@ app.use('/api/mentee', menteeProfileRouter);
 app.use('/api/assign',assignmentRouter);
 app.use('/api/assigned',assignedCourseRouter);
 app.use('/api',chatbotRouter)
+app.use('/api/exam',examRouter)
 
 // Initialize Socket.IO
 const io = new Server(server, {

@@ -1,48 +1,62 @@
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-dotenv.config();
-const Course = require('./models/CourseModel');
+const Course = require('./models/CourseModel');    
+require('dotenv').config();
 
-// Connect to MongoDB
-const MONGO_URI = process.env.MONGO_URL; // Use your actual MongoDB URL
-mongoose.connect(MONGO_URI, {
+// ✅ Connect to MongoDB
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ Failed to connect to MongoDB', err));
+    useUnifiedTopology: true,
+}).then(() => console.log("✅ Connected to MongoDB"))
+  .catch(err => console.error("❌ Failed to connect", err));
 
+// ✅ Function to update all courses
 const updateCourses = async () => {
     try {
-        // Fetch all courses
-        const courses = await Course.find({});
+        const courses = await Course.find();
 
-        // Loop through each course
         for (let course of courses) {
-            let updated = false;
+            let isUpdated = false;
 
-            // Loop through each chapter of the course
-            for (let chapter of course.chapters) {
-                // Check if `ppt` field exists, if not, add it
-                if (chapter.ppt === undefined) {
-                    chapter.ppt = "";  // Adding ppt as empty string
-                    updated = true;
+            course.chapters.forEach(chapter => {
+                // ✅ Add Video Field if not exists
+                if (!chapter.video) {
+                    chapter.video = {
+                        url: '',
+                        thumbnail: ''
+                    };
+                    isUpdated = true;
                 }
-            }
 
-            // If any chapter was updated, save the course
-            if (updated) {
+                // ✅ Add PPT Field if not exists
+                if (!chapter.ppt) {
+                    chapter.ppt = {
+                        title: '',
+                        link: ''
+                    };
+                    isUpdated = true;
+                }
+
+                // ✅ Ensure isCompleted exists
+                if (chapter.isCompleted === undefined) {
+                    chapter.isCompleted = false;
+                    isUpdated = true;
+                }
+            });
+
+            // ✅ Save only if any changes were made
+            if (isUpdated) {
                 await course.save();
-                console.log(`✅ Updated Course ID: ${course._id}`);
+                console.log(`✅ Updated course: ${course.courseName}`);
             }
         }
 
-        console.log('🎉 All courses updated successfully');
+        console.log("🎉 All courses have been successfully updated.");
         mongoose.connection.close();
-    } catch (err) {
-        console.error('❌ Error updating courses:', err);
+    } catch (error) {
+        console.error("❌ Error updating courses:", error);
         mongoose.connection.close();
     }
 };
 
+// ✅ Run the script
 updateCourses();
