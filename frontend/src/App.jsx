@@ -35,6 +35,7 @@ import { useUser } from "./context/UserContext";
 import InternshipListings from "./components/InternshipListings";
 import TeamsStyleCalendar from "./pages/TimeTable/TeamsStyleCalendar";
 import Landing from "./pages/Landing";
+import Transcript from "./components/Transcript";
 
 const App = () => (
   <UserProvider>
@@ -70,6 +71,7 @@ const App = () => (
           <Route path="/internships" element={<InternshipListings />} />
           <Route path="/similarity" element={<Similarity />} />
           <Route path="/calendar" element={<TeamsStyleCalendar />} />
+          <Route path="/transcript" element={<Transcript/>} />
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
