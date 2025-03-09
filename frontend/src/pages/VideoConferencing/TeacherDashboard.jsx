@@ -37,6 +37,7 @@ const TeacherDashboard = () => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
+            console.log(response.data);
             setLectures(response.data);
         } catch (error) {
             console.error('Error fetching lectures:', error);
@@ -370,7 +371,7 @@ const TeacherDashboard = () => {
                                                         </div>
                                                         <div className="flex items-center text-sm text-gray-600">
                                                             <Users size={14} className="mr-2 text-gray-500" />
-                                                            Student: {lecture.mentee.name}
+                                                            Student: 
                                                         </div>
                                                     </div>
                                                     {lecture.recordingUrl && (

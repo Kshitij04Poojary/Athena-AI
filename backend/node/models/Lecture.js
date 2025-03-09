@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const lectureSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -26,6 +27,8 @@ const lectureSchema = new mongoose.Schema({
     },
     recordingUrl: {
         type: String
+    },transcriptPdfUrl: {
+        type: String
     },
     attendance: [{
         student: {
@@ -39,4 +42,5 @@ const lectureSchema = new mongoose.Schema({
 
 const Lecture = mongoose.model('Lecture', lectureSchema);
 module.exports = Lecture;
+
 

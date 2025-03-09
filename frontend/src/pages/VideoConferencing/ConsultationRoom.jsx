@@ -120,7 +120,7 @@ function ConsultationRoom() {
         );
       }
     
-      socketRef.current.emit('leave_lecture', { roomId, userId: user._id });
+      socketRef.current.emit('leave_lecture', { roomId,role, userId: user._id });
       navigate(user.role === 'mentor' ? '/mentor' : '/mentee');
     } catch (error) {
       console.error("Error ending call:", error);

@@ -294,7 +294,7 @@ const createAssignedCourseForMentor = async (courseId) => {
             onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
           />
           <textarea
-            placeholder="Description"
+            placeholder="Course Description"
             className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
             rows="4"
             value={formData.description}

@@ -101,6 +101,7 @@ router.post("/:id/course-end-assessment", async (req, res) => {
           - 4 options
           - The correct answer.
           No need to include a 'difficulty' key. Keep questions concise but challenging.
+          if possible search the web to check if the answers to the questions generated are correct or not.
       `;
 
       const airesponse = await generateExamModel.sendMessage(aiPrompt.trim());

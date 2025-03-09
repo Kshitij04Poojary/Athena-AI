@@ -14,6 +14,7 @@ router.get('/room/:roomId', auth, lectureController.getLectureByRoomId);
 router.get('/:roomId/chat', auth, lectureController.getLectureChat);
 router.post('/:roomId/chat', auth, lectureController.addChatMessage);
 router.put('/:id/status', auth, lectureController.updateLectureStatus1);
+// const {processTranscription}=require('../config/transcription')
 // In your lectureRoutes.js (or similar)
 router.put('/:id/recording', async (req, res) => {
     try {
@@ -22,6 +23,20 @@ router.put('/:id/recording', async (req, res) => {
             { recordingUrl: req.body.recordingUrl },
             { new: true }
         );
+        // processTranscription(lecture);
+        res.json(lecture);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update recording' });
+    }
+});
+router.put('/:id/transcript', async (req, res) => {
+    try {
+        const lecture = await Lecture.findByIdAndUpdate(
+            req.params.id,
+            { transcriptPdfUrl: req.body.transcriptPdfUrl },
+            { new: true }
+        );
+        // processTranscription(lecture);
         res.json(lecture);
     } catch (error) {
         res.status(500).json({ error: 'Failed to update recording' });

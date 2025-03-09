@@ -10,7 +10,7 @@ import {
   ClipboardList,BarChart2,
   BrainCircuit,
   Briefcase,
-  Lightbulb, Star,Calendar,UserCheck, Link
+  Lightbulb, Star,Calendar,UserCheck, Link,BarChart2
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -27,6 +27,7 @@ const SideBar = () => {
         { name: 'AI Schedule', icon: Calendar, path: '/calendar' },
         // { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         { name: 'Coding', icon: BarChart2, path: '/coding' },
+        { name: 'Exams', icon: BarChart2, path: (user?.role==='mentor'?'/create-exam':(user?.role==='mentee'?'/mentee-exam':'/none') )},
         { name: 'Mock Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
