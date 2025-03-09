@@ -7,7 +7,7 @@ import {
   BookOpen, 
   ChevronLeft, 
   ChevronRight,
-  ClipboardList,
+  ClipboardList,BarChart2,
   BrainCircuit,
   Briefcase,
   Lightbulb, Star,Calendar,UserCheck, Link,BarChart2
@@ -25,6 +25,8 @@ const SideBar = () => {
         { name: 'Video Conferencing', icon: Video, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
         { name: 'Project Recommendations', icon: Lightbulb, path: '/recommend-projects' },
         { name: 'AI Schedule', icon: Calendar, path: '/calendar' },
+        // { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
+        { name: 'Coding', icon: BarChart2, path: '/coding' },
         { name: 'Exams', icon: BarChart2, path: (user?.role==='mentor'?'/create-exam':(user?.role==='mentee'?'/mentee-exam':'/none') )},
         { name: 'Mock Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Internships', icon: Briefcase, path: '/internships' },

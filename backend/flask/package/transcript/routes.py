@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app
+from bson.objectid import ObjectId
 
 transcript_bp = Blueprint("transcript_bp", __name__)
 
@@ -63,7 +64,11 @@ def get_text(video_file):
 @transcript_bp.route("/", methods=["POST"])
 def get_transcript():
     data = request.get_json().get("path")
+    lec_id = request.get_json().get("lec_id")
     print(data)
     # video_file = "https://res.cloudinary.com/dhk1v7s3d/video/upload/v1741483165/New_Recordings/d7ksepdunzakxnbfewre.mp4"
     text = get_text(data)
+    lectures = current_app.db["lectures"].update_one({'_id': ObjectId(lec_id)}, {"$set": {"transcript": text}})
+    if lectures.modified_count > 0:
+        print("modified the mongo db database")
     return jsonify(text)

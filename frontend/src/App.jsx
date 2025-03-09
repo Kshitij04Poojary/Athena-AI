@@ -38,6 +38,8 @@ import Landing from "./pages/Landing";
 import Transcript from "./components/Transcript";
 import CreateExam from "./pages/Exams/CreateExam";
 import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
+import CodeEditor from "./components/Coding";
+
 
 const App = () => (
   <UserProvider>
@@ -72,6 +74,7 @@ const App = () => (
           <Route path="/similarity" element={<Similarity />} />
           <Route path="/calendar" element={<TeamsStyleCalendar />} />
           <Route path="/transcript" element={<Transcript/>} />
+          <Route path="/coding" element={<CodeEditor/>} />
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
