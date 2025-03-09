@@ -10,7 +10,7 @@ import {
   ClipboardList,
   BrainCircuit,
   Briefcase,
-  Lightbulb, Star,Calendar,UserCheck, Link,Video
+  Lightbulb, Star,Calendar,UserCheck, Link,BarChart2
 } from 'lucide-react';
 
 const SideBar = () => {
