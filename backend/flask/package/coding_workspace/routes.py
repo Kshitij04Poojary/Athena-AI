@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 import requests
 import time
 import os
+from bson.objectid import ObjectId
 # Create a Blueprint for internships
 coding_bp = Blueprint("coding_bp", __name__)
 
@@ -73,10 +74,24 @@ LANGUAGE_ID_MAPPING = {
 
 
 @coding_bp.route("/", methods=["POST"])
-def get_code():
+def get_output():
     data = request.get_json()
     code = data.get("source_code")
     lang_id = LANGUAGE_ID_MAPPING[data.get("language")]
     print(lang_id)
     stdout, stderr = fetch_data(code, lang_id)
+
     return jsonify({"output": stdout, "errors": stderr})
+
+@coding_bp.route("/submit-code", methods=["POST"])
+def submit_code():
+    data = request.get_json()
+    user_id = data.get("user_id")
+    code = data.get("source_code")
+    lang_id = LANGUAGE_ID_MAPPING[data.get("language")]
+    stdout, stderr = fetch_data(code, lang_id)
+    result = current_app.db["codes"].insert_one({"user_id": ObjectId(user_id), "output": stdout, "error": stderr, "code": code})
+    if result.inserted_id:
+        print("Code inserted into database")
+        return jsonify("code inserted"), 201
+    return jsonify("error"), 402
