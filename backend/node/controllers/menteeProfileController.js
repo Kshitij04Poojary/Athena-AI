@@ -3,7 +3,7 @@ const Mentee = require('../models/Mentee');
 exports.getProfile = async (req, res) => {
     try {
         const mentee = await Mentee.findOne({ user: req.user.id })
-            .populate('user', 'name email')
+            .populate('user', 'name email skills linkedin github')
             .populate('mentor');
         
         if (!mentee) {
