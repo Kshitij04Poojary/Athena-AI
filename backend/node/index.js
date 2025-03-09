@@ -110,7 +110,7 @@ io.on('connection', (socket) => {
         if (mentee) {
           await Lecture.findOneAndUpdate(
             { roomId: roomId },
-            { $push: { attendance: { student: mentee._id } } },
+            { $push: { attendance:  mentee._id  } },
             { new: true }
           );
         }

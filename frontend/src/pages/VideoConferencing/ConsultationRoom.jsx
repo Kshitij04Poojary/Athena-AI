@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
 import { PhoneOff, Video } from "lucide-react";
+import Transcript from "../../components/Transcript";
 
 const APP_ID = 2030731488;
 const SERVER_SECRET = 'bc0fb9a32a2db1941c02ecc00521f5c1';
@@ -28,6 +29,17 @@ function ConsultationRoom() {
   const socketRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const recordingIntervalRef = useRef(null);
+
+  async function fetchData({secure_url,lectureId}) {
+    try {
+      
+        const resp = await axios.post("http://127.0.0.1:5004/api/transcript/",{"path": secure_url,"lec_id":lectureId},{withCredentials: true});
+        
+    } catch (error) {
+        console.error("Error fetching transcript:", error);
+        
+    } 
+}
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -119,6 +131,7 @@ function ConsultationRoom() {
           { headers: { Authorization: `Bearer ${token}` } }
         );
       }
+      
     
       socketRef.current.emit('leave_lecture', { roomId,userId: user._id,role: user.role });
       navigate(user.role === 'mentor' ? '/mentor' : '/mentee');
@@ -193,7 +206,7 @@ function ConsultationRoom() {
       );
 
       if (!response.data.secure_url) throw new Error('No secure URL');
-      
+      await fetchData({secure_url: response.data.secure_url,lectureId:lecture._id.toString()});
       await axios.put(
         `http://localhost:8000/api/lectures/${lecture._id}/recording`,
         { recordingUrl: response.data.secure_url },
