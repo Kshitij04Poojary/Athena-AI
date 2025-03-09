@@ -7,7 +7,9 @@ const {
     updateChapter,
     deleteCourse,
     getChapterById,
-    getSectionById
+    getSectionById,
+    updateCourseLayout, 
+    updateChapterLayout
 } = require('../controllers/courseController');
 const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
@@ -20,5 +22,6 @@ router.put('/:courseId', updateCourse);
 router.delete('/:id', authMiddleware, deleteCourse);      // Delete (requires auth)
 router.get('/:courseId/chapters/:chapterId', getChapterById);
 router.get('/:courseId/chapters/:chapterId/sections/:sectionId', getSectionById);
+
 
 module.exports = router;

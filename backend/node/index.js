@@ -14,7 +14,7 @@ const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
 const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
 const menteeProfileRouter = require('./routes/menteeProfileRouter');
-
+// const teamRouter = require('./routes/teamRouter');
 const assignmentRouter=require('./routes/assignmentRouter')
 const assignedCourseRouter = require('./routes/assignedCourseRouter');
 const chatbotRouter=require('./routes/chatbotRouter')
@@ -50,6 +50,7 @@ app.use('/api/assessment', assessmentRoutes);
 app.use('/api', generateCourseRoutes);
 app.use('/api', generateChapterContentRoutes);
 app.use('/api/interview', interviewRoutes);
+// app.use('/api/teams', teamRouter);
 app.use('/api/lectures', lectureRoutes);
 app.use('/api/users', mentorMenteeRouter);
 app.use('/api/mentee', menteeProfileRouter);
@@ -60,8 +61,8 @@ app.use('/api',chatbotRouter)
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'PATCH'],
+    origin: process.env.CLIENT_URL || 'http://localhost:5173' || 'http://localhost:5174',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true
   }
 });

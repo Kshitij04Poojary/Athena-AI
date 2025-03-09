@@ -6,24 +6,14 @@ const lectureSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    mentor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mentor',
-        required: true
-    },
-    mentee: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Mentee',
-        required: true
-    }],
-
     startTime: {
         type: Date,
         required: true
     },
     duration: {
         type: Number, // in minutes
-        required: true
+        required: true,
+        default: 60
     },
     status: {
         type: String,
@@ -44,11 +34,8 @@ const lectureSchema = new mongoose.Schema({
         student: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Mentee',
-            // required: true
           },
     }],
-    // Lecture.js
-
     
 }, { timestamps: true });
 

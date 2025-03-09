@@ -10,7 +10,8 @@ import {
     Star,
     Lock,
     Unlock,
-    CheckCircle
+    CheckCircle,
+    Pencil
 } from 'lucide-react';
 
 const CourseDetails = () => {
@@ -21,7 +22,9 @@ const CourseDetails = () => {
 
     const [course, setCourse] = useState(null);
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
-
+    const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+    const [editableCourse, setEditableCourse] = useState(null); // State to manage editable course data
+    console.log(editableCourse)
     useEffect(() => {
         if (!token) {
             console.error('No auth token found');
@@ -98,6 +101,21 @@ const CourseDetails = () => {
     const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
     const { passedFinal } = course || {};
 
+    const handleEditClick = () => {
+        setEditableCourse({ ...course }); // Set the current course content for editing
+        setIsModalOpen(true); // Open the modal
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false); // Close the modal
+    };
+
+    const handleSaveChanges = () => {
+        // Perform save operation (e.g., call API to save updated course data)
+        console.log("Saving changes to course:", editableCourse);
+        setIsModalOpen(false);
+    };
+
     if (!course) {
         return (
             <div className="flex justify-center items-center h-screen">
@@ -118,6 +136,11 @@ const CourseDetails = () => {
                             <ArrowLeft className="text-white" size={24} />
                         </button>
                         <h1 className="text-3xl font-bold flex-grow">{course.courseName}</h1>
+                        {user.role === "mentor" && (
+                            <button onClick={handleEditClick} className="text-white p-2 rounded-full hover:bg-white/30">
+                                <Pencil size={24} />
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -195,11 +218,11 @@ const CourseDetails = () => {
                     <div
                         className={`flex items-center justify-between p-5 rounded-xl shadow-md border
                                     ${passedFinal
-                                        ? 'bg-green-50 border-green-200 text-green-700'
-                                        : allChaptersCompleted
-                                            ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
-                                            : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
-                                    }`}
+                                ? 'bg-green-50 border-green-200 text-green-700'
+                                : allChaptersCompleted
+                                    ? 'bg-blue-50 border-blue-200 text-blue-700 cursor-pointer hover:bg-blue-100'
+                                    : 'bg-gray-100 border-gray-200 text-gray-500 cursor-not-allowed'
+                            }`}
                         onClick={() => {
                             if (allChaptersCompleted) {
                                 navigate(`/course/${courseId}/course-assessment`, {
@@ -226,7 +249,150 @@ const CourseDetails = () => {
                     </div>
                 </div>
             </div>
-            
+
+            {/* Modal */}
+            {isModalOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white p-8 rounded-xl shadow-xl w-5/6 overflow-y-auto max-h-[90vh]">
+                        <h2 className="text-2xl font-semibold mb-4">Edit Course</h2>
+
+                        {/* Editable course content */}
+                        <div className="space-y-4">
+                            <div className="mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
+                                <div className="bg-blue-600 text-white p-6">
+                                    <div className="flex items-center space-x-4 mb-4">
+                                        <input
+                                            className="text-3xl font-bold flex-grow p-2 border rounded-xl"
+                                            value={editableCourse?.courseName || ''}
+                                            onChange={(e) => setEditableCourse({ ...editableCourse, courseName: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="p-8">
+                                    <div className="grid md:grid-cols-2 gap-6 mb-8">
+                                        <div>
+                                            <div className="flex items-center mb-4">
+                                                <BookOpen className="mr-3 text-blue-600" size={24} />
+                                                <textarea
+                                                    className="w-full p-2 border rounded-xl"
+                                                    rows="4"
+                                                    value={editableCourse?.description || ''}
+                                                    onChange={(e) => setEditableCourse({ ...editableCourse, description: e.target.value })}
+                                                />
+                                            </div>
+
+                                            <div className="flex items-center mb-4">
+                                                <Layers className="mr-3 text-blue-600" size={24} />
+                                                <input
+                                                    className="w-full p-2 border rounded-xl"
+                                                    value={editableCourse?.skills.join(', ') || ''}
+                                                    onChange={(e) => setEditableCourse({
+                                                        ...editableCourse,
+                                                        skills: e.target.value.split(',').map(skill => skill.trim())
+                                                    })}
+                                                />
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div className="flex items-center">
+                                                    <Star className="mr-2 text-blue-600" size={20} />
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={editableCourse?.level || ''}
+                                                        onChange={(e) => setEditableCourse({ ...editableCourse, level: e.target.value })}
+                                                    />
+                                                </div>
+                                                <div className="flex items-center">
+                                                    <Clock className="mr-2 text-blue-600" size={20} />
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={editableCourse?.duration || ''}
+                                                        onChange={(e) => setEditableCourse({ ...editableCourse, duration: e.target.value })}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
+                                            <div className="flex items-center mb-4">
+                                                <Target className="mr-3 text-blue-600" size={24} />
+                                                <h2 className="text-xl font-semibold">Course Outcomes</h2>
+                                            </div>
+                                            <textarea
+                                                className="w-full p-2 border rounded-xl"
+                                                rows="4"
+                                                value={editableCourse?.courseOutcomes.join('\n') || ''}
+                                                onChange={(e) => setEditableCourse({
+                                                    ...editableCourse,
+                                                    courseOutcomes: e.target.value.split('\n').map(outcome => outcome.trim())
+                                                })}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b pb-3">
+                                        Course Chapters
+                                    </h2>
+                                    <div className="space-y-4">
+                                        {editableCourse?.chapters.map((chapter, index) => (
+                                            <div
+                                                key={chapter._id}
+                                                className="bg-white border border-blue-100 rounded-xl p-5"
+                                            >
+                                                <div className="flex items-center mb-4">
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.chapterName}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].chapterName = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="mb-4">
+                                                    <textarea
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.about}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].about = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
+                                                </div>
+                                                <div className="flex items-center text-gray-500">
+                                                    <Clock className="mr-2" size={16} />
+                                                    <input
+                                                        className="w-full p-2 border rounded-xl"
+                                                        value={chapter.duration}
+                                                        onChange={(e) => {
+                                                            const updatedChapters = [...editableCourse.chapters];
+                                                            updatedChapters[index].duration = e.target.value;
+                                                            setEditableCourse({ ...editableCourse, chapters: updatedChapters });
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end space-x-4 mt-6">
+                            <button onClick={handleCloseModal} className="bg-gray-500 text-white py-2 px-4 rounded-lg">
+                                Close
+                            </button>
+                            <button onClick={handleSaveChanges} className="bg-blue-600 text-white py-2 px-4 rounded-lg">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 };

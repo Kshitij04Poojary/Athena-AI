@@ -16,10 +16,10 @@ const TeamsStyleCalendar = () => {
 
   // Colors mapped to mentors for consistency
   const mentorColors = {
-    "mentor1": "#6264A7", // Teams purple
-    "mentor2": "#4CC9F0",
-    "mentor3": "#4895EF",
-    "mentor4": "#560BAD"
+    "Nilay Rathod": "#6264A7", // Teams purple
+    "Prof. Ashok": "#4CC9F0",
+    "Cain": "#4895EF",
+    "Prof Andrew": "#560BAD"
   };
 
   // Format time like "08:00"

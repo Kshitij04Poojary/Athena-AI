@@ -35,6 +35,7 @@ import { useUser } from "./context/UserContext";
 import InternshipListings from "./components/InternshipListings";
 import TeamsStyleCalendar from "./pages/TimeTable/TeamsStyleCalendar";
 import Landing from "./pages/Landing";
+import Transcript from "./components/Transcript";
 
 const App = () => (
   <UserProvider>
@@ -46,6 +47,7 @@ const App = () => (
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
 
+                
         <Route
           path="/consultation-room/:roomId"
           element={<ConsultationRoom />}
@@ -69,6 +71,7 @@ const App = () => (
           <Route path="/internships" element={<InternshipListings />} />
           <Route path="/similarity" element={<Similarity />} />
           <Route path="/calendar" element={<TeamsStyleCalendar />} />
+          <Route path="/transcript" element={<Transcript/>} />
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
@@ -83,20 +86,42 @@ const App = () => (
           {<Route path="/mentor" element={<TeacherDashboard />} />}
         </Route>
 
-        <Route path="/interview/:interviewId" element={<StartInterview />} />
-        <Route
-          path="/interview/:interviewId/start"
-          element={<MainInterview />}
-        />
-        <Route path="/assessment/:examId" element={<Exam />} />
-        <Route
-          path="/course/:courseId/course-assessment"
-          element={<CourseAssessment />}
-        />
-        <Route path="/examreview" element={<ExamReview />} />
-      </Routes>
-    </Router>
-  </UserProvider>
+                <Route element={<MainLayout />}>
+
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/my-courses" element={<MyCourses />} />
+                    <Route path="/create-course" element={<CreateCourse />} />
+                    <Route path="/course/:courseId" element={<CourseDetails />} />
+                    <Route path="/course/:courseId/chapter/:chapterId" element={<ChapterDetails />} />
+                    <Route path="/assessment" element={<ExamDashboard />} />
+                    <Route path="/interview" element={<InterviewDashboard />} />
+                    <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
+                    <Route path='/internships' element={<InternshipListings/>}/>
+                    <Route path='/similarity' element={<Similarity/>}/>
+                    <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
+                    
+                    if(useUser().user.role==='mentee'){
+                        <>
+                            <Route path="/mentee" element={<StudentDashboard />} />
+                        </>
+                    }
+                    if(useUser().user.role==='mentor'){
+                        <Route path="/mentor" element={<TeacherDashboard />} />
+                    }
+
+                </Route>
+
+                <Route path="/interview/:interviewId" element={<StartInterview />} />
+                <Route path='/interview/:interviewId/start' element={<MainInterview />} />
+                <Route path="/assessment/:examId" element={<Exam />} />
+                <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />}/>
+                <Route path="/examreview" element={<ExamReview />} />
+                
+                <Route path='/recommend-projects' element={<AIProjectRecommendations/>}/>
+
+            </Routes>
+        </Router>
+    </UserProvider>
 );
 
 export default App;

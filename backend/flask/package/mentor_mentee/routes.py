@@ -76,3 +76,29 @@ def get_score():
     sorted_mentors = sorted(filtered_mentors, key=lambda x: x['similarity_score'], reverse=True)
     # print(filtered_mentor)
     return jsonify(sorted_mentors)
+@mentor_mentee.route("/team", methods=["POST"])
+def get_score_from_team():
+    users = current_app.db['users']
+    team = request.get_json().get("team")
+    
+    # Find mentees with the team skill and include their id
+    mentees = list(current_app.db["users"].find({'userType': "Student", 'skills.name': team}, {"_id": 1, "name": 1, "email": 1}))
+    
+    # Find mentors with the team skill and include their id
+    mentors = list(current_app.db["users"].find({'userType': "Mentor", 'skills.name': team}, {"_id": 1, "name": 1, "email": 1}))
+    
+    # Print the mentees and mentors to check the data
+    print("mentees are: ", mentees)
+    print("mentors are: ", mentors)
+    
+    # Modify the result to send id as 'id' to frontend
+    for mentee in mentees:
+        mentee['id'] = str(mentee['_id'])  # Convert ObjectId to string and add as 'id'
+        del mentee['_id']  # Remove the original '_id' field
+    
+    for mentor in mentors:
+        mentor['id'] = str(mentor['_id'])  # Convert ObjectId to string and add as 'id'
+        del mentor['_id']  # Remove the original '_id' field
+    
+    # Return the JSON response
+    return jsonify({"Mentees": mentees, "Mentors": mentors}), 200

@@ -43,4 +43,47 @@ router.put('/:id/transcript', async (req, res) => {
     }
 });
 
+router.get('/mentees/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+        // Find the mentor using the userId
+        const mentor = await Mentor.findOne({ user: userId }).populate('mentees');
+        if (!mentor) {
+            return res.status(404).json({ message: 'Mentor not found' });
+        }
+
+        res.status(200).json(mentor.mentees);
+    } catch (error) {
+        console.error('Error fetching mentees:', error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+});
+
+// ✅ Create a new lecture with attendance
+router.post('/create', async (req, res) => {
+    const { title, startTime, duration, mentorId, attendanceList } = req.body;
+
+    if (!title || !startTime || !mentorId) {
+        return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    try {
+        const newLecture = new Lecture({
+            title,
+            startTime,
+            duration,
+            mentor: mentorId,
+            attendance: attendanceList.map(studentId => ({ student: studentId }))
+        });
+
+        await newLecture.save();
+        res.status(201).json({ message: 'Lecture created successfully', lecture: newLecture });
+    } catch (error) {
+        console.error('Error creating lecture:', error);
+        res.status(500).json({ message: 'Failed to create lecture' });
+    }
+});
+
+
 module.exports = router;

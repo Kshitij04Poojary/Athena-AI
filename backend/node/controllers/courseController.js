@@ -189,3 +189,73 @@ exports.getSectionById = async (req, res) => {
     }
 };
 
+// Update course layout
+exports.updateCourseLayout = async (req, res) => {
+    const { courseId } = req.params;
+    const { chapters } = req.body;  // Expecting array of chapters with _id and updated data
+
+    try {
+        // Find the course
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+
+        // Check if chapters exceed 5 (already handled by Mongoose validation)
+        if (chapters.length > 5) {
+            return res.status(400).json({ message: 'A course can have a maximum of 5 chapters only.' });
+        }
+
+        // Update the chapters array in the same sequence
+        course.chapters = chapters.map(chapter => ({
+            _id: chapter._id,
+            chapterName: chapter.chapterName,
+            about: chapter.about,
+            duration: chapter.duration,
+            sections: chapter.sections,
+            video: chapter.video,
+            isCompleted: chapter.isCompleted
+        }));
+
+        await course.save();
+
+        res.status(200).json({ message: 'Course layout updated successfully', course });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update course layout', error: error.message });
+    }
+};
+
+// Update chapter layout
+exports.updateChapterLayout = async (req, res) => {
+    const { courseId, chapterId } = req.params;
+    const { sections } = req.body;  // Expecting sections array
+
+    try {
+        // Find the course
+        const course = await Course.findById(courseId);
+        if (!course) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+
+        // Find the specific chapter
+        const chapter = course.chapters.id(chapterId);
+        if (!chapter) {
+            return res.status(404).json({ message: 'Chapter not found' });
+        }
+
+        // Update sections array
+        chapter.sections = sections.map(section => ({
+            _id: section._id,
+            title: section.title,
+            explanation: section.explanation,
+            codeExample: section.codeExample
+        }));
+
+        await course.save();
+
+        res.status(200).json({ message: 'Chapter layout updated successfully', chapter });
+    } catch (error) {
+        res.status(500).json({ message: 'Failed to update chapter layout', error: error.message });
+    }
+};
+
