@@ -99,7 +99,7 @@ io.on('connection', (socket) => {
   });
 
   // Handle user leaving a lecture
-  socket.on('leave_lecture', async ({ roomId, role, userId }) => {
+  socket.on('leave_lecture', async ({ roomId,  userId ,role }) => {
     console.log(userId, "Left lecture");
     if (role === 'mentee') {
       try {

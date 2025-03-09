@@ -1,24 +1,6 @@
 const mongoose = require('mongoose');
 
-// const attendanceSchema = new mongoose.Schema({
-//     student: {
-//       type: mongoose.Schema.Types.ObjectId,
-//       ref: 'Mentee',
-//       required: true
-//     },
-//     joinTime: {
-//       type: Date,
-//       required: true,
-//       default: Date.now
-//     },
-//     leaveTime: Date,
-//     duration: Number
-//   });
-// attendanceSchema.pre('save', function() {
-//     if (this.isModified('leaveTime') && this.leaveTime) {
-//       this.duration = Math.round((this.leaveTime - this.joinTime) / 60000); // In minutes
-//     }
-//   });
+
 const lectureSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -55,6 +37,8 @@ const lectureSchema = new mongoose.Schema({
     },
     recordingUrl: {
         type: String
+    },transcriptPdfUrl: {
+        type: String
     },
     attendance: [{
         student: {
@@ -72,8 +56,4 @@ const lectureSchema = new mongoose.Schema({
 const Lecture = mongoose.model('Lecture', lectureSchema);
 module.exports = Lecture;
 
-// Lecture.syncIndexes().then(() => {
-//     console.log('Indexes are synchronized');
-// }).catch(err => {
-//     console.error('Error synchronizing indexes', err);
-// });
+
