@@ -36,7 +36,7 @@ import InternshipListings from "./components/InternshipListings";
 import TeamsStyleCalendar from "./pages/TimeTable/TeamsStyleCalendar";
 import Landing from "./pages/Landing";
 import Transcript from "./components/Transcript";
-
+import CodeEditor from "./components/Coding";
 const App = () => (
   <UserProvider>
     <Router>
@@ -98,6 +98,7 @@ const App = () => (
                     <Route path='/interview/:interviewId/feedback' element={<Feedback />} />
                     <Route path='/internships' element={<InternshipListings/>}/>
                     <Route path='/similarity' element={<Similarity/>}/>
+                    <Route path='/coding' element={<CodeEditor/>}/>
                     <Route path='/calendar' element={<TeamsStyleCalendar/>}/>
                     
                     if(useUser().user.role==='mentee'){
