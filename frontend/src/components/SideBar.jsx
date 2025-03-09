@@ -12,7 +12,8 @@ import {
   Briefcase,
   Lightbulb,
   Calendar,
-  ListChecks 
+  ListChecks,
+  BarChart2 
 } from 'lucide-react';
 
 const SideBar = () => {
