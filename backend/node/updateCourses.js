@@ -2,40 +2,47 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 const Course = require('./models/CourseModel');
-const AssignedCourse = require('./models/AssignedCourseModel');
 
-const MONGO_URI = process.env.MONGO_URL;
+// Connect to MongoDB
+const MONGO_URI = process.env.MONGO_URL; // Use your actual MongoDB URL
+mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => console.log('✅ Connected to MongoDB'))
+.catch(err => console.error('❌ Failed to connect to MongoDB', err));
 
-const runFix = async () => {
+const updateCourses = async () => {
     try {
-        await mongoose.connect(MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        // Fetch all courses
+        const courses = await Course.find({});
 
-        // Step 1: Get all courses that are courseCopies in AssignedCourse
-        const assignedCourses = await AssignedCourse.find().populate('assigns.courseCopy');
+        // Loop through each course
+        for (let course of courses) {
+            let updated = false;
 
-        // Step 2: Extract all courseCopy IDs that have been duplicated
-        const courseCopyIds = assignedCourses.flatMap(ac =>
-            ac.assigns.map(assign => assign.courseCopy._id.toString())
-        );
+            // Loop through each chapter of the course
+            for (let chapter of course.chapters) {
+                // Check if `ppt` field exists, if not, add it
+                if (chapter.ppt === undefined) {
+                    chapter.ppt = "";  // Adding ppt as empty string
+                    updated = true;
+                }
+            }
 
-        console.log(`Found ${courseCopyIds.length} duplicated courses.`);
+            // If any chapter was updated, save the course
+            if (updated) {
+                await course.save();
+                console.log(`✅ Updated Course ID: ${course._id}`);
+            }
+        }
 
-        // Step 3: Update those courses to have assignedCopy: true
-        const result = await Course.updateMany(
-            { _id: { $in: courseCopyIds } },
-            { $set: { assignedCopy: true } }
-        );
-
-        console.log(`Updated ${result.modifiedCount} duplicated courses to have assignedCopy: true`);
-
+        console.log('🎉 All courses updated successfully');
         mongoose.connection.close();
     } catch (err) {
-        console.error('🔥 Error fixing duplicate courses:', err);
+        console.error('❌ Error updating courses:', err);
         mongoose.connection.close();
     }
 };
 
-runFix();
+updateCourses();
