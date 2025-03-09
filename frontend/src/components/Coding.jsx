@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useUser } from '../context/UserContext';
 
 const CodeEditor = () => {
+  const {user} = useUser();
   const [code, setCode] = useState('// Write your code here\nconsole.log("Hello, world!");');
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
+  const [isSubmitting, setisSubmitting] = useState(false);
   const [language, setLanguage] = useState('javascript');
   const [theme, setTheme] = useState('dark');
   const [codeError, setCodeError] = useState(null);
   const [activeTab, setActiveTab] = useState('output'); // 'output' or 'error'
-
+  console.log(user?._id.toString())
   // Auto-resize textarea based on content
   useEffect(() => {
     const textarea = document.querySelector('.code-input');
@@ -19,17 +22,30 @@ const CodeEditor = () => {
     }
   }, [code]);
 
+  const submitCode = async () => {
+    setisSubmitting(true);
+    setOutput('');
+    setCodeError(null);
+
+    try {
+        await axios.post(
+        "http://127.0.0.1:5004/api/coding/submit-code",
+        { "source_code": code, "language": language, "user_id": user?._id.toString() },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      setOutput(`Error: ${error.message}`);
+    } finally {
+      setisSubmitting(false);
+    }
+  };
   const runCode = async () => {
     setIsRunning(true);
     setOutput('');
     setCodeError(null);
 
     try {
-      const resp = await axios.post(
-        "http://127.0.0.1:5004/api/coding/",
-        { "source_code": code, "language": language },
-        { withCredentials: true }
-      );
+      const resp = await axios.post("http://127.0.0.1:5004/api/coding/", { "source_code": code, "language": language},{ withCredentials: true });
       setOutput(resp.data.output);
       setCodeError(resp.data.errors);
       
@@ -46,7 +62,6 @@ const CodeEditor = () => {
       setIsRunning(false);
     }
   };
-
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
@@ -137,6 +152,14 @@ const CodeEditor = () => {
           >
             <span>{isRunning ? '⏳' : '▶️'}</span>
             <span>{isRunning ? 'Running...' : 'Run Code'}</span>
+          </button>
+          <button
+            onClick={submitCode}
+            disabled={isSubmitting}
+            className={`px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-400 text-white'}`}
+          >
+            <span>{isSubmitting ? '⏳' : '▶️'}</span>
+            <span>{isSubmitting ? 'Submitting...' : 'Submit Code'}</span>
           </button>
         </div>
       </div>
