@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import { useUser } from '../context/UserContext';
 import { 
   User, 
-  Settings, 
-  MessageSquare, 
-  BarChart2, 
-  HelpCircle, 
+  Video,
   LogOut,
   BookOpen, 
   ChevronLeft, 
@@ -25,12 +22,12 @@ const SideBar = () => {
         { name: 'Profile', icon: User, path: '/profile' },
         { name: 'Courses', icon: BookOpen, path:'/my-courses'},
         { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
-        { name: 'Video Conferencing', icon: HelpCircle, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
+        { name: 'Video Conferencing', icon: Video, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
         { name: 'Project Recommendations', icon: Lightbulb, path: '/recommend-projects' },
-        { name: 'Schedule', icon: Calendar, path: '/calendar' },
+        { name: 'AI Schedule', icon: Calendar, path: '/calendar' },
         // { name: 'Messages', icon: MessageSquare, path: '/messages', badge: 3 },
         // { name: 'Analytics', icon: BarChart2, path: '/analytics' },
-        { name: 'Interviews', icon: BrainCircuit, path: '/interview' },
+        { name: 'Mock Interviews', icon: BrainCircuit, path: '/interview' },
         { name: 'Internships', icon: Briefcase, path: '/internships' },
     ];
 
