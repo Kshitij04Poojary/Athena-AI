@@ -442,8 +442,8 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex flex-col gap-8">
+            {/* Main Content */}
+            <div className="flex flex-col gap-8">
         {/* Mentee Specific Information */}
         {user.role === "mentee" &&
           (isEditing ? (
@@ -452,28 +452,29 @@ const ProfilePage = () => {
               onComplete={handleUpdate}
             />
           ) : (
-            renderMenteeProfile()
+            <>
+              {renderMenteeProfile()}
+              
+              {/* Download Resume Button */}
+              {menteeData && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex justify-center mt-8"
+                >
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => generateResume(menteeData)}
+                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+                  >
+                    <Download className="w-5 h-5" />
+                    Download Resume
+                  </motion.button>
+                </motion.div>
+              )}
+            </>
           ))}
-        {/* Add this inside the main content div, after the mentee profile sections */}
-        {user.role === "mentee" && !isEditing && menteeData && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex justify-center mt-8"
-          >
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => generateResume(menteeData)}
-              className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
-            >
-              <Download className="w-5 h-5" />
-              Download Resume
-            </motion.button>
-          </motion.div>
-        )}
-          ) : renderMenteeProfile()
-        )}
       </div>
     </div>
   );
