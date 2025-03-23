@@ -5,7 +5,7 @@ const User = require('../models/UserModel');
 // Mentor Controllers
 exports.getMentorMentees = async (req, res) => {
     try {
-        console.log(req.user.id);
+        // console.log(req.user.id);
         const mentor = await Mentor.findOne({ user: req.user.id })
            
 
@@ -22,14 +22,7 @@ exports.getMentorMentees = async (req, res) => {
 exports.getMentorDetails = async (req, res) => {
     try {
         const mentor = await Mentor.findOne({ user: req.params.mentorId })
-            .populate('user', 'name email userType skills courses achievements')
-            .populate({
-                path: 'reviews',
-                populate: {
-                    path: 'mentee',
-                    select: 'name'
-                }
-            });
+           
 
         if (!mentor) {
             return res.status(404).json({ message: 'Mentor not found' });

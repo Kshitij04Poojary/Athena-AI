@@ -49,13 +49,14 @@ const App = () => (
         <Route path="/" element={<Landing />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        
         <Route
           path="/consultation-room/:roomId"
           element={<ConsultationRoom />}
         />
 
         <Route element={<MainLayout />}>
+        <Route path="/home" element={<Home />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/my-courses" element={<MyCourses />} />
           <Route path="/create-course" element={<CreateCourse />} />

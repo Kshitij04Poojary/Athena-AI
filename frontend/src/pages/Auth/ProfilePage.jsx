@@ -14,13 +14,20 @@ import {
   User,
   Download,
 } from "lucide-react";
+import React, { useState, useEffect } from 'react';
+import { useUser } from '../../context/UserContext';
+import axios from 'axios';
+import { motion } from 'framer-motion';
+import MenteeProfileForm from '../../components/MenteeProfileForm';
+import { Edit2, BookOpen, Briefcase, Award, Target, ArrowLeft, User } from 'lucide-react';
+import MentorScoresChart from '../../components/landing/MentorScoresCart';
 
 const ProfilePage = () => {
   const { user } = useUser();
   const [menteeData, setMenteeData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  
   useEffect(() => {
     const fetchMenteeData = async () => {
       if (user?.role === "mentee") {
@@ -61,16 +68,24 @@ const ProfilePage = () => {
     }
   };
 
-  if (!user || loading)
+  if (!user || loading) return (
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="animate-pulse text-center">
+        <div className="w-24 h-24 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-full mx-auto mb-4"></div>
+        <div className="h-8 bg-gray-200 rounded-md w-64 mx-auto mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded-md w-48 mx-auto"></div>
+      </div>
+    </div>
+  );
+  
+  // Render mentor view if user is a mentor
+  if (user?.role === "mentor") {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-pulse text-center">
-          <div className="w-24 h-24 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-full mx-auto mb-4"></div>
-          <div className="h-8 bg-gray-200 rounded-md w-64 mx-auto mb-2"></div>
-          <div className="h-4 bg-gray-200 rounded-md w-48 mx-auto"></div>
-        </div>
+      <div>
+        <MentorScoresChart />
       </div>
     );
+  }
 
   const renderMenteeProfile = () => {
     if (!menteeData) {
@@ -456,6 +471,8 @@ const ProfilePage = () => {
               Download Resume
             </motion.button>
           </motion.div>
+        )}
+          ) : renderMenteeProfile()
         )}
       </div>
     </div>

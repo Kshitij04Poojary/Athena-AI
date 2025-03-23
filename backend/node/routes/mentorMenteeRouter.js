@@ -7,8 +7,8 @@ const User = require("../models/UserModel");
 const auth = require('../middleware/authMiddleware');
 
 // Mentor routes
-router.get('/mentor/mentees', auth, mentorMenteeController.getMentorMentees);
-router.get('/mentor/:mentorId', auth, mentorMenteeController.getMentorDetails);
+router.get('/mentor/mentees', mentorMenteeController.getMentorMentees);
+router.get('/mentor/:mentorId', mentorMenteeController.getMentorDetails);
 
 // Mentee routes
 router.get('/mentee/mentor', auth, mentorMenteeController.getMenteeMentor);

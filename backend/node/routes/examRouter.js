@@ -152,4 +152,29 @@ router.get('/status/:examId/:userId', async (req, res) => {
     }
   });
   
+
+router.get("/mentor/:mentorId/scores", async (req, res) => {
+  try {
+    const { mentorId } = req.params;
+
+    // Find all exams assigned by this mentor
+    const exams = await Exam.find({ mentor: mentorId }).select('scores');
+
+    if (!exams.length) {
+        console.log("hi");
+      return res.status(404).json({ message: "No exams found for this mentor" });
+    }
+
+    // Extract scores from all exams
+    const menteeScores = exams.flatMap(exam => exam.scores);
+
+    res.json({ scores: menteeScores });
+
+  } catch (error) {
+    console.error("Error fetching mentee scores:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 module.exports = router;
