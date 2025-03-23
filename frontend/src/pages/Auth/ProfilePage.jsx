@@ -14,12 +14,6 @@ import {
   User,
   Download,
 } from "lucide-react";
-import React, { useState, useEffect } from 'react';
-import { useUser } from '../../context/UserContext';
-import axios from 'axios';
-import { motion } from 'framer-motion';
-import MenteeProfileForm from '../../components/MenteeProfileForm';
-import { Edit2, BookOpen, Briefcase, Award, Target, ArrowLeft, User } from 'lucide-react';
 import MentorScoresChart from '../../components/landing/MentorScoresCart';
 
 const ProfilePage = () => {
