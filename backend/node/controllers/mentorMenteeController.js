@@ -1,18 +1,15 @@
-const Mentor = require('../models/Mentor');
-const Mentee = require('../models/Mentee');
 const User = require('../models/UserModel');
 
 // Mentor Controllers
 exports.getMentorMentees = async (req, res) => {
     try {
-        // console.log(req.user.id);
-        const mentor = await Mentor.findOne({ user: req.user.id })
-           
+        const mentor = await User.findOne({ _id: req.user.id, userType: 'Mentor' })
+            .populate('mentees', 'name email userType progress');
 
         if (!mentor) {
             return res.status(404).json({ message: 'Mentor not found' });
         }
-        // console.log(mentor);
+
         res.json(mentor.mentees);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -21,8 +18,8 @@ exports.getMentorMentees = async (req, res) => {
 
 exports.getMentorDetails = async (req, res) => {
     try {
-        const mentor = await Mentor.findOne({ user: req.params.mentorId })
-           
+        const mentor = await User.findOne({ _id: req.params.mentorId, userType: 'Mentor' })
+            .select('name email userType rating totalHoursTaught availability reviews');
 
         if (!mentor) {
             return res.status(404).json({ message: 'Mentor not found' });
@@ -37,13 +34,10 @@ exports.getMentorDetails = async (req, res) => {
 // Mentee Controllers
 exports.getMenteeMentor = async (req, res) => {
     try {
-        const mentee = await Mentee.findOne({ user: req.user.id })
+        const mentee = await User.findOne({ _id: req.user.id, userType: 'Student' })
             .populate({
                 path: 'mentor',
-                populate: {
-                    path: 'user',
-                    select: 'name email userType skills courses achievements'
-                }
+                select: 'name email userType rating totalHoursTaught availability'
             });
 
         if (!mentee || !mentee.mentor) {
@@ -58,14 +52,11 @@ exports.getMenteeMentor = async (req, res) => {
 
 exports.getMenteeDetails = async (req, res) => {
     try {
-        const mentee = await Mentee.findOne({ user: req.params.menteeId })
-            .populate('user', 'name email userType skills courses careerGoals')
+        const mentee = await User.findOne({ _id: req.params.menteeId, userType: 'Student' })
+            .select('name email userType progress education futureGoals')
             .populate({
                 path: 'mentor',
-                populate: {
-                    path: 'user',
-                    select: 'name email'
-                }
+                select: 'name email userType'
             });
 
         if (!mentee) {

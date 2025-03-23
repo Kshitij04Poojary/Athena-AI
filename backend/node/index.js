@@ -12,18 +12,14 @@ const generateCourseRoutes = require('./routes/generateCourseRouter');
 const generateChapterContentRoutes = require('./routes/generateChapterContentRouter');
 const interviewRoutes = require('./routes/interviewRouter');
 const lectureRoutes = require('./routes/lectureRouter');
-const mentorMenteeRouter = require('./routes/mentorMenteeRouter');
 const menteeProfileRouter = require('./routes/menteeProfileRouter');
-// const teamRouter = require('./routes/teamRouter');
-const assignmentRouter=require('./routes/assignmentRouter')
+const assignmentRouter = require('./routes/assignmentRouter');
 const assignedCourseRouter = require('./routes/assignedCourseRouter');
-const chatbotRouter=require('./routes/chatbotRouter')
-const examRouter=require('./routes/examRouter')
+const chatbotRouter = require('./routes/chatbotRouter');
+const examRouter = require('./routes/examRouter');
 
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
-const Mentor = require('./models/Mentor');
-const Mentee = require('./models/Mentee');
 const jwt = require('jsonwebtoken');
 
 const app = express();
@@ -40,7 +36,6 @@ app.use(cors({
   credentials: true
 }));
 
-
 // Connect to MongoDB
 connectDB();
 
@@ -51,19 +46,20 @@ app.use('/api/assessment', assessmentRoutes);
 app.use('/api', generateCourseRoutes);
 app.use('/api', generateChapterContentRoutes);
 app.use('/api/interview', interviewRoutes);
-// app.use('/api/teams', teamRouter);
 app.use('/api/lectures', lectureRoutes);
-app.use('/api/users', mentorMenteeRouter);
 app.use('/api/mentee', menteeProfileRouter);
-app.use('/api/assign',assignmentRouter);
-app.use('/api/assigned',assignedCourseRouter);
-app.use('/api',chatbotRouter)
-app.use('/api/exam',examRouter)
+app.use('/api/assign', assignmentRouter);
+app.use('/api/assigned', assignedCourseRouter);
+app.use('/api', chatbotRouter);
+app.use('/api/exam', examRouter);
 
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:5173' || 'http://localhost:5174',
+    origin: [
+      process.env.CLIENT_URL || 'http://localhost:5173',
+      'http://localhost:5174'
+    ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: true
   }
@@ -75,11 +71,10 @@ app.set('io', io);
 // Socket Authentication Middleware
 io.use(async (socket, next) => {
   try {
-    const token = socket.handshake.auth.token;
+    const token = socket.handshake.auth?.token;
     if (!token) {
       return next(new Error('Authentication error: No token provided'));
     }
-
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     socket.user = decoded;
     socket.userId = decoded.id;
@@ -102,15 +97,15 @@ io.on('connection', (socket) => {
   });
 
   // Handle user leaving a lecture
-  socket.on('leave_lecture', async ({ roomId,  userId ,role }) => {
+  socket.on('leave_lecture', async ({ roomId, userId, role }) => {
     console.log(userId, "Left lecture");
-    if (role === 'mentee') {
+    if (role === 'student') {
       try {
-        const mentee = await Mentee.findOne({ user: userId }); // Fix: Using `findOne` instead of `find`
-        if (mentee) {
+        const user = await User.findById(userId);
+        if (user) {
           await Lecture.findOneAndUpdate(
             { roomId: roomId },
-            { $push: { attendance:  mentee._id  } },
+            { $push: { attendance: user._id } },
             { new: true }
           );
         }

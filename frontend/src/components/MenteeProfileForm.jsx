@@ -96,7 +96,7 @@ const MenteeProfileForm = ({ initialData = {} }) => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                'http://localhost:8000/api/mentee/profile',
+                'http://localhost:8000/api/auth/profile',
                 formData,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }

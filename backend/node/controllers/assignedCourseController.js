@@ -25,7 +25,7 @@ const createAssignedCourse = async (req, res) => {
 // Get All Assigned Courses
 const getAllAssignedCourses = async (req, res) => {
     try {
-        const assignedCourses = await AssignedCourse.find().populate('assigns.menteeId assigns.courseCopy orgCourseId');
+        const assignedCourses = await AssignedCourse.find().populate('assigns.userId assigns.courseCopy orgCourseId');
         res.json(assignedCourses);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching assigned courses', error });
@@ -36,7 +36,7 @@ const getAllAssignedCourses = async (req, res) => {
 const getAssignedCourseById = async (req, res) => {
     try {
         const { id } = req.params;
-        const assignedCourse = await AssignedCourse.findById(id).populate('assigns.menteeId assigns.courseCopy orgCourseId');
+        const assignedCourse = await AssignedCourse.findById(id).populate('assigns.userId assigns.courseCopy orgCourseId');
         if (!assignedCourse) return res.status(404).json({ message: 'Assigned Course not found' });
         res.json(assignedCourse);
     } catch (error) {
@@ -44,51 +44,40 @@ const getAssignedCourseById = async (req, res) => {
     }
 };
 
-// Add Mentee Assignment (Add a new mentee and duplicated course to existing assignedCourse)
-const addMenteeToAssignedCourse = async (req, res) => {
+// Add User Assignment (Replacing mentee references)
+const addUserToAssignedCourse = async (req, res) => {
     try {
         const { assignedCourseId } = req.params;
-        const { menteeId, orgCourseId } = req.body;
+        const { userId, orgCourseId } = req.body;
 
-        console.log('Fetching original course:', orgCourseId);
         const originalCourse = await Course.findById(orgCourseId);
-        if (!originalCourse) {
-            console.log('Original course not found');
-            return res.status(404).json({ message: 'Original Course not found' });
-        }
-
-        console.log('Original Course found:', originalCourse);
+        if (!originalCourse) return res.status(404).json({ message: 'Original Course not found' });
 
         const duplicatedCourse = new Course(originalCourse.toObject());
         duplicatedCourse._id = new mongoose.Types.ObjectId();
-        duplicatedCourse.isNew = true;  // Critical step
-        console.log('Saving duplicated course...');
+        duplicatedCourse.isNew = true;
         await duplicatedCourse.save();
 
-        console.log('Duplicated course saved:', duplicatedCourse._id);
-
         await User.findByIdAndUpdate(
-            menteeId,
+            userId,
             { $push: { courses: duplicatedCourse._id } },
             { new: true }
         );
 
         const updatedAssignedCourse = await AssignedCourse.findByIdAndUpdate(
             assignedCourseId,
-            { $push: { assigns: { menteeId, courseCopy: duplicatedCourse._id } } },
+            { $push: { assigns: { userId, courseCopy: duplicatedCourse._id } } },
             { new: true }
-        ).populate('assigns.menteeId assigns.courseCopy orgCourseId');
+        ).populate('assigns.userId assigns.courseCopy orgCourseId');
 
-        console.log('Mentee added successfully');
-        res.json({ message: 'Mentee added with new course copy', updatedAssignedCourse });
+        res.json({ message: 'User added with new course copy', updatedAssignedCourse });
 
     } catch (error) {
-        console.error('🔥 Error adding mentee:', error.message, error.stack);
-        res.status(500).json({ message: 'Error adding mentee', error: error.message });
+        res.status(500).json({ message: 'Error adding user', error: error.message });
     }
 };
 
-
+// Get Assigned Course by Original Course ID
 const getAssignedCourseByOrgCourse = async (req, res) => {
     try {
         const { orgCourseId } = req.params;
@@ -104,45 +93,40 @@ const getAssignedCourseByOrgCourse = async (req, res) => {
     }
 };
 
-const getAssignedCoursesForMentee = async (req, res) => {
+// Get Assigned Courses for a User
+const getAssignedCoursesForUser = async (req, res) => {
     try {
-        const { menteeId } = req.params;
+        const { userId } = req.params;
 
         const assignedCourses = await AssignedCourse.find({
-            'assigns.menteeId': menteeId
+            'assigns.userId': userId
         }).populate('assigns.courseCopy');
 
-        const filteredCourses = [];
-
-        assignedCourses.forEach(assignedCourse => {
-            const assignEntry = assignedCourse.assigns.find(assign => assign.menteeId.toString() === menteeId);
-
-            if (assignEntry && assignEntry.courseCopy) {
-                const courseData = {
-                    _id: assignEntry.courseCopy._id,
-                    courseName: assignEntry.courseCopy.courseName,
-                    description: assignEntry.courseCopy.description,
-                    skills: assignEntry.courseCopy.skills,
-                    level: assignEntry.courseCopy.level,
-                    passedFinal: assignEntry.courseCopy.passedFinal,  // Added
+        const filteredCourses = assignedCourses.flatMap(assignedCourse =>
+            assignedCourse.assigns
+                .filter(assign => assign.userId.toString() === userId)
+                .map(assign => ({
+                    _id: assign.courseCopy._id,
+                    courseName: assign.courseCopy.courseName,
+                    description: assign.courseCopy.description,
+                    skills: assign.courseCopy.skills,
+                    level: assign.courseCopy.level,
+                    passedFinal: assign.courseCopy.passedFinal,
                     assignedDate: assignedCourse.updatedAt,
                     mentor: assignedCourse.mentor
-                };
-                filteredCourses.push(courseData);
-            }
-        });
+                }))
+        );
 
         res.status(200).json({ courses: filteredCourses });
     } catch (error) {
-        console.error('Error fetching assigned courses for mentee:', error);
         res.status(500).json({ message: 'Failed to fetch assigned courses.' });
     }
 };
 
 // Set due date
 const setDueDate = async (req, res) => {
-    const { dueDate } = req.body;
     try {
+        const { dueDate } = req.body;
         const assignedCourse = await AssignedCourse.findByIdAndUpdate(
             req.params.assignedCourseId,
             { dueDate },
@@ -153,7 +137,6 @@ const setDueDate = async (req, res) => {
         res.status(500).json({ error: 'Failed to set due date' });
     }
 };
-
 
 // Delete Assigned Course
 const deleteAssignedCourse = async (req, res) => {
@@ -170,7 +153,7 @@ const deleteAssignedCourse = async (req, res) => {
 const getCoursesByMentor = async (req, res) => {
     try {
         const { mentor } = req.params;
-        const assignedCourses = await AssignedCourse.find({ mentor }).populate('assigns.menteeId assigns.courseCopy orgCourseId');
+        const assignedCourses = await AssignedCourse.find({ mentor }).populate('assigns.userId assigns.courseCopy orgCourseId');
         res.json(assignedCourses);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching mentor courses', error });
@@ -181,10 +164,10 @@ module.exports = {
     createAssignedCourse,
     getAllAssignedCourses,
     getAssignedCourseById,
-    addMenteeToAssignedCourse,
+    addUserToAssignedCourse, // Updated function name
     deleteAssignedCourse,
     getCoursesByMentor,
     getAssignedCourseByOrgCourse,
-    getAssignedCoursesForMentee, 
+    getAssignedCoursesForUser, // Updated function name
     setDueDate
 };
