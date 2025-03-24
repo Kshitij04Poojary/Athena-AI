@@ -4,7 +4,7 @@ import { Clock, Video, Calendar, User, BookOpen, GraduationCap, Trophy, Award, A
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
-import DashboardCard from '../../components/DashboardCard';
+import DashboardCard from '../../components/misc/DashboardCard';
 import { useUser } from '../../context/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

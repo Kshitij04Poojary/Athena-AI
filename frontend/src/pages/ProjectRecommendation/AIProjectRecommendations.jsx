@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useUser } from '../../context/UserContext';
+import { useTranslation } from "react-i18next";
 
 const AIProjectRecommendations = () => {
-  const [selectedDomain, setSelectedDomain] = useState('All');
+  const { t } = useTranslation();
+  const [selectedDomain, setSelectedDomain] = useState(t("projects.filter.all"));
   const [projectRecommendations, setProjectRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
 
   // Get unique domains for filtering
-  const domains = ['All', ...new Set(projectRecommendations.map(project => project.domain))];
+  const domains = [
+    t("projects.filter.all"), 
+    ...new Set(projectRecommendations.map(project => project.domain))
+  ];
 
   // Filter projects based on selected domain
-  const filteredProjects = selectedDomain === 'All'
+  const filteredProjects = selectedDomain === t("projects.filter.all")
     ? projectRecommendations
     : projectRecommendations.filter(project => project.domain === selectedDomain);
 
   async function fetchRecommendations() {
     if (!user) {
-      console.error('User not logged in');
+      console.error(t("projects.errors.notLoggedIn"));
       return;
     }
     
@@ -30,18 +35,14 @@ const AIProjectRecommendations = () => {
         { withCredentials: true }
       );
       
-      console.log(response.data.responses);
-      const updatedData = response.data.responses.map(item => {
-        return {
-          ...item,
-          domain: item.domain  // domain is already a string
-        };
-      });
+      const updatedData = response.data.responses.map(item => ({
+        ...item,
+        domain: item.domain
+      }));
       
-      console.log(updatedData);
       setProjectRecommendations(updatedData);
     } catch (error) {
-      console.error('Error fetching project recommendations:', error);
+      console.error(t("projects.errors.fetchFailed"), error);
     } finally {
       setLoading(false);
     }
@@ -50,8 +51,12 @@ const AIProjectRecommendations = () => {
   return (
     <div className="bg-gray-50 min-h-screen p-8 font-sans">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">AI Project Recommendations</h1>
-        <p className="text-gray-600 mb-4">Discover innovative project ideas powered by artificial intelligence</p>
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          {t("projects.title")}
+        </h1>
+        <p className="text-gray-600 mb-4">
+          {t("projects.subtitle")}
+        </p>
         
         {/* Fetch Recommendations Button */}
         <div className="mb-6">
@@ -66,18 +71,20 @@ const AIProjectRecommendations = () => {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
-                Loading Recommendations...
+                {t("projects.buttons.loading")}
               </>
             ) : (
-              <>Get AI Project Recommendations</>
+              t("projects.buttons.getRecommendations")
             )}
           </button>
         </div>
 
-        {/* Domain Filter - Only show if there are recommendations */}
+        {/* Domain Filter */}
         {projectRecommendations.length > 0 && (
           <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-800 mb-3">Filter by Domain</h2>
+            <h2 className="text-lg font-semibold text-gray-800 mb-3">
+              {t("projects.filter.title")}
+            </h2>
             <div className="flex flex-wrap gap-2">
               {domains.map(domain => (
                 <button
@@ -100,7 +107,9 @@ const AIProjectRecommendations = () => {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600 mb-4"></div>
-            <p className="text-gray-600">Fetching personalized recommendations...</p>
+            <p className="text-gray-600">
+              {t("projects.loading")}
+            </p>
           </div>
         ) : projectRecommendations.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -118,7 +127,9 @@ const AIProjectRecommendations = () => {
                 <p className="text-gray-600 mb-4 text-sm">{project.description}</p>
 
                 <div className="mt-3">
-                  <h3 className="text-sm font-semibold text-gray-900 my-2">Key Features</h3>
+                  <h3 className="text-sm font-semibold text-gray-900 my-2">
+                    {t("projects.featuresTitle")}
+                  </h3>
                   <ul className="space-y-4">
                     {project.key_features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start">
@@ -136,8 +147,12 @@ const AIProjectRecommendations = () => {
         ) : (
           <div className="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
             <div className="text-gray-400 text-5xl mb-4">🤖</div>
-            <h3 className="text-xl font-medium text-gray-800 mb-2">No Recommendations Yet</h3>
-            <p className="text-gray-600 mb-6">Click the button above to get personalized AI project recommendations.</p>
+            <h3 className="text-xl font-medium text-gray-800 mb-2">
+              {t("projects.empty.title")}
+            </h3>
+            <p className="text-gray-600 mb-6">
+              {t("projects.empty.message")}
+            </p>
           </div>
         )}
       </div>

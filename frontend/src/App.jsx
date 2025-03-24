@@ -31,13 +31,13 @@ import ProfilePage from "./pages/Auth/ProfilePage";
 import Similarity from "./pages/MentorMenteeConnect/Similarity";
 import AIProjectRecommendations from "./pages/ProjectRecommendation/AIProjectRecommendations";
 import CourseAssessment from "./pages/CourseGen/CourseAssessment";
-import InternshipListings from "./components/InternshipListings";
+import InternshipListings from "./components/misc/InternshipListings";
 import TeamsStyleCalendar from "./pages/TimeTable/TeamsStyleCalendar";
 import Landing from "./pages/Landing";
-import Transcript from "./components/Transcript";
+import Transcript from "./components/misc/Transcript";
 import CreateExam from "./pages/Exams/CreateExam";
 import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
-import CodeEditor from "./components/Coding";
+import CodeEditor from "./components/misc/Coding";
 
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 

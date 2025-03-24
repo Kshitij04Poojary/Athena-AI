@@ -18,25 +18,72 @@ import {
     Download
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import { useTranslation } from "react-i18next";
+import { translateText } from "../../components/language/translateService";
 
 const CourseDetails = () => {
+    const { t, i18n } = useTranslation();
     const { courseId } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
     const token = user?.token;
 
     const [course, setCourse] = useState(null);
+    const [translatedCourse, setTranslatedCourse] = useState(null);
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editableCourse, setEditableCourse] = useState(null);
+    const [isTranslating, setIsTranslating] = useState(false);
 
     useEffect(() => {
         if (!token) {
-            console.error('No auth token found');
+            console.error(t("courseDetails.errors.noToken"));
             return;
         }
         fetchCourseDetails();
     }, [courseId, token]);
+
+    useEffect(() => {
+        if (course) {
+            translateCourseContent();
+        }
+    }, [course, i18n.language]);
+
+    const translateCourseContent = async () => {
+        if (!course || i18n.language === 'en') {
+            setTranslatedCourse(course);
+            return;
+        }
+
+        setIsTranslating(true);
+        try {
+            const translations = await Promise.all([
+                translateText(course.courseName, i18n.language),
+                translateText(course.description, i18n.language),
+                Promise.all(course.skills.map(skill => translateText(skill, i18n.language))),
+                Promise.all(course.courseOutcomes.map(outcome => translateText(outcome, i18n.language))),
+                Promise.all(course.chapters.map(async chapter => ({
+                    ...chapter,
+                    chapterName: await translateText(chapter.chapterName, i18n.language),
+                    about: await translateText(chapter.about, i18n.language)
+                })))
+            ]);
+
+            setTranslatedCourse({
+                ...course,
+                courseName: translations[0],
+                description: translations[1],
+                skills: translations[2],
+                courseOutcomes: translations[3],
+                chapters: translations[4]
+            });
+        } catch (error) {
+            console.error(t("courseDetails.errors.translationError"), error);
+            setTranslatedCourse(course); // Fallback to original if translation fails
+        } finally {
+            setIsTranslating(false);
+        }
+    };
 
     const fetchCourseDetails = async () => {
         try {
@@ -49,10 +96,10 @@ const CourseDetails = () => {
                 setCourse(data);
                 checkFinalAssessment(data);
             } else {
-                console.error('Failed to fetch course data');
+                console.error(t("courseDetails.errors.fetchFailed"));
             }
         } catch (error) {
-            console.error('Error fetching course data:', error);
+            console.error(t("courseDetails.errors.fetchError"), error);
         }
     };
 
@@ -386,31 +433,46 @@ const CourseDetails = () => {
         }
     };
     
-    if (!course) {
+    if (!course || !translatedCourse) {
         return (
             <div className="flex justify-center items-center h-screen">
-                <div className="animate-pulse text-blue-600 text-xl">Loading Course Details...</div>
+                <div className="animate-pulse text-blue-600 text-xl">
+                    {t("courseDetails.loading")}
+                </div>
             </div>
         );
     }
 
-    const allChaptersCompleted = course?.chapters.every(chapter => chapter.isCompleted);
-    const { passedFinal } = course || {};
+    const allChaptersCompleted = translatedCourse?.chapters.every(chapter => chapter.isCompleted);
+    const { passedFinal } = translatedCourse || {};
 
     return (
         <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
+            {isTranslating && (
+                <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <p>{t("courseDetails.translating")}</p>
+                    </div>
+                </div>
+            )}
+
             <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
                 <div className="bg-blue-600 text-white p-6">
                     <div className="flex items-center space-x-4 mb-4">
                         <button
                             className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition"
                             onClick={() => navigate('/my-courses')}
+                            aria-label={t("courseDetails.buttons.back")}
                         >
                             <ArrowLeft className="text-white" size={24} />
                         </button>
-                        <h1 className="text-3xl font-bold flex-grow">{course.courseName}</h1>
+                        <h1 className="text-3xl font-bold flex-grow">{translatedCourse.courseName}</h1>
                         {user.role === "mentor" && (
-                            <button onClick={handleEditClick} className="text-white p-2 rounded-full hover:bg-white/30">
+                            <button 
+                                onClick={handleEditClick} 
+                                className="text-white p-2 rounded-full hover:bg-white/30"
+                                aria-label={t("courseDetails.buttons.edit")}
+                            >
                                 <Pencil size={24} />
                             </button>
                         )}
@@ -422,24 +484,26 @@ const CourseDetails = () => {
                         <div>
                             <div className="flex items-center mb-4">
                                 <BookOpen className="mr-3 text-blue-600" size={24} />
-                                <p className="text-gray-700"><strong>Description:</strong> {course.description}</p>
+                                <p className="text-gray-700">
+                                    <strong>{t("courseDetails.description")}:</strong> {translatedCourse.description}
+                                </p>
                             </div>
 
                             <div className="flex items-center mb-4">
                                 <Layers className="mr-3 text-blue-600" size={24} />
                                 <p className="text-gray-700">
-                                    <strong>Skills:</strong> {course.skills.join(', ')}
+                                    <strong>{t("courseDetails.skills")}:</strong> {translatedCourse.skills.join(', ')}
                                 </p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="flex items-center">
                                     <Star className="mr-2 text-blue-600" size={20} />
-                                    <span><strong>Level:</strong> {course.level}</span>
+                                    <span><strong>{t("courseDetails.level")}:</strong> {translatedCourse.level}</span>
                                 </div>
                                 <div className="flex items-center">
                                     <Clock className="mr-2 text-blue-600" size={20} />
-                                    <span><strong>Duration:</strong> {course.duration}</span>
+                                    <span><strong>{t("courseDetails.duration")}:</strong> {translatedCourse.duration}</span>
                                 </div>
                             </div>
                         </div>
@@ -447,10 +511,10 @@ const CourseDetails = () => {
                         <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
                             <div className="flex items-center mb-4">
                                 <Target className="mr-3 text-blue-600" size={24} />
-                                <h2 className="text-xl font-semibold">Course Outcomes</h2>
+                                <h2 className="text-xl font-semibold">{t("courseDetails.outcomesTitle")}</h2>
                             </div>
                             <ul className="list-disc pl-6 space-y-2 text-gray-700">
-                                {course.courseOutcomes.map((outcome, index) => (
+                                {translatedCourse.courseOutcomes.map((outcome, index) => (
                                     <li key={index} className="pl-2">{outcome}</li>
                                 ))}
                             </ul>
@@ -458,10 +522,10 @@ const CourseDetails = () => {
                     </div>
 
                     <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b pb-3">
-                        Course Chapters
+                        {t("courseDetails.chaptersTitle")}
                     </h2>
                     <div className="space-y-4">
-                        {course.chapters.map((chapter) => (
+                        {translatedCourse.chapters.map((chapter) => (
                             <div
                                 key={chapter._id}
                                 className="bg-white border border-blue-100 rounded-xl p-5 
@@ -474,7 +538,7 @@ const CourseDetails = () => {
                                     {chapter.chapterName}
                                 </h3>
                                 <p className="text-gray-600 mb-2">
-                                    <strong>About:</strong> {chapter.about}
+                                    <strong>{t("courseDetails.about")}:</strong> {chapter.about}
                                 </p>
                                 <div className="flex items-center text-gray-500">
                                     <Clock className="mr-2" size={16} />
@@ -485,7 +549,7 @@ const CourseDetails = () => {
                     </div>
 
                     <h2 className="text-2xl font-semibold mt-8 mb-4 text-blue-700 border-b pb-3">
-                        Final Assessment
+                        {t("courseDetails.assessmentTitle")}
                     </h2>
 
                     <div
@@ -500,9 +564,9 @@ const CourseDetails = () => {
                             if (!passedFinal && allChaptersCompleted) {
                                 navigate(`/course/${courseId}/course-assessment`, {
                                     state: {
-                                        topic: course.courseName,
-                                        skills: course.skills,
-                                        difficultyLevel: course.level,
+                                        topic: translatedCourse.courseName,
+                                        skills: translatedCourse.skills,
+                                        difficultyLevel: translatedCourse.level,
                                     }
                                 });
                             }
@@ -514,14 +578,23 @@ const CourseDetails = () => {
                                     : <Lock size={24} className="text-gray-500" />
                             }
                             <div>
-                                <span className="font-medium text-lg">{course.courseName} Final Assessment</span>
-                                {bestAssessmentScore !== null && <div className="text-sm">Best Score: {bestAssessmentScore}%</div>}
+                                <span className="font-medium text-lg">
+                                    {translatedCourse.courseName} {t("courseDetails.finalAssessment")}
+                                </span>
+                                {bestAssessmentScore !== null && (
+                                    <div className="text-sm">
+                                        {t("courseDetails.bestScore")}: {bestAssessmentScore}%
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        <span className="font-semibold">{passedFinal ? "Completed" : allChaptersCompleted ? "Unlocked" : "Locked"}</span>
+                        <span className="font-semibold">
+                            {passedFinal ? t("courseDetails.completed") 
+                                : allChaptersCompleted ? t("courseDetails.unlocked") 
+                                    : t("courseDetails.locked")}
+                        </span>
                     </div>
                     
-                    {/* Certificate Download Button - Only shown when passedFinal is true */}
                     {passedFinal && (
                         <div className="mt-6">
                             <button
@@ -529,18 +602,20 @@ const CourseDetails = () => {
                                 className="flex items-center justify-center w-full bg-green-600 text-white py-3 px-6 rounded-lg hover:bg-green-700 transition-all duration-300 shadow-lg"
                             >
                                 <Download size={24} className="mr-2" />
-                                <span className="font-semibold text-lg">Download Certificate</span>
+                                <span className="font-semibold text-lg">
+                                    {t("courseDetails.downloadCertificate")}
+                                </span>
                             </button>
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* Edit Course Modal */}
+            {/* Edit Course Modal - Use original course data for editing */}
             {isModalOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-8 rounded-xl shadow-xl w-5/6 overflow-y-auto max-h-[90vh]">
-                        <h2 className="text-2xl font-semibold mb-4">Edit Course</h2>
+                        <h2 className="text-2xl font-semibold mb-4">{t("courseDetails.editTitle")}</h2>
 
                         {/* Editable course content */}
                         <div className="space-y-4">

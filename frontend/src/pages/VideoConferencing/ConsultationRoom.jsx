@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { motion } from "framer-motion";
 import { PhoneOff, Video } from "lucide-react";
-import Transcript from "../../components/Transcript";
+import Transcript from "../../components/misc/Transcript";
 
 const APP_ID = 2030731488;
 const SERVER_SECRET = 'bc0fb9a32a2db1941c02ecc00521f5c1';
