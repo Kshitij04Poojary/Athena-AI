@@ -28,6 +28,7 @@ def create_app():
     from package.genetic_algorithm.routes import genetic_bp
     from package.transcript.routes import transcript_bp
     from package.coding_workspace.routes import coding_bp
+    from package.chatpdf.routes import chatpdf_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(project_recomm, url_prefix="/recommendations")
     app.register_blueprint(mentor_mentee, url_prefix="/mentor-mentee")
@@ -36,5 +37,6 @@ def create_app():
     app.register_blueprint(genetic_bp, url_prefix="/genetic-algorithm")
     app.register_blueprint(transcript_bp, url_prefix="/api/transcript")
     app.register_blueprint(coding_bp, url_prefix="/api/coding")
+    app.register_blueprint(chatpdf_bp, url_prefix="/api/chatpdf")
 
     return app

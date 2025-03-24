@@ -40,6 +40,7 @@ import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
 import CodeEditor from "./components/Coding";
 
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
+import PDFChatComponent from "./components/chatpdf/PDFChatComponent";
 
 const App = () => (
   <UserProvider>
@@ -77,6 +78,7 @@ const App = () => (
           <Route path="/calendar" element={<TeamsStyleCalendar />} />
           <Route path="/transcript" element={<Transcript/>} />
           <Route path="/coding" element={<CodeEditor/>} />
+          <Route path="/chat-with-pdf" element={<PDFChatComponent/>} />
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
