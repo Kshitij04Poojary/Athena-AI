@@ -14,8 +14,7 @@ import {
   Lightbulb,
   Calendar,
   ListChecks,
-  BarChart2 ,
-  SearchIcon
+  BarChart2 
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -40,7 +39,6 @@ const SideBar = () => {
             : []),
         { name: t("sidebar.items.interviews"), icon: BrainCircuit, path: '/interview' },
         { name: t("sidebar.items.internships"), icon: Briefcase, path: '/internships' },
-        { name: t('Query PDF'), icon: SearchIcon, path: '/chat-with-pdf' },
     ];    
 
     return (
