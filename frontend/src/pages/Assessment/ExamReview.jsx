@@ -1,10 +1,12 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CheckCircle, XCircle, AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ExamReview = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Retrieve userAnswers and quiz from state
   const { userAnswers = [], quiz = [] } = location.state || {};
@@ -28,17 +30,26 @@ const ExamReview = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-6">
-      <h2 className="text-3xl font-bold mb-6 text-indigo-800 border-b pb-4">Exam Review</h2>
+      <h2 className="text-3xl font-bold mb-6 text-indigo-800 border-b pb-4">
+        {t("examReview.title")}
+      </h2>
       
       {/* Score summary card */}
       <div className="bg-indigo-50 p-4 rounded-lg mb-6 flex items-center justify-between">
         <div>
-          <h3 className="text-xl font-semibold text-indigo-700">Your Score</h3>
+          <h3 className="text-xl font-semibold text-indigo-700">
+            {t("examReview.yourScore")}
+          </h3>
           <p className="text-gray-700 mt-1">
-            You answered {score.correct} out of {score.total} questions correctly
+            {t("examReview.scoreSummary", {
+              correct: score.correct,
+              total: score.total
+            })}
           </p>
         </div>
-        <div className="text-4xl p-5 font-bold text-indigo-700">{score.percentage}%</div>
+        <div className="text-4xl p-5 font-bold text-indigo-700">
+          {score.percentage}%
+        </div>
       </div>
 
       {quiz.length > 0 ? (
@@ -74,7 +85,7 @@ const ExamReview = () => {
                       {question.question}
                       {!isAttempted && (
                         <span className="ml-2 text-yellow-600 font-normal text-sm inline-block px-2 py-1 bg-yellow-100 rounded">
-                          Not Attempted
+                          {t("examReview.notAttempted")}
                         </span>
                       )}
                     </h3>
@@ -84,11 +95,9 @@ const ExamReview = () => {
                         let statusIcon = null;
 
                         if (option === question.answer) {
-                          // Correct answer is always green
                           optionClass = "bg-green-100 border border-green-300 text-green-800";
                           statusIcon = <CheckCircle className="text-green-500" size={16} />;
                         } else if (isAttempted && option === userSelected) {
-                          // Incorrect selection is red
                           optionClass = "bg-red-100 border border-red-300 text-red-800";
                           statusIcon = <XCircle className="text-red-500" size={16} />;
                         }
@@ -112,8 +121,12 @@ const ExamReview = () => {
         </div>
       ) : (
         <div className="text-center py-10 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-lg">No quiz data available</p>
-          <p className="text-gray-500 mt-2">Please start a new quiz from the home page</p>
+          <p className="text-gray-600 text-lg">
+            {t("examReview.noQuizData")}
+          </p>
+          <p className="text-gray-500 mt-2">
+            {t("examReview.startNewQuiz")}
+          </p>
         </div>
       )}
 
@@ -121,9 +134,9 @@ const ExamReview = () => {
       <div className="mt-8 flex justify-between">
         <button
           onClick={() => navigate("/home")}
-          className="px-6 py-2  bg-blue-600 text-white rounded-lg transition shadow-md flex items-center gap-2"
+          className="px-6 py-2 bg-blue-600 text-white rounded-lg transition shadow-md flex items-center gap-2"
         >
-          Back to Home
+          {t("examReview.backToHome")}
         </button>
       </div>
     </div>

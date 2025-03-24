@@ -14,7 +14,7 @@ import {
     Plus,
     Trash2
 } from 'lucide-react';
-import Chatbot from '../../components/Chatbot';
+import Chatbot from '../../components/misc/Chatbot';
 
 const ChapterDetails = () => {
     const { courseId, chapterId } = useParams();

@@ -4,7 +4,7 @@ import { Calendar, Clock, Video, Users, BookOpen, Award, Play, ArrowRight, Spark
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
-import DashboardCard from '../../components/DashboardCard';
+import DashboardCard from '../../components/misc/DashboardCard';
 
 const TeacherDashboard = () => {
     const [lectures, setLectures] = useState([]);

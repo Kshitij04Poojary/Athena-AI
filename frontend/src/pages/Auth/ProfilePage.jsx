@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useUser } from "../../context/UserContext";
 import { motion } from "framer-motion";
-import MenteeProfileForm from "../../components/MenteeProfileForm";
-import generateResume from "../../components/generateResume";
+import MenteeProfileForm from "../../components/misc/MenteeProfileForm";
+import generateResume from "../../components/misc/generateResume";
 import axios from "axios";
 import {
   Edit2,
