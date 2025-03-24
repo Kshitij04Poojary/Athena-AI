@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useUser } from '../context/UserContext';
+import { useUser } from '../../context/UserContext';
+import { useTranslation } from "react-i18next";
 import { 
   User, 
   Video,
@@ -18,25 +19,29 @@ import {
 } from 'lucide-react';
 
 const SideBar = () => {
+    const { t } = useTranslation();
     const { user, logout } = useUser();
     const [collapsed, setCollapsed] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
 
     const menuItems = [
-        { name: 'Profile', icon: User, path: '/profile' },
-        { name: 'Courses', icon: BookOpen, path:'/my-courses'},
-        { name: 'Assessments', icon: ClipboardList, path: '/assessment' },
-        ...(user?.role === 'mentor' ? [{ name: 'Attendance', icon: ListChecks, path: '/offline-attendance' }] : []),
-        { name: 'Video Conferencing', icon: Video, path: (user?.role==='mentor'?'/mentor':(user?.role==='mentee'?'/mentee':'/none') )},
-        { name: 'Project Recommendations', icon: Lightbulb, path: '/recommend-projects' },
-        { name: 'AI Schedule', icon: Calendar, path: '/calendar' },
-        { name: 'Coding', icon: BarChart2, path: '/coding' },
-        { name: 'Exams', icon: BarChart2, path: (user?.role==='mentor'?'/create-exam':(user?.role==='mentee'?'/mentee-exam':'/none') )},
-        { name: 'Mock Interviews', icon: BrainCircuit, path: '/interview' },
-        { name: 'Internships', icon: Briefcase, path: '/internships' },
-        { name: 'Query PDF', icon: SearchIcon, path: '/chat-with-pdf' },
-    ];
-    
+        { name: t("sidebar.items.profile"), icon: User, path: '/profile' },
+        { name: t("sidebar.items.courses"), icon: BookOpen, path:'/my-courses'},
+        { name: t("sidebar.items.assessments"), icon: ClipboardList, path: '/assessment' },
+        ...(user?.role === 'mentor' ? [{ name: t("sidebar.items.attendance"), icon: ListChecks, path: '/offline-attendance' }] : []),
+        ...(user?.role === 'mentor' || user?.role === 'mentee' 
+            ? [{ name: t("sidebar.items.video"), icon: Video, path: user?.role === 'mentor' ? '/mentor' : '/mentee' }] 
+            : []),
+        { name: t("sidebar.items.projects"), icon: Lightbulb, path: '/recommend-projects' },
+        { name: t("sidebar.items.schedule"), icon: Calendar, path: '/calendar' },
+        { name: t("sidebar.items.coding"), icon: BarChart2, path: '/coding' },
+        ...(user?.role === 'mentor' || user?.role === 'mentee' 
+            ? [{ name: t("sidebar.items.exams"), icon: BarChart2, path: user?.role === 'mentor' ? '/create-exam' : '/mentee-exam' }] 
+            : []),
+        { name: t("sidebar.items.interviews"), icon: BrainCircuit, path: '/interview' },
+        { name: t("sidebar.items.internships"), icon: Briefcase, path: '/internships' },
+        { name: t('Query PDF'), icon: SearchIcon, path: '/chat-with-pdf' },
+    ];    
 
     return (
         <div 
@@ -48,7 +53,7 @@ const SideBar = () => {
             <button 
                 onClick={() => setCollapsed(!collapsed)}
                 className="absolute -right-4 top-20 bg-blue-600 text-white p-2 rounded-full shadow-lg z-10 transform transition-transform hover:scale-110"
-                aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+                aria-label={collapsed ? t("sidebar.aria.expand") : t("sidebar.aria.collapse")}
             >
                 {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
@@ -61,7 +66,7 @@ const SideBar = () => {
                     </div>
                     {!collapsed && (
                         <h2 className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
-                            OdysseyAI
+                            {t("sidebar.appName")}
                         </h2>
                     )}
                 </div>
@@ -72,14 +77,14 @@ const SideBar = () => {
                 <div className="flex items-center space-x-4">
                     <div className="relative">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-xl font-bold shadow-md">
-                            {user?.name?.charAt(0) || 'G'}
+                            {user?.name?.charAt(0) || t("sidebar.guestInitial")}
                         </div>
                         <div className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-green-500 border-2 border-indigo-900"></div>
                     </div>
                     {!collapsed && (
                         <div className="overflow-hidden">
-                            <p className="font-medium truncate">{user?.name || 'Guest'}</p>
-                            <p className="text-xs text-blue-300 truncate">{user?.email || 'guest@example.com'}</p>
+                            <p className="font-medium truncate">{user?.name || t("sidebar.guestName")}</p>
+                            <p className="text-xs text-blue-300 truncate">{user?.email || t("sidebar.guestEmail")}</p>
                         </div>
                     )}
                 </div>
@@ -130,7 +135,7 @@ const SideBar = () => {
                     <div className={`${!collapsed && 'mr-4'} !text-white group-hover:text-gray transition-colors`}>
                         <LogOut size={20} />
                     </div>
-                    {!collapsed && <span className="group-hover:text-white transition-colors">Logout</span>}
+                    {!collapsed && <span className="group-hover:text-white transition-colors">{t("sidebar.logout")}</span>}
                 </button>
             </div>
         </div>
