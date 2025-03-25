@@ -41,7 +41,9 @@ import CodeEditor from "./components/misc/Coding";
 
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 import PDFChatComponent from "./components/chatpdf/PDFChatComponent";
-import MainFlashcard from "./pages/Flashcards/MainFlashcard"
+import NotesFlashcard from "./pages/CourseGen/NotesFlashcard";
+import MainCourseDetails from "./pages/CourseGen/MainCourseDetails";
+import MainFlashcard from "./pages/Flashcards/MainFlashcard";
 
 const App = () => (
   <UserProvider>
@@ -62,7 +64,8 @@ const App = () => (
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/my-courses" element={<MyCourses />} />
           <Route path="/create-course" element={<CreateCourse />} />
-          <Route path="/course/:courseId" element={<CourseDetails />} />
+          {/* <Route path="/course/:courseId" element={<CourseDetails />} /> */}
+          <Route path="/course/:courseId" element={<MainCourseDetails />} />
           <Route
             path="/course/:courseId/chapter/:chapterId"
             element={<ChapterDetails />}
@@ -99,7 +102,7 @@ const App = () => (
               <Route path='/create-exam' element={<CreateExam />} />
             </>
           }
-
+          <Route path="/flashcards/:courseId" element={<MainFlashcard />} />
         </Route>
 
         <Route path="/interview/:interviewId" element={<StartInterview />} />
@@ -107,7 +110,7 @@ const App = () => (
         <Route path="/assessment/:examId" element={<Exam />} />
         <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />} />
         <Route path="/examreview" element={<ExamReview />} />
-        <Route path="/flashcard" element={<MainFlashcard />} />
+        <Route path="/flashcard" element={<NotesFlashcard />} />
 
       </Routes>
     </Router>
