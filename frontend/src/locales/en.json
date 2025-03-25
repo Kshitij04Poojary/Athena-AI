@@ -1,6 +1,6 @@
 {
     "Welcome": "Welcome",
-    "Discover the power of AI with OdesseyAI": "Discover the power of AI with OdysseyAI",
+    "Discover the power of AI with AthenaAI": "Discover the power of AI with AthenaAI",
     "myCourses": {
         "title": "My Courses",
         "createCourse": "Create Course",
@@ -208,7 +208,7 @@
         }
     },
     "sidebar": {
-        "appName": "OdysseyAI",
+        "appName": "AthenaAI",
         "guestName": "Guest",
         "guestInitial": "G",
         "guestEmail": "guest@example.com",

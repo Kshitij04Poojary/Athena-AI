@@ -62,7 +62,7 @@ const SideBar = () => {
             <div className="p-6 flex items-center justify-center border-b border-blue-700">
                 <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-xl font-bold text-white">
-                        O
+                        A
                     </div>
                     {!collapsed && (
                         <h2 className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">

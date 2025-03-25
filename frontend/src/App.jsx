@@ -41,6 +41,7 @@ import CodeEditor from "./components/misc/Coding";
 
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 import PDFChatComponent from "./components/chatpdf/PDFChatComponent";
+import MainFlashcard from "./pages/Flashcards/MainFlashcard"
 
 const App = () => (
   <UserProvider>
@@ -106,6 +107,7 @@ const App = () => (
         <Route path="/assessment/:examId" element={<Exam />} />
         <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />} />
         <Route path="/examreview" element={<ExamReview />} />
+        <Route path="/flashcard" element={<MainFlashcard />} />
 
       </Routes>
     </Router>

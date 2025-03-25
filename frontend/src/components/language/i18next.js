@@ -18,10 +18,10 @@ import ne from "../../locales/ne.json";
 import or from "../../locales/or.json";
 import pa from "../../locales/pa.json";
 import sa from "../../locales/sa.json";
-import sd from "../../locales/sd.json";
-import si from "../../locales/si.json";
+// import sd from "../../locales/sd.json";
+// import si from "../../locales/si.json";
 import ta from "../../locales/ta.json";
-import te from "../../locales/te.json";
+// import te from "../../locales/te.json";
 
 // Get saved language or default to English
 const savedLang = localStorage.getItem("language") || "en";
@@ -47,10 +47,10 @@ i18n
       or: { translation: or },
       pa: { translation: pa },
       sa: { translation: sa },
-      sd: { translation: sd },
-      si: { translation: si },
+      // sd: { translation: sd },
+      // si: { translation: si },
       ta: { translation: ta },
-      te: { translation: te }
+      // te: { translation: te }
     },
     lng: savedLang, // Use saved language if available
     fallbackLng: "en",

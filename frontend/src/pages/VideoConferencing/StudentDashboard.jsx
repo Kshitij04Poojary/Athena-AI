@@ -8,7 +8,6 @@ import DashboardCard from '../../components/misc/DashboardCard';
 import { useUser } from '../../context/UserContext';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "./Style.css";
 
 const StudentDashboard = () => {
     const { user } = useUser();
