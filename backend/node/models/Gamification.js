@@ -38,8 +38,8 @@ const GameSchema = new mongoose.Schema({
             Medium: { type: Number, default: 0 },
             Hard: { type: Number, default: 0 }
         },
-        total_stars: { type: Number, default: 0 }, 
-        lives: { type: Number, default: 3 } 
+        total_stars: { type: Number, default: 0 },
+        lives: { type: Number, default: 3 }
     }
 }, { timestamps: true });
 
