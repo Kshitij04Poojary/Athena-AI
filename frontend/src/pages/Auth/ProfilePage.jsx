@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { motion } from "framer-motion";
 import MenteeProfileForm from "../../components/misc/MenteeProfileForm";
@@ -20,7 +20,22 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   console.log("User data:", user);
-  
+  async function load_flask() {
+    try {
+        const response = await axios.post("http://127.0.0.1:5004/recommendations/load-projects", 
+            { "user_id": user?._id }, { withCredentials: true });
+        console.log(response.data);
+    } catch (error) {
+        console.log(error);
+    }
+  }
+
+  useEffect(() => {
+      if (user) {
+          load_flask();
+      }
+  }, [user]);
+    
   const handleUpdate = async (updatedData) => {
     try {
         if (!user?._id || !user?.token) {
