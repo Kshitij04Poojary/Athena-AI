@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-  RefreshCw
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, RefreshCw, RotateCw, AlertCircle } from 'lucide-react';
+import { useParams } from 'react-router-dom';
 
 // Importing the flashcard content and individual flashcard component
 import { flashCardContent } from './Content';
 import FlashCardItem from './FlashCardItem';
 
 const Flashcards = () => {
+  const { courseId } = useParams();
   const [flashCards, setFlashCards] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Load flashcards on component mount
   useEffect(() => {
-    setFlashCards(flashCardContent);
-  }, []);
+    const fetchFlashcards = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/flashcards/${courseId}`);
+        if (!response.ok) throw new Error('Failed to fetch flashcards');
+        const data = await response.json();
+        setFlashCards(data.flashcards.cards);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFlashcards();
+  }, [courseId]);
 
   // Handle flipping the card
   const handleFlip = () => {
