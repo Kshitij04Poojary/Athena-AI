@@ -119,7 +119,7 @@ const MyCourses = () => {
                     </div>
                 </div>
 
-                {user?.userType !== 'Mentor' && <AssignedCourses />}
+                {user?.userType == 'Mentor' && <AssignedCourses />}
             </div>
         </div>
     );

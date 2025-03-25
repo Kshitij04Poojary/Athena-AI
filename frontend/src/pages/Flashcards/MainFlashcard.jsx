@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, RefreshCw, RotateCw, AlertCircle } from 'lucide-react';
-import { useParams } from 'react-router-dom';
-
-// Importing the flashcard content and individual flashcard component
-import { flashCardContent } from './Content';
+import { ChevronLeft, ChevronRight, RefreshCw, RotateCw, AlertCircle, ArrowLeft } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
 import FlashCardItem from './FlashCardItem';
 
 const Flashcards = () => {
   const { courseId } = useParams();
+  const navigate = useNavigate();
   const [flashCards, setFlashCards] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -16,19 +14,40 @@ const Flashcards = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchFlashcards = async () => {
+    const fetchOrGenerateFlashcards = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/flashcards/${courseId}`);
-        if (!response.ok) throw new Error('Failed to fetch flashcards');
-        const data = await response.json();
-        setFlashCards(data.flashcards.cards);
+        setLoading(true);
+        setError(null);
+        
+        // First try to fetch existing flashcards
+        const fetchResponse = await fetch(`http://localhost:8000/api/flashcards/${courseId}`);
+        
+        if (fetchResponse.ok) {
+          const data = await fetchResponse.json();
+          if (data.flashcards?.cards?.length > 0) {
+            setFlashCards(data.flashcards.cards);
+            return;
+          }
+        }
+        
+        // If no flashcards exist, generate new ones
+        const generateResponse = await fetch(`http://localhost:8000/api/genflashcards/${courseId}`, {
+          method: 'POST'
+        });
+        
+        if (!generateResponse.ok) throw new Error('Failed to generate flashcards');
+        
+        const generatedData = await generateResponse.json();
+        setFlashCards(generatedData.flashcards.cards);
+        
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-    fetchFlashcards();
+
+    fetchOrGenerateFlashcards();
   }, [courseId]);
 
   // Handle flipping the card
@@ -58,8 +77,7 @@ const Flashcards = () => {
     setIsFlipped(false);
   };
 
-  // If no flashcards are loaded
-  if (flashCards.length === 0) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <motion.p 
@@ -67,14 +85,47 @@ const Flashcards = () => {
           animate={{ opacity: 1, scale: 1 }}
           className="text-gray-500 text-lg"
         >
-          Loading flashcards...
+          {flashCards.length === 0 ? 'Generating flashcards...' : 'Loading flashcards...'}
         </motion.p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <AlertCircle className="mx-auto text-red-500 mb-4" size={32} />
+          <p className="text-red-500 text-lg">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </motion.div>
       </div>
     );
   }
 
   return (
     <div className="max-w-xl mx-auto p-6 bg-gradient-to-br from-[#F5F7FA] to-[#E6E9F0] min-h-screen flex flex-col justify-center">
+      {/* Back Button */}
+      <motion.button
+        onClick={() => navigate(`/course/${courseId}`)}
+        className="flex items-center text-gray-600 hover:text-gray-800 mb-6 self-start"
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <ArrowLeft className="mr-2" size={20} />
+        Back to Course
+      </motion.button>
+
       <div className="text-center mb-12">
         <motion.h2 
           initial={{ opacity: 0, y: -50 }}

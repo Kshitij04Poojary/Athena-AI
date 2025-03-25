@@ -14,10 +14,11 @@ import {
   Lightbulb,
   Calendar,
   ListChecks,
-  BarChart2 ,
+  BarChart2,
   SearchIcon,
   Gamepad2
 } from 'lucide-react';
+import image from '../../assets/athena.png';
 
 const SideBar = () => {
     const { t } = useTranslation();
@@ -63,9 +64,11 @@ const SideBar = () => {
             {/* Logo and App Name */}
             <div className="p-6 flex items-center justify-center border-b border-blue-700">
                 <div className="flex items-center">
-                    <div className="w-10 h-10 rounded-full bg-blue-400 flex items-center justify-center text-xl font-bold text-white">
-                        A
-                    </div>
+                    <img 
+                        src = {image}  // Update this path to match your logo file location
+                        alt="App Logo"
+                        className={`w-10 h-10 bg-white rounded-full object-contain ${collapsed ? 'mx-auto' : 'mr-3'}`}
+                    />
                     {!collapsed && (
                         <h2 className="ml-3 text-xl font-bold bg-gradient-to-r from-blue-300 to-purple-300 bg-clip-text text-transparent">
                             {t("sidebar.appName")}

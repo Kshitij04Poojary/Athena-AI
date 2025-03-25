@@ -45,6 +45,7 @@ import NotesFlashcard from "./pages/CourseGen/NotesFlashcard";
 import MainCourseDetails from "./pages/CourseGen/MainCourseDetails";
 import MainFlashcard from "./pages/Flashcards/MainFlashcard";
 import GamePage from "./pages/Gamification/GamePage";
+import NotesPage from "./pages/Notes/NotesPage";
 
 const App = () => (
   <UserProvider>
@@ -105,6 +106,7 @@ const App = () => (
             </>
           }
           <Route path="/flashcards/:courseId" element={<MainFlashcard />} />
+          <Route path="/notes/:courseId" element={<NotesPage />} />
         </Route>
 
         <Route path="/interview/:interviewId" element={<StartInterview />} />
