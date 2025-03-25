@@ -15,7 +15,8 @@ import {
   Calendar,
   ListChecks,
   BarChart2 ,
-  SearchIcon
+  SearchIcon,
+  Gamepad2
 } from 'lucide-react';
 
 const SideBar = () => {
@@ -32,6 +33,7 @@ const SideBar = () => {
         ...(user?.role === 'mentor' || user?.role === 'mentee' 
             ? [{ name: t("sidebar.items.video"), icon: Video, path: user?.role === 'mentor' ? '/mentor' : '/mentee' }] 
             : []),
+        { name: t("sidebar.items.challenge"), icon: Gamepad2, path: '/game' },
         { name: t("sidebar.items.projects"), icon: Lightbulb, path: '/recommend-projects' },
         { name: t("sidebar.items.schedule"), icon: Calendar, path: '/calendar' },
         { name: t("sidebar.items.coding"), icon: BarChart2, path: '/coding' },

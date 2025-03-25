@@ -42,6 +42,7 @@ import CodeEditor from "./components/misc/Coding";
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 import PDFChatComponent from "./components/chatpdf/PDFChatComponent";
 import MainFlashcard from "./pages/Flashcards/MainFlashcard"
+import GamePage from "./pages/Gamification/GamePage";
 
 const App = () => (
   <UserProvider>
@@ -80,6 +81,7 @@ const App = () => (
           <Route path="/transcript" element={<Transcript/>} />
           <Route path="/coding" element={<CodeEditor/>} />
           <Route path="/chat-with-pdf" element={<PDFChatComponent/>} />
+          <Route path="/game" element={<GamePage />} />
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
