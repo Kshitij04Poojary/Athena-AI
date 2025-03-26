@@ -1,9 +1,7 @@
 from flask import Blueprint, request, jsonify, current_app
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
 from bson.objectid import ObjectId
-import asyncio
 
 mentor_mentee = Blueprint("mentor_mentee", __name__)
 # Assuming you have model loaded already

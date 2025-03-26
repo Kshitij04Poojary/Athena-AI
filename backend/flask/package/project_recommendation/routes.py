@@ -1,9 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app
-import json
-import ast
 project_recomm = Blueprint("project_recomm", __name__)
 from bson.objectid import ObjectId
-import random
 import requests
 import pandas as pd
 from concurrent.futures import ThreadPoolExecutor

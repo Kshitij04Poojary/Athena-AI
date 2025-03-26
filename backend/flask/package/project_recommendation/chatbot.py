@@ -2,7 +2,6 @@ import json
 import re
 import os
 from groq import Groq
-import random
 
 def chat(data):
     client = Groq(api_key=os.getenv("GROQ_API"))
