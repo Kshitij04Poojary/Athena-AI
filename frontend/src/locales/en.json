@@ -231,5 +231,15 @@
         "interviews": "Mock Interviews",
         "internships": "Internships"
         }
+    },
+    "notes": {
+        "title": "View Notes",
+        "description": "Transform your learning experience with comprehensive, structured digital notes.",
+        "button": "View Notes"
+    },
+    "flashcards": {
+        "title": "View Flashcards",
+        "description": "Boost your memory with interactive, custom-generated flashcards.",
+        "button": "View Flashcards"
     }
 }
