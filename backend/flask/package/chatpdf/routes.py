@@ -4,7 +4,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import google.generativeai as genai
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.question_answering import load_qa_chain
 from langchain.prompts import PromptTemplate
@@ -20,7 +20,7 @@ def get_pdf_text(pdf_files):
     for pdf in pdf_files:
         pdf_reader = PdfReader(pdf)
         for page in pdf_reader.pages:
-            text += page.extract_text()
+            text += page.extract_text() or ""
     return text
 
 def get_text_chunks(text):
@@ -56,6 +56,9 @@ def process_pdfs():
     
     pdf_files = request.files.getlist('pdfs')
     raw_text = get_pdf_text(pdf_files)
+    if not raw_text.strip():
+        return jsonify({"error": "No text extracted from PDFs"}), 400
+    
     text_chunks = get_text_chunks(raw_text)
     get_vector_store(text_chunks)
     
@@ -64,16 +67,23 @@ def process_pdfs():
 @chatpdf_bp.route('/ask', methods=['POST'])
 def ask_question():
     data = request.json
-    user_question = data.get("question", "")
+    user_question = data.get("question", "").strip()
     
     if not user_question:
         return jsonify({"error": "No question provided"}), 400
     
     embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    try:
+        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    except Exception as e:
+        return jsonify({"error": f"Failed to load vector store: {str(e)}"}), 500
+    
     docs = new_db.similarity_search(user_question)
+    
+    if not docs:
+        return jsonify({"reply": "answer is not available in the context"})
     
     chain = get_conversational_chain()
     response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
     
-    return jsonify({"reply": response["output_text"]})
+    return jsonify({"reply": response.get("output_text", "answer is not available in the context")})

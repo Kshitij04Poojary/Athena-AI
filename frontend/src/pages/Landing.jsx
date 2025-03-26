@@ -6,7 +6,7 @@ const Landing = () => {
     <div className="min-h-screen bg-gradient-to-r from-blue-100 to-indigo-100 flex flex-col items-center justify-center p-6">
       {/* Navbar */}
       <nav className="w-full max-w-7xl absolute top-0 flex justify-between items-center p-4 bg-white bg-opacity-80 backdrop-blur-sm rounded-lg mt-3 shadow-md">
-        <div className="text-2xl font-bold text-indigo-900">OdysseyAI</div>
+        <div className="text-2xl font-bold text-indigo-900">AthenaAI</div>
         <div className="flex space-x-4">
           <Link
             to="/login"

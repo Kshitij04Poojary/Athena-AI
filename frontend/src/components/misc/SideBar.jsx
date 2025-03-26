@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Add this import
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from "react-i18next";
 import { 
@@ -22,9 +23,21 @@ import image from '../../assets/athena.png';
 
 const SideBar = () => {
     const { t } = useTranslation();
-    const { user, logout } = useUser();
+    const { user, setUser } = useUser();
+    const navigate = useNavigate(); // Initialize navigate
     const [collapsed, setCollapsed] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('userData');
+        localStorage.removeItem('auth');
+        localStorage.removeItem('session');
+        setUser(null);
+        navigate('/');
+        window.location.reload();
+    };
 
     const menuItems = [
         { name: t("sidebar.items.profile"), icon: User, path: '/profile' },
@@ -65,7 +78,7 @@ const SideBar = () => {
             <div className="p-6 flex items-center justify-center border-b border-blue-700">
                 <div className="flex items-center">
                     <img 
-                        src = {image}  // Update this path to match your logo file location
+                        src={image}
                         alt="App Logo"
                         className={`w-10 h-10 bg-white rounded-full object-contain ${collapsed ? 'mx-auto' : 'mr-3'}`}
                     />
@@ -134,7 +147,7 @@ const SideBar = () => {
             {/* Logout Button */}
             <div className="p-4 border-t border-blue-700 mb-auto">
                 <button 
-                    onClick={logout} 
+                    onClick={handleLogout} // Updated to use handleLogout
                     className="flex items-center p-3 w-full rounded-lg hover:bg-gray/20 transition-colors group !bg-black"
                 >
                     <div className={`${!collapsed && 'mr-4'} !text-white group-hover:text-gray transition-colors`}>
