@@ -19,6 +19,7 @@ const assignedCourseRouter = require('./routes/assignedCourseRouter');
 const chatbotRouter = require('./routes/chatbotRouter');
 const examRouter = require('./routes/examRouter');
 const flashcardRouter=require('./routes/flashcardRouter')
+const gamificationRouter = require('./routes/GamificationRouter');
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
 const jwt = require('jsonwebtoken');
@@ -48,6 +49,7 @@ app.use('/api', generateCourseRoutes);
 app.use('/api', generateChapterContentRoutes);
 app.use('/api/notes', generateCourseNotesRoutes);
 app.use('/api/interview', interviewRoutes);
+app.use('/api', gamificationRouter);
 app.use('/api/lectures', lectureRoutes);
 app.use('/api/mentee', menteeProfileRouter);
 app.use('/api/assign', assignmentRouter);

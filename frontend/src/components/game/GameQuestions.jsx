@@ -3,16 +3,14 @@ import React, { useState } from 'react';
 const GameQuestions = ({ questions, onComplete, onBack }) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [score, setScore] = useState(0);
+  const [userAnswers, setUserAnswers] = useState([]);
   const [showFeedback, setShowFeedback] = useState(false);
 
   const handleAnswerSelect = (answer) => {
+    const newUserAnswers = [...userAnswers, answer];
+    setUserAnswers(newUserAnswers);
     setSelectedAnswer(answer);
     setShowFeedback(true);
-
-    if (answer === questions[currentQuestion].correct_answer) {
-      setScore(score + 1);
-    }
 
     setTimeout(() => {
       if (currentQuestion < questions.length - 1) {
@@ -20,8 +18,7 @@ const GameQuestions = ({ questions, onComplete, onBack }) => {
         setSelectedAnswer(null);
         setShowFeedback(false);
       } else {
-        const starsEarned = Math.ceil((score + (answer === questions[currentQuestion].correct_answer ? 1 : 0)) / questions.length * 3);
-        onComplete(starsEarned);
+        onComplete(newUserAnswers);
       }
     }, 1500);
   };
