@@ -29,7 +29,7 @@ const CodeEditor = () => {
 
     try {
         await axios.post(
-        "http://127.0.0.1:5004/api/coding/submit-code",
+        "https://athenai-backendonly.onrender.com/api/coding/submit-code",
         { "source_code": code, "language": language, "user_id": user?._id.toString() },
         { withCredentials: true }
       );
@@ -45,7 +45,7 @@ const CodeEditor = () => {
     setCodeError(null);
 
     try {
-      const resp = await axios.post("http://127.0.0.1:5004/api/coding/", { "source_code": code, "language": language},{ withCredentials: true });
+      const resp = await axios.post("https://athenai-backendonly.onrender.com/api/coding/", { "source_code": code, "language": language},{ withCredentials: true });
       setOutput(resp.data.output);
       setCodeError(resp.data.errors);
       

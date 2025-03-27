@@ -22,7 +22,7 @@ const ProfilePage = () => {
   console.log("User data:", user);
   async function load_flask() {
     try {
-        const response = await axios.post("http://127.0.0.1:5004/recommendations/load-projects", 
+        const response = await axios.post("https://athenai-backendonly.onrender.com/recommendations/load-projects", 
             { "user_id": user?._id }, { withCredentials: true });
         console.log(response.data);
     } catch (error) {

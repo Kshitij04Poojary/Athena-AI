@@ -7,6 +7,7 @@ const PDFChatComponent = () => {
   const [uploadStatus, setUploadStatus] = useState('');
   const [responseText, setResponseText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading2, setIsLoading2] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -34,7 +35,7 @@ const PDFChatComponent = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        'http://127.0.0.1:5004/api/chatpdf/process_pdfs',
+        'https://athenai-backendonly.onrender.com/api/chatpdf/process_pdfs',
         formData,
         {
           headers: {
@@ -58,17 +59,17 @@ const PDFChatComponent = () => {
       return;
     }
 
-    setIsLoading(true);
+    setIsLoading2(true);
     try {
       const response = await axios.post(
-        'http://127.0.0.1:5004/api/chatpdf/ask',
+        'https://athenai-backendonly.onrender.com/api/chatpdf/ask',
         { question }
       );
       setResponseText(response.data.reply);
     } catch (error) {
       setResponseText('Failed to get response: ' + error.message);
     } finally {
-      setIsLoading(false);
+      setIsLoading2(false);
     }
   };
 
@@ -327,7 +328,7 @@ const PDFChatComponent = () => {
                     shadow-md hover:shadow-lg
                   "
                 >
-                  {isLoading ? (
+                  {isLoading2 ? (
                     <>
                       <svg
                         className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
