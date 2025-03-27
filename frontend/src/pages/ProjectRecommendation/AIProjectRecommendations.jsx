@@ -30,7 +30,7 @@ const AIProjectRecommendations = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://127.0.0.1:5004/recommendations/",
+        "https://athenai-backendonly.onrender.com/recommendations/",
         { "user_id": user._id },
         { withCredentials: true }
       );
