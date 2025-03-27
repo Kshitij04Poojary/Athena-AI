@@ -32,7 +32,7 @@ const TeamsStyleCalendar = () => {
     const fetchEvents = async () => {
       setLoading(true); // Set loading state
       try {
-        const response = await axios.get('https://athenai-backendonly.onrender.com/genetic-algorithm', {withCredentials: true}); // Make a request to your backend API
+        const response = await axios.get('https://athenai-backendonly-docker.onrender.com/genetic-algorithm/', {withCredentials: true}); // Make a request to your backend API
         const eventsData = response.data; // Assuming your backend sends data in the same format as shown
         console.log(eventsData)
         // Process events data
