@@ -93,7 +93,7 @@ const InternshipListings = () => {
     const fetchInternships = async () => {
       try {
         setLoading(true);
-        const response = await fetch('https://athenai-backendonly-docker.onrender.com/api/internships/');
+        const response = await fetch('https://athenai-backendonly.onrender.com/api/internships');
         
         if (!response.ok) {
           throw new Error(`API request failed with status ${response.status}`);
