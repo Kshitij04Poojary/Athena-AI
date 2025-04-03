@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, MapPin, WalletCards,Clock, DollarSign, Calendar, ExternalLink, Loader2, Briefcase, Filter } from 'lucide-react';
 
 const InternshipCard = ({ internship }) => {
-  const FLASK_API = import.meta.env.VITE_FLASK_API;
+  
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-gray-100 transform hover:-translate-y-1 hover:border-indigo-200">
       <div className="absolute -top-3 -right-3 bg-indigo-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
@@ -84,6 +84,7 @@ const EmptyState = ({ searchTerm, clearSearch }) => {
 };
 
 const InternshipListings = () => {
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
   const [searchTerm, setSearchTerm] = useState('');
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
