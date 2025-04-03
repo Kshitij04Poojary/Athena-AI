@@ -63,7 +63,7 @@ const PDFChatComponent = () => {
     setIsLoading2(true);
     try {
       const response = await axios.post(
-        `${FLASK_URL}/chatpdf/ask`,
+        `${FLASK_API}/chatpdf/ask`,
         { question }
       );
       setResponseText(response.data.reply);
