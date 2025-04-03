@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Add this import
+import { useNavigate, useLocation } from 'react-router-dom'; // Added useLocation
 import { useUser } from '../../context/UserContext';
 import { useTranslation } from "react-i18next";
 import { 
@@ -24,7 +24,8 @@ import image from '../../assets/athena.png';
 const SideBar = () => {
     const { t } = useTranslation();
     const { user, setUser } = useUser();
-    const navigate = useNavigate(); // Initialize navigate
+    const navigate = useNavigate();
+    const location = useLocation(); // Get current location
     const [collapsed, setCollapsed] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
 
@@ -49,7 +50,7 @@ const SideBar = () => {
             : []),
         { name: t("sidebar.items.challenge"), icon: Gamepad2, path: '/game' },
         { name: t("sidebar.items.projects"), icon: Lightbulb, path: '/recommend-projects' },
-        { name: t("sidebar.items.schedule"), icon: Calendar, path: '/calendar' },
+        //{ name: t("sidebar.items.schedule"), icon: Calendar, path: '/calendar' },
         { name: t("sidebar.items.coding"), icon: BarChart2, path: '/coding' },
         ...(user?.role === 'mentor' || user?.role === 'mentee' 
             ? [{ name: t("sidebar.items.exams"), icon: BarChart2, path: user?.role === 'mentor' ? '/create-exam' : '/mentee-exam' }] 
@@ -58,6 +59,11 @@ const SideBar = () => {
         { name: t("sidebar.items.internships"), icon: Briefcase, path: '/internships' },
         { name: t('Query PDF'), icon: SearchIcon, path: '/chat-with-pdf' },
     ];    
+
+    // Helper function to check if a menu item is active
+    const isActive = (path) => {
+        return location.pathname === path;
+    };
 
     return (
         <div 
@@ -116,17 +122,19 @@ const SideBar = () => {
                             <a 
                                 href={item.path} 
                                 className={`flex items-center p-3 rounded-lg transition-all duration-200
-                                ${hoveredItem === item.name 
-                                    ? 'bg-blue-700 shadow-md transform scale-105' 
-                                    : 'hover:bg-blue-700/60'}`}
+                                ${isActive(item.path) 
+                                    ? 'bg-blue-600 shadow-lg' // Active item styling
+                                    : hoveredItem === item.name 
+                                        ? 'bg-blue-700 shadow-md transform scale-105' 
+                                        : 'hover:bg-blue-700/60'}`}
                                 onMouseEnter={() => setHoveredItem(item.name)}
                                 onMouseLeave={() => setHoveredItem(null)}
                             >
-                                <div className={`${!collapsed && 'mr-4'} text-blue-300`}>
+                                <div className={`${!collapsed && 'mr-4'} ${isActive(item.path) ? 'text-white' : 'text-blue-300'}`}>
                                     <item.icon size={20} />
                                 </div>
                                 {!collapsed && (
-                                    <span className="flex-1 transition-all">{item.name}</span>
+                                    <span className={`flex-1 transition-all ${isActive(item.path) ? 'font-semibold' : ''}`}>{item.name}</span>
                                 )}
                                 {!collapsed && item.badge && (
                                     <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
@@ -147,7 +155,7 @@ const SideBar = () => {
             {/* Logout Button */}
             <div className="p-4 border-t border-blue-700 mb-auto">
                 <button 
-                    onClick={handleLogout} // Updated to use handleLogout
+                    onClick={handleLogout}
                     className="flex items-center p-3 w-full rounded-lg hover:bg-gray/20 transition-colors group !bg-black"
                 >
                     <div className={`${!collapsed && 'mr-4'} !text-white group-hover:text-gray transition-colors`}>
