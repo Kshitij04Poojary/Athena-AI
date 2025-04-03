@@ -21,11 +21,11 @@ const generationConfig = {
 
 async function generateCourseNotes({ courseName, description, skills, level, chapterNames }) {
   // Ensure all inputs are strings/arrays
-  if (typeof courseName !== 'string' || 
-      typeof description !== 'string' ||
-      !Array.isArray(skills) ||
-      typeof level !== 'string' ||
-      !Array.isArray(chapterNames)) {
+  if (typeof courseName !== 'string' ||
+    typeof description !== 'string' ||
+    !Array.isArray(skills) ||
+    typeof level !== 'string' ||
+    !Array.isArray(chapterNames)) {
     throw new Error('Invalid input types');
   }
 
@@ -56,16 +56,13 @@ Output format:
     const result = await chatSession.sendMessage(prompt);
     const response = result.response;
     const text = response.text();
-    
-    // Debugging - log the raw response
-    console.log("Raw Gemini response:", text);
-    
+
     // Parse and validate
     const notes = JSON.parse(text);
     if (!notes.courseName || !notes.chapters) {
       throw new Error('Invalid response format from Gemini');
     }
-    
+
     return notes;
   } catch (error) {
     console.error("Generation error:", error);

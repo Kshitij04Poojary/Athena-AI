@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Course = require('./models/CourseModel');    
+const Course = require('./models/CourseModel');
 require('dotenv').config();
 
 // ✅ Connect to MongoDB
@@ -7,7 +7,7 @@ mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("✅ Connected to MongoDB"))
-  .catch(err => console.error("❌ Failed to connect", err));
+    .catch(err => console.error("❌ Failed to connect", err));
 
 // ✅ Function to update all courses
 const updateCourses = async () => {
@@ -46,7 +46,6 @@ const updateCourses = async () => {
             // ✅ Save only if any changes were made
             if (isUpdated) {
                 await course.save();
-                console.log(`✅ Updated course: ${course.courseName}`);
             }
         }
 
