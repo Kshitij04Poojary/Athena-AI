@@ -19,7 +19,7 @@ const Register = () => {
     const [filteredSkills, setFilteredSkills] = useState([]);
     const [showSkillDropdown, setShowSkillDropdown] = useState(false);
     const skillInputRef = useRef(null);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -132,7 +132,7 @@ const Register = () => {
         setIsLoading(true);
         try {
             console.log("Form Data:", formData);
-            const response = await axios.post('http://localhost:8000/api/auth/register', formData);
+            const response = await axios.post(`${NODE_API}/auth/register`, formData);
             const { user, token } = response.data;
             console.log(response);
 

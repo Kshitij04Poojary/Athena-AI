@@ -13,7 +13,7 @@ const MyCourses = () => {
     const [isLoading, setIsLoading] = useState(true);
     const { t, i18n } = useTranslation();
     const [language, setLanguage] = useState(i18n.language);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     // Track language changes to force component re-render
     useEffect(() => {
         const handleLanguageChange = () => {
@@ -38,7 +38,7 @@ const MyCourses = () => {
 
         const fetchCourses = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/courses/courselist', {
+                const response = await fetch(`${NODE_API}/courses/courselist`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
 

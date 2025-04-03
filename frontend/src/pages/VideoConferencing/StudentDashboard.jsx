@@ -24,6 +24,7 @@ const StudentDashboard = () => {
     });
     const [liveLectures, setLiveLectures] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const NODE_API = import.meta.env.VITE_NODE_API;
     
     const pastLectures = lectures.filter(l => l.status === 'completed');
     const navigate = useNavigate();
@@ -41,12 +42,12 @@ const StudentDashboard = () => {
     const fetchLectures = async () => {
         try {
             const [lecturesRes, liveRes] = await Promise.all([
-                axios.get('http://localhost:8000/api/lectures/mentee', {
+                axios.get(`${NODE_API}/lectures/mentee`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
                 }),
-                axios.get('http://localhost:8000/api/lectures/live', {
+                axios.get(`${NODE_API}/lectures/live`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`
                     }
@@ -63,7 +64,7 @@ const StudentDashboard = () => {
 
     const fetchMentorInfo = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/users/mentee/mentor', {
+            const response = await axios.get(`${NODE_API}/users/mentee/mentor`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }

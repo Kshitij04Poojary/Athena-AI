@@ -18,6 +18,7 @@ import MentorScoresChart from '../../components/landing/MentorScoresCart';
 const ProfilePage = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
+  const NODE_API = import.meta.env.VITE_NODE_API;
 
   console.log("User data:", user);
   async function load_flask() {
@@ -43,7 +44,7 @@ const ProfilePage = () => {
             return;
         }
 
-        const { data } = await axios.patch(`/api/auth/profile/${user._id}`, updatedData, {
+        const { data } = await axios.patch(`${NODE_API}/api/auth/profile/${user._id}`, updatedData, {
             headers: { Authorization: `Bearer ${user.token}` },
         });
 

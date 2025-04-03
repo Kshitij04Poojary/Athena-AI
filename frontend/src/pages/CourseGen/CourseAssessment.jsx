@@ -12,7 +12,7 @@ const CourseAssessment = () => {
   const { courseId } = useParams();
   const { user } = useUser();
   const location = useLocation();
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   const { topic, skills, difficultyLevel } = location.state || {};
 
   const [quiz, setQuiz] = useState([]);
@@ -27,7 +27,7 @@ const CourseAssessment = () => {
     const generateCourseEndAssessment = async () => {
       try {
         const res = await axios.post(
-          `http://localhost:8000/api/assessment/${courseId}/course-end-assessment`,
+          `${NODE_API}/assessment/${courseId}/course-end-assessment`,
           {
             userId: user._id,
             topic,
@@ -91,7 +91,7 @@ const CourseAssessment = () => {
       return;
     }
     try {
-      await axios.patch(`http://localhost:8000/api/assessment/${examId}`, {
+      await axios.patch(`${NODE_API}/assessment/${examId}`, {
         score: finalScore,
       });
     } catch (error) {

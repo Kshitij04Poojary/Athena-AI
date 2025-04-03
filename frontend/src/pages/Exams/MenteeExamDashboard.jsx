@@ -19,7 +19,7 @@ const MenteeExamDashboard = () => {
   const [examResult, setExamResult] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [completedExams, setCompletedExams] = useState({});
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   useEffect(() => {
     if (user?._id) {
       fetchExams();
@@ -32,7 +32,7 @@ const MenteeExamDashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`http://localhost:8000/api/exam/mentee/${user?._id}`);
+      const response = await fetch(`${NODE_API}/exam/mentee/${user?._id}`);
       const data = await response.json();
       setExams(data);
       
@@ -41,7 +41,7 @@ const MenteeExamDashboard = () => {
       for (const exam of data) {
         try {
           const statusResponse = await axios.get(
-            `http://localhost:8000/api/exam/status/${exam._id}/${user._id}`
+            `${NODE_API}/exam/status/${exam._id}/${user._id}`
           );
           completionStatus[exam._id] = statusResponse.data.isCompleted;
         } catch (statusErr) {
@@ -125,7 +125,7 @@ const MenteeExamDashboard = () => {
   
     // Submit exam result to API
     try {
-      const response = await axios.post(`http://localhost:8000/api/exam/submit/${selectedExam._id}`, {
+      const response = await axios.post(`${NODE_API}/exam/submit/${selectedExam._id}`, {
         userId: user._id,
         answers: answersArray
       });

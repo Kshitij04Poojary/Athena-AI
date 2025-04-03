@@ -12,7 +12,7 @@ const AssignedCourses = () => {
     const { t } = useTranslation();
     const [assignedCourses, setAssignedCourses] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     useEffect(() => {
         if (!user?.token || !user?._id) {
             setIsLoading(false);
@@ -22,7 +22,7 @@ const AssignedCourses = () => {
         const fetchAssignedCourses = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8000/api/assigned/assigned-courses/${user._id}`
+                    `${NODE_API}/assigned/assigned-courses/${user._id}`
                 );
 
                 if (response.data && response.data.courses) {

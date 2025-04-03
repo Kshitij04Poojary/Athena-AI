@@ -27,7 +27,7 @@ const GamePage = () => {
     const [userGames, setUserGames] = useState([]);
     const [lastWaveResult, setLastWaveResult] = useState(null);
     const dropdownRef = useRef(null);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     // Filter skills based on search term
     const filteredSkills = useMemo(() => {
         return skillList.filter(skill =>
@@ -38,7 +38,7 @@ const GamePage = () => {
     const createGame = async (topic, skill) => {
         setIsLoading(true);
         try {
-            const response = await fetch('http://localhost:8000/api/games', {
+            const response = await fetch(`${NODE_API}/games`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ const GamePage = () => {
     };
 
     const completeWaveAPI = async (gameId, difficulty, waveNumber, userAnswers) => {
-        const response = await fetch('http://localhost:8000/api/games/complete-wave', {
+        const response = await fetch(`${NODE_API}/games/complete-wave`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const GamePage = () => {
         try {
             console.log("ID: ", user._id);
             console.log("Token: ", user.token);
-            const response = await fetch(`http://localhost:8000/api/games/user/${user._id}`, {
+            const response = await fetch(`${NODE_API}/games/user/${user._id}`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
                 }

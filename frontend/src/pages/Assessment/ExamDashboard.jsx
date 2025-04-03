@@ -16,6 +16,7 @@ const ExamDashboard = () => {
   const navigate = useNavigate();
   const { user } = useUser();
   const { t } = useTranslation();
+  const NODE_API = import.meta.env.VITE_NODE_API;
 
   // State for generating new assessment
   const [topic, setTopic] = useState("");
@@ -32,7 +33,7 @@ const ExamDashboard = () => {
     setIsAssessmentsLoading(true);
     try {
       const res = await axios.get(
-        `http://localhost:8000/api/assessment/getassess/${user._id}`
+        `${NODE_API}/assessment/getassess/${user._id}`
       );
       setAssessments(res.data);
     } catch (error) {
@@ -56,7 +57,7 @@ const ExamDashboard = () => {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/assessment/generate",
+        `${NODE_API}/assessment/generate`,
         {
           userId: user?._id,
           topic,

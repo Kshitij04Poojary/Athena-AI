@@ -48,6 +48,7 @@ const MenteeProfileForm = ({ initialData = {} }) => {
     const [newSkill, setNewSkill] = useState('');
     const [newDreamCompany, setNewDreamCompany] = useState('');
     const [errors, setErrors] = useState({});
+    const NODE_API = import.meta.env.VITE_NODE_API;
 
     const STEPS = [
         { id: 1, label: 'Academics', icon: <School size={20} /> },
@@ -96,7 +97,7 @@ const MenteeProfileForm = ({ initialData = {} }) => {
         setIsLoading(true);
         try {
             const response = await axios.post(
-                'http://localhost:8000/api/auth/profile',
+                `${NODE_URL}/auth/profile`,
                 formData,
                 {
                     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }

@@ -14,6 +14,7 @@ const Login = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const NODE_API = import.meta.env.VITE_NODE_API;
 
     const { setUser } = useUser();
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Login = () => {
 
         setIsLoading(true);
         try {
-            const response = await axios.post('http://localhost:8000/api/auth/login', formData);
+            const response = await axios.post(`${NODE_API}/auth/login`, formData);
             const { user, token } = response.data;
 
             toast.success('Login successful');

@@ -9,12 +9,12 @@ const Feedback = () => {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { interviewId } = useParams();
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   useEffect(() => {
     const GetFeedback = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://localhost:8000/api/interview/feedback/${interviewId}`);
+        const response = await axios.get(`${NODE_API}/interview/feedback/${interviewId}`);
         setFeedbackList(response.data);
         setIsLoading(false);
       } catch (err) {

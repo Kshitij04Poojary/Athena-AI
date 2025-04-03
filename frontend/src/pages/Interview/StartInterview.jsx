@@ -9,14 +9,14 @@ const StartInterview = () => {
     const navigate = useNavigate();
     const [interviewData, setInterviewData] = useState(null);
     const [webCamEnabled, setWebCamEnabled] = useState(false);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     useEffect(() => {
         GetInterviewDetails();
     }, []);
 
     const GetInterviewDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/interview/${interviewId}`);
+            const response = await axios.get(`${NODE_API}/interview/${interviewId}`);
             setInterviewData(response.data);
         } catch (error) {
             console.error('Error fetching interview details:', error);

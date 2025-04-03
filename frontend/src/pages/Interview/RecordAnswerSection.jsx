@@ -10,7 +10,7 @@ import webcamImage from '../../assets/webcam.png';
 const RecordAnswerSection = ({ activeQuestionIndex, mockInterviewQuestion, interviewData }) => {
     const [userAnswer, setUserAnswer] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const {
         interimResult,
         isRecording,
@@ -64,7 +64,7 @@ const RecordAnswerSection = ({ activeQuestionIndex, mockInterviewQuestion, inter
             };
 
             // Send data to backend
-            const response = await axios.post('http://localhost:8000/api/interview/user-answer', userAnswerData);
+            const response = await axios.post(`${NODE_API}/interview/user-answer`, userAnswerData);
 
             if (response.status === 201) {
                 toast.success('User Answer recorded successfully');

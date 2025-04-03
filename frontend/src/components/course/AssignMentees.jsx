@@ -10,13 +10,14 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
     const [loading, setLoading] = useState(false);
     const [dueDate, setDueDate] = useState(null);  // Using Date object for DatePicker
     const [hasDueDate, setHasDueDate] = useState(false);
+    const NODE_API = import.meta.env.VITE_NODE_API;
 
     useEffect(() => {
         if(user?._id)
         {
         const fetchMentees = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/users/mentees/${user?._id}`, {
+                const response = await fetch(`${NODE_API}/users/mentees/${user?._id}`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
 
@@ -32,7 +33,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
 
         const checkDueDate = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/assigned?orgCourseId=${courseId}`);
+                const response = await fetch(`${NODE_API}/assigned?orgCourseId=${courseId}`);
                 if (!response.ok) throw new Error('Failed to check assigned course');
 
                 const data = await response.json();
@@ -67,7 +68,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
 
     const getAssignedCourseId = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/assigned?orgCourseId=${courseId}`);
+            const response = await fetch(`${NODE_API}/assigned?orgCourseId=${courseId}`);
             if (!response.ok) throw new Error('Failed to fetch assignedCourseId');
 
             const data = await response.json();
@@ -91,7 +92,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
             }
 
             for (const menteeId of selectedMentees) {
-                const response = await fetch(`http://localhost:8000/api/assigned/${assignedCourseId}/addMentee`, {
+                const response = await fetch(`${NODE_API}/assigned/${assignedCourseId}/addMentee`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -104,7 +105,7 @@ const AssignMentees = ({ courseId, closeDropdown }) => {
             }
 
             if (!hasDueDate && dueDate) {
-                await fetch(`http://localhost:8000/api/assigned/${assignedCourseId}/setDueDate`, {
+                await fetch(`${NODE_API}/assigned/${assignedCourseId}/setDueDate`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

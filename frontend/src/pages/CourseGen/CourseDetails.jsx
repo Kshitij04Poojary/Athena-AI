@@ -27,7 +27,7 @@ const CourseDetails = () => {
     const navigate = useNavigate();
     const { user } = useUser();
     const token = user?.token;
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const [course, setCourse] = useState(null);
     const [translatedCourse, setTranslatedCourse] = useState(null);
     const [bestAssessmentScore, setBestAssessmentScore] = useState(null);
@@ -87,7 +87,7 @@ const CourseDetails = () => {
 
     const fetchCourseDetails = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+            const response = await fetch(`${NODE_API}/courses/${courseId}`, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
 
@@ -105,7 +105,7 @@ const CourseDetails = () => {
 
     const checkFinalAssessment = async (courseData) => {
         try {
-            const response = await fetch(`http://localhost:8000/api/assessment/course/${courseId}`, {
+            const response = await fetch(`${NODE_API}/assessment/course/${courseId}`, {
                 headers: { 'Authorization': `Bearer ${token}` },
             });
 
@@ -129,7 +129,7 @@ const CourseDetails = () => {
     const updateCoursePassedFinal = async (status) => {
         try {
             console.log("Updating course passedFinal status to:", status);
-            const response = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+            const response = await fetch(`${NODE_API}/courses/${courseId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ const CourseDetails = () => {
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(18);
         doc.setTextColor(65, 105, 225);
-        doc.text('OdysseyAI', pageWidth / 2, pageHeight - 30, { align: 'center' });
+        doc.text('AthenaAI', pageWidth / 2, pageHeight - 30, { align: 'center' });
         
         // Save the PDF with sanitized filename
         doc.save(`${sanitizeFilename(course.courseName)}_Certificate.pdf`);
@@ -363,7 +363,7 @@ const CourseDetails = () => {
         // ✅ If chapter has a MongoDB _id, send a DELETE request
         if (chapterId) {
             try {
-                const response = await fetch(`http://localhost:8000/api/courses/${courseId}/chapters/${chapterId}`, {
+                const response = await fetch(`${NODE_API}/courses/${courseId}/chapters/${chapterId}`, {
                     method: 'DELETE',
                     headers: {
                         'Content-Type': 'application/json',
@@ -408,7 +408,7 @@ const CourseDetails = () => {
     
         try {
             console.log("Updating course layout:", courseDataToSend);
-            const response = await fetch(`http://localhost:8000/api/courses/${courseId}/layout`, {
+            const response = await fetch(`${NODE_API}/courses/${courseId}/layout`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

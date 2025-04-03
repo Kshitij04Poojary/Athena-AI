@@ -25,7 +25,7 @@ const CreateExam = () => {
     const [showMenteeSelector, setShowMenteeSelector] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isFetchingMentees, setIsFetchingMentees] = useState(false);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     useEffect(() => {
         // Set mentor ID when user is loaded
         if (user?._id && !formData.mentorId) {
@@ -41,7 +41,7 @@ const CreateExam = () => {
 
         setIsFetchingMentees(true);
         try {
-            const response = await fetch(`http://localhost:8000/api/users/mentees/${user._id}`);
+            const response = await fetch(`${NODE_API}/users/mentees/${user._id}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch mentees');
             }
@@ -162,7 +162,7 @@ const CreateExam = () => {
         setIsSubmitting(true);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/exam/create', examData, {
+            const response = await axios.post(`${NODE_API}/exam/create`, examData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

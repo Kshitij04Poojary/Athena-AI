@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 function TeamsCard({ team }) {
   const navigate = useNavigate();
   const [latestLecture, setLatestLecture] = useState(null);
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   // Fetch the latest lecture based on teamId
   useEffect(() => {
     const fetchLatestLecture = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/teams/latest-lectures/team?teamId=${team._id}`);
+        const response = await fetch(`${NODE_API}/teams/latest-lectures/team?teamId=${team._id}`);
         if (!response.ok) throw new Error('Failed to fetch lecture');
         const data = await response.json();
         setLatestLecture(data.latestLecture);

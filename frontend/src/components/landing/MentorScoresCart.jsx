@@ -10,13 +10,14 @@ const MentorScoresChart = ({ mentorId }) => {
   const { user } = useUser();
   const [mentor, setMentor] = useState(null);
   const [activeTab, setActiveTab] = useState("bar"); // To toggle between chart types
+  const NODE_API = import.meta.env.VITE_NODE_API;
 
   // First useEffect to fetch mentor data
   useEffect(() => {
     const fetchMentors = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`http://localhost:8000/api/users/mentor/${user._id}`);
+        const response = await fetch(`${NODE_API}/users/mentor/${user._id}`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch mentor data: ${response.status}`);
@@ -49,7 +50,7 @@ const MentorScoresChart = ({ mentorId }) => {
         }
         
         setIsLoading(true);
-        const response = await fetch(`http://localhost:8000/api/exam/mentor/${mentor._id}/scores`);
+        const response = await fetch(`${NODE_API}/exam/mentor/${mentor._id}/scores`);
         
         if (!response.ok) {
           throw new Error(`Failed to fetch scores data: ${response.status}`);

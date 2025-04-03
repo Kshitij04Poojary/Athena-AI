@@ -8,12 +8,12 @@ const InterviewList = () => {
   const [interviewList, setInterviewList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
-
+  const NODE_API = process.env.REACT_APP_NODE_API;
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://localhost:8000/api/interview/get-interviews/${user?._id}`);
+        const response = await axios.get(`${NODE_API}/interview/get-interviews/${user?._id}`);
         setInterviewList(response.data);
       } catch (error) {
         if (error.response?.status === 404) {

@@ -8,6 +8,7 @@ function OfflineAttendance() {
     const [mentees, setMentees] = useState([]);
     const [attendanceList, setAttendanceList] = useState([]);
     const { user } = useUser();
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const [loading, setLoading] = useState(true);
 
     // ✅ Fetch all mentees from Mentor ID
@@ -16,7 +17,7 @@ function OfflineAttendance() {
         
         const fetchMentees = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/lectures/mentees/${user._id}`);
+                const response = await fetch(`${NODE_API}/lectures/mentees/${user._id}`);
                 if (!response.ok) throw new Error('Failed to fetch mentees');
                 const data = await response.json();
                 setMentees(data);
@@ -80,7 +81,7 @@ function OfflineAttendance() {
 
         try {
             console.log("Lecture Data: ",lectureData);
-            const response = await fetch('http://localhost:8000/api/lectures/create', {
+            const response = await fetch('${NODE_API}/lectures/create', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(lectureData)

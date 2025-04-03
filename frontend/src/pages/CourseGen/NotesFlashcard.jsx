@@ -9,7 +9,6 @@ const NotesFlashcard = () => {
   const navigate = useNavigate();
   const { courseId } = useParams();
   const { t } = useTranslation();
-
   const handleNavigateToFlashcards = () => {
     navigate(`/flashcards/${courseId}`);
   };

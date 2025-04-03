@@ -9,6 +9,7 @@ const PDFChatComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoading2, setIsLoading2] = useState(false);
   const fileInputRef = useRef(null);
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
 
   const handleFileChange = (e) => {
     // Convert FileList to Array and filter PDF files
@@ -35,7 +36,7 @@ const PDFChatComponent = () => {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        'https://athenai-backendonly.onrender.com/api/chatpdf/process_pdfs',
+        `${FLASK_API}/chatpdf/process_pdfs`,
         formData,
         {
           headers: {
@@ -62,7 +63,7 @@ const PDFChatComponent = () => {
     setIsLoading2(true);
     try {
       const response = await axios.post(
-        'https://athenai-backendonly.onrender.com/api/chatpdf/ask',
+        `${FLASK_URL}/chatpdf/ask`,
         { question }
       );
       setResponseText(response.data.reply);

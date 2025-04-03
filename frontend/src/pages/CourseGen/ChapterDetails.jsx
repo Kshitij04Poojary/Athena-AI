@@ -22,7 +22,7 @@ const ChapterDetails = () => {
     const navigate = useNavigate();
     const { user, loading } = useUser(); // ✅ Use loading state
     const token = user?.token;
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     // States for editing functionality
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editableChapter, setEditableChapter] = useState(null);
@@ -38,7 +38,7 @@ const ChapterDetails = () => {
 
         const fetchChapterDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/courses/${courseId}/chapters/${chapterId}`, {
+                const response = await fetch(`${NODE_API}/courses/${courseId}/chapters/${chapterId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -66,7 +66,7 @@ const ChapterDetails = () => {
 
         try {
             // Mark current chapter as completed
-            const update = await fetch(`http://localhost:8000/api/courses/${courseId}/chapters/${chapterId}`, {
+            const update = await fetch(`${NODE_API}/courses/${courseId}/chapters/${chapterId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ const ChapterDetails = () => {
             console.log("Update: ",update);
 
             // Fetch full course details to get chapter list
-            const courseResponse = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+            const courseResponse = await fetch(`${NODE_API}/courses/${courseId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -148,7 +148,7 @@ const ChapterDetails = () => {
     
             // Step 4: Send the updated data to your backend
             console.log("Updating chapter:", updatedChapter);
-            const response = await fetch(`http://localhost:8000/api/courses/${courseId}/chapters/${chapterId}/layout`, {
+            const response = await fetch(`${NODE_API}/courses/${courseId}/chapters/${chapterId}/layout`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

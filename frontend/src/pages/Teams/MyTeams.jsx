@@ -5,7 +5,7 @@ import TeamsCard from './TeamsCard';
 function MyTeams() {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   const { user } = useUser();
 
   useEffect(() => {
@@ -13,7 +13,7 @@ function MyTeams() {
 
     const fetchTeams = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/teams?userId=${user._id}`);
+        const response = await fetch(`${NODE_API}/teams?userId=${user._id}`);
         if (!response.ok) throw new Error('Failed to fetch teams');
 
         const data = await response.json();

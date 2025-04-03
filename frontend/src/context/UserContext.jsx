@@ -9,10 +9,11 @@ export const useUser = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const NODE_API = import.meta.env.VITE_NODE_API;
 
     const fetchUser = async (userId) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/auth/profile/${userId}`);
+            const response = await axios.get(`${NODE_API}/auth/profile/${userId}`);
             const userData = response.data;
             const token = localStorage.getItem('token');
             setUser({ ...userData, token }); // Assuming response.data is the user object

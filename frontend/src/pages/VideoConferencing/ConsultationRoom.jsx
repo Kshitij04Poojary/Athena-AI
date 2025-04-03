@@ -13,7 +13,7 @@ import Transcript from "../../components/misc/Transcript";
 
 const APP_ID = 2030731488;
 const SERVER_SECRET = 'bc0fb9a32a2db1941c02ecc00521f5c1';
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = import.meta.env.VITE_NODE_API;
 
 function ConsultationRoom() {
   const [isMentor, setIsMentor] = useState(false);
@@ -50,7 +50,7 @@ function ConsultationRoom() {
 
     const fetchLectureDetails = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/lectures/room/${roomId}`, {
+        const response = await axios.get(`${BACKEND_URL}/lectures/room/${roomId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setLecture(response.data);

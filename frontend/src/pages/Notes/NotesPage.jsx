@@ -13,7 +13,7 @@ const NotesPage = () => {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const { user } = useUser();
   const token = user?.token;
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   const fetchOrGenerateNotes = async (signal) => {
     try {
       if (!token) {
@@ -25,7 +25,7 @@ const NotesPage = () => {
 
       // 1. Try to fetch existing notes
       try {
-        const response = await fetch(`http://localhost:8000/api/notes/${courseId}`, {
+        const response = await fetch(`${NODE_API}/notes/${courseId}`, {
           headers: { 'Authorization': `Bearer ${token}` },
           signal
         });
@@ -48,7 +48,7 @@ const NotesPage = () => {
       }
 
       // 2. Get course details needed for generation
-      const courseResponse = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+      const courseResponse = await fetch(`${NODE_API}/courses/${courseId}`, {
         headers: { 'Authorization': `Bearer ${token}` },
         signal
       });
@@ -61,7 +61,7 @@ const NotesPage = () => {
       const courseData = await courseResponse.json();
 
       // 3. Generate and save notes in one call
-      const generateResponse = await fetch(`http://localhost:8000/api/notes/generate/${courseId}`, {
+      const generateResponse = await fetch(`${NODE_API}/notes/generate/${courseId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ const NotesPage = () => {
       setLoading(true);
       setError(null);
       
-      const courseResponse = await fetch(`http://localhost:8000/api/courses/${courseId}`, {
+      const courseResponse = await fetch(`${NODE_API}/courses/${courseId}`, {
         headers: { 'Authorization': `Bearer ${token}` },
       });
 
@@ -152,7 +152,7 @@ const NotesPage = () => {
 
       const courseData = await courseResponse.json();
 
-      const generateResponse = await fetch(`http://localhost:8000/api/notes/generate/${courseId}`, {
+      const generateResponse = await fetch(`${NODE_API}/notes/generate/${courseId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -20,7 +20,7 @@ const CreateCourse = () => {
   const [apiResponse, setApiResponse] = useState({ courseLayout: [] });
   const [generatingCourse, setGeneratingCourse] = useState(false);
   const [generatingChapters, setGeneratingChapters] = useState(false);
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   const { user } = useUser();
   const navigate = useNavigate();
 
@@ -66,7 +66,7 @@ const CreateCourse = () => {
   const GenerateCourseLayout = async () => {
     setGeneratingCourse(true);
     try {
-      const response = await fetch("http://localhost:8000/api/generate-course", {
+      const response = await fetch(`${NODE_API}/generate-course`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...formData, skills }),
@@ -110,7 +110,7 @@ const CreateCourse = () => {
             };
 
             try {
-                const chapterResponse = await fetch("http://localhost:8000/api/generate-chapter-content", {
+                const chapterResponse = await fetch(`${NODE_API}/generate-chapter-content`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(chapterPayload),
@@ -166,7 +166,7 @@ const CreateCourse = () => {
 
         try {
             const response = await axios.post(
-                'http://localhost:8000/api/courses/create-courses',
+                `${NODE_API}/courses/create-courses`,
                 finalCourse,
                 {
                     headers: { Authorization: `Bearer ${token}` }
@@ -211,7 +211,7 @@ const CreateCourse = () => {
             dueDate: null
         };
 
-        await axios.post('http://localhost:8000/api/assigned/', assignedCoursePayload);
+        await axios.post(`${NODE_API}/assigned/`, assignedCoursePayload);
         toast.success(t("createCourse.success.assignedCreated"));
     } catch (error) {
         console.error(t("createCourse.errors.assignFailed"), error);

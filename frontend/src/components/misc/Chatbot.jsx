@@ -97,6 +97,7 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const NODE_API = import.meta.env.VITE_NODE_API;
   
   const {
     transcript,
@@ -178,7 +179,7 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8000/api/chatbot', {
+      const response = await fetch('${NODE_API}/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage }),

@@ -17,7 +17,7 @@ const TeacherDashboard = () => {
         startTime: '',
         duration: 60
     });
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const [activeTab, setActiveTab] = useState('upcoming');
     const [showLiveModal, setShowLiveModal] = useState(false);
     const [liveFormData, setLiveFormData] = useState({
@@ -32,7 +32,7 @@ const TeacherDashboard = () => {
 
     const fetchLectures = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/lectures/mentor',{
+            const response = await axios.get(`${NODE_API}/lectures/mentor`,{
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -46,7 +46,7 @@ const TeacherDashboard = () => {
     console.log(mentees);
     const fetchMentees = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/users/mentor/mentees',{
+            const response = await axios.get(`${NODE_API}/users/mentor/mentees`,{
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
@@ -60,7 +60,7 @@ const TeacherDashboard = () => {
     const handleScheduleLecture = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:8000/api/lectures/schedule', 
+            const res = await axios.post(`${NODE_API}/lectures/schedule`, 
                 formData,
                 {
                     headers: {
@@ -80,7 +80,7 @@ const TeacherDashboard = () => {
         try {
             console.log(lecture);
             // Update lecture status to ongoing
-            await axios.put(`http://localhost:8000/api/lectures/status`, {
+            await axios.put(`${NODE_API}/lectures/status`, {
                 lectureId: lecture._id,
                 status: 'ongoing'
             }, {
@@ -98,7 +98,7 @@ const TeacherDashboard = () => {
         e.preventDefault();
         try {
             const startTime = new Date(); // Current time
-            const response = await axios.post('http://localhost:8000/api/lectures/schedule', 
+            const response = await axios.post(`${NODE_API}/lectures/schedule`, 
                 {
                     ...liveFormData,
                     startTime: startTime.toISOString()
@@ -111,7 +111,7 @@ const TeacherDashboard = () => {
             );
 
             // Immediately update status to ongoing
-            await axios.put(`http://localhost:8000/api/lectures/status`, {
+            await axios.put(`${NODE_API}/lectures/status`, {
                 lectureId: response.data._id,
                 status: 'ongoing'
             }, {

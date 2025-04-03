@@ -12,7 +12,7 @@ const Flashcards = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const NODE_API = import.meta.env.VITE_NODE_API;
   useEffect(() => {
     const fetchOrGenerateFlashcards = async () => {
       try {
@@ -20,7 +20,7 @@ const Flashcards = () => {
         setError(null);
         
         // First try to fetch existing flashcards
-        const fetchResponse = await fetch(`http://localhost:8000/api/flashcards/${courseId}`);
+        const fetchResponse = await fetch(`${NODE_API}/flashcards/${courseId}`);
         
         if (fetchResponse.ok) {
           const data = await fetchResponse.json();
@@ -31,7 +31,7 @@ const Flashcards = () => {
         }
         
         // If no flashcards exist, generate new ones
-        const generateResponse = await fetch(`http://localhost:8000/api/genflashcards/${courseId}`, {
+        const generateResponse = await fetch(`${NODE_API}/genflashcards/${courseId}`, {
           method: 'POST'
         });
         

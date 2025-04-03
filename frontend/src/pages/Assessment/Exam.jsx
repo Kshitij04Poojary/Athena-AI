@@ -14,11 +14,12 @@ const Exam = () => {
   const [userAnswers, setUserAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
   const [score, setScore] = useState(0);
+  const NODE_API = import.meta.env.VITE_NODE_API;
 
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/assessment/${examId}`);
+        const res = await axios.get(`${NODE_API}/assessment/${examId}`);
         setQuiz(res.data.questions);
       } catch (error) {
         console.error(t("errorFetchingQuestions"), error);
@@ -63,7 +64,7 @@ const Exam = () => {
     const finalScore = calculateScore();
     setShowResults(true);
     try {
-      await axios.patch(`http://localhost:8000/api/assessment/${examId}`, { score: finalScore });
+      await axios.patch(`${NODE_API}/assessment/${examId}`, { score: finalScore });
     } catch (error) {
       console.error(t("errorUpdatingScore"), error);
     }

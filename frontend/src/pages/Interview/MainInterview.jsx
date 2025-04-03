@@ -9,14 +9,14 @@ const MainInterview = () => {
     const [interviewData, setInterviewData] = useState(null);
     const [mockInterviewQuestion, setMockInterviewQuestion] = useState([]);
     const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     useEffect(() => {
         GetInterviewDetails();
     }, []);
 
     const GetInterviewDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/interview/${interviewId}`);
+            const response = await axios.get(`${NODE_API}/interview/${interviewId}`);
             const result = response.data;    
             const parsedData = JSON.parse(result.jsonMockResp);
             setMockInterviewQuestion(parsedData);

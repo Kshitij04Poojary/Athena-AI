@@ -9,7 +9,7 @@
 //     const [loading, setLoading] = useState(false);
 //     const [assigning, setAssigning] = useState({});
 //     const [mentees, setMentees] = useState([]); // Initialize as an empty array to prevent issues
-
+//     const NODE_API = import.meta.env.VITE_NODE_API;
 //     // Find the selected mentee (Only if mentees are available)
 //     const selectedMentee = mentees.length > 0 ? mentees.find(mentee => mentee._id === selectedMenteeId) : null;
 
@@ -67,7 +67,7 @@
 
 //         try {
 //             const response = await axios.post(
-//                 "http://localhost:8000/api/assign/assign-mentee",
+//                 `${NODE_API}/assign/assign-mentee`,
 //                 { menteeId: selectedMenteeId, mentorId: professorId },
 //                 { withCredentials: true }
 //             );

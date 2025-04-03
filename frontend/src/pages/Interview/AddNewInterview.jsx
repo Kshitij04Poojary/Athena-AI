@@ -12,13 +12,13 @@ const AddNewInterview = () => {
     const [jobDesc, setJobDesc] = useState('');
     const [jobExp, setJobExp] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const NODE_API = import.meta.env.VITE_NODE_API;
     const onSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8000/api/interview/generate-interview', {
+            const response = await axios.post(`${NODE_API}/interview/generate-interview`, {
                 jobPos, 
                 jobDesc, 
                 jobExp, 
