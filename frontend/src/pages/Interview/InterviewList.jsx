@@ -8,7 +8,7 @@ const InterviewList = () => {
   const [interviewList, setInterviewList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
-  const NODE_API = process.env.REACT_APP_NODE_API;
+  const NODE_API = import.meta.env.VITE_NODE_API;
   useEffect(() => {
     const fetchInterviews = async () => {
       try {
