@@ -24,7 +24,7 @@ const GameQuestions = ({ questions, onComplete, onBack }) => {
   };
 
   return (
-    <div className="relative max-w-2xl mx-auto bg-gray-800/90 p-8 rounded-xl shadow-xl">
+    <div className="relative max-w-2xl mx-auto bg-gray-800/90 md:p-8 p-4 rounded-xl shadow-xl mt-4">
       <button 
         onClick={onBack}
         className="absolute top-4 left-4 text-2xl hover:text-yellow-400 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-full p-1"
@@ -37,13 +37,13 @@ const GameQuestions = ({ questions, onComplete, onBack }) => {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl text-white font-semibold mb-6">{questions[currentQuestion].question}</h2>
+        <h2 className="md:text-2xl text-white font-semibold mb-6">{questions[currentQuestion].question}</h2>
         
         <div className="grid grid-cols-1 gap-3 text-white">
           {questions[currentQuestion].options.map((option, index) => (
             <button
               key={index}
-              className={`p-4 rounded-lg text-left transition-all focus:outline-none focus:ring-2 focus:ring-white/50 ${
+              className={`p-4 text-sm md:text-base rounded-lg text-left transition-all focus:outline-none focus:ring-2 focus:ring-white/50 ${
                 !selectedAnswer ? 'bg-gray-700 hover:bg-gray-600' : ''
               } ${
                 selectedAnswer === option ? 
@@ -63,7 +63,7 @@ const GameQuestions = ({ questions, onComplete, onBack }) => {
       </div>
 
       {showFeedback && (
-        <div className={`text-center text-xl font-bold py-4 rounded ${
+        <div className={`text-center text-xl font-bold md:py-4 rounded ${
           selectedAnswer === questions[currentQuestion].correct_answer ? 
             'text-green-400' : 'text-red-400'
         }`}>

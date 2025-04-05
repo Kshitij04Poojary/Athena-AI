@@ -218,45 +218,44 @@ const CreateCourse = () => {
         toast.error(t("createCourse.errors.assignFailed"));
     }
   };
-
   return (
-    <div className="flex">
+    <div className="flex flex-col min-h-screen">
       <Toaster position="top-right" richColors />
-      <div className="p-6 w-lg min-h-lvh mx-40 my-40 min-w-2xl">
-        <h2 className="text-3xl font-bold text-purple-600 text-center mb-6">
+      <div className="p-4 sm:p-6 w-full max-w-4xl mx-auto my-4 sm:my-8">
+        <h2 className="text-2xl sm:text-3xl font-bold text-purple-600 text-center mb-4 sm:mb-6">
           {t("createCourse.title")}
         </h2>
-
-        <div className="flex justify-center items-center gap-4 mb-8">
+  
+        <div className="flex justify-center items-center gap-2 sm:gap-4 mb-6 sm:mb-8 overflow-x-auto px-2">
           {steps.map((stepItem, index) => (
-            <div key={index} className="flex items-center">
-              <div className={`w-10 h-10 flex justify-center items-center rounded-full ${step >= index ? "bg-purple-600 text-white" : "bg-gray-300"}`}>
-                <stepItem.icon />
+            <div key={index} className="flex items-center flex-shrink-0">
+              <div className={`w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center rounded-full ${step >= index ? "bg-purple-600 text-white" : "bg-gray-300"}`}>
+                <stepItem.icon className="w-4 h-4 sm:w-5 sm:h-5" />
               </div>
-              {index < steps.length - 1 && <div className={`w-16 h-1 ${step > index ? "bg-purple-600" : "bg-gray-300"}`} />}
+              {index < steps.length - 1 && <div className={`w-8 sm:w-16 h-1 ${step > index ? "bg-purple-600" : "bg-gray-300"}`} />}
             </div>
           ))}
         </div>
-
-        <div className="bg-gradient-to-br from-purple-50 to-white p-8 rounded-xl shadow-lg">
+  
+        <div className="bg-gradient-to-br from-purple-50 to-white p-4 sm:p-8 rounded-xl shadow-lg">
           {step < 3 && (
             <>
               {step === 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-purple-800 mb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-purple-800 mb-3 sm:mb-4">
                     {t("createCourse.skills.title")}
                   </h3>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                     <input
                       type="text"
                       placeholder={t("createCourse.skills.addPlaceholder")}
-                      className="flex-grow p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                      className="flex-grow p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
                       list="skillSuggestions"
                     />
                     <button
-                      className="bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition duration-300"
+                      className="bg-purple-600 text-white p-2 sm:p-3 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition duration-300"
                       disabled={!skillInput.trim()}
                       onClick={addSkill}
                     >
@@ -274,7 +273,7 @@ const CreateCourse = () => {
                         key={skill} 
                         className="bg-purple-200 px-3 py-1 rounded-full flex items-center space-x-2 text-purple-800"
                       >
-                        <span>{skill}</span>
+                        <span className="text-sm sm:text-base">{skill}</span>
                         <button 
                           className="text-red-500 hover:text-red-700 transition" 
                           onClick={() => removeSkill(skill)}
@@ -286,36 +285,36 @@ const CreateCourse = () => {
                   </div>
                 </div>
               )}
-
+  
               {step === 1 && (
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-purple-800 mb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-purple-800 mb-3 sm:mb-4">
                     {t("createCourse.topic.title")}
                   </h3>
                   <input
                     type="text"
                     placeholder={t("createCourse.topic.topicPlaceholder")}
-                    className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                    className="w-full p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     value={formData.topic}
                     onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
                   />
                   <textarea
                     placeholder={t("createCourse.topic.descriptionPlaceholder")}
-                    className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                    className="w-full p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     rows="4"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   />
                 </div>
               )}
-
+  
               {step === 2 && (
                 <div className="space-y-4">
-                  <h3 className="text-2xl font-bold text-purple-800 mb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-purple-800 mb-3 sm:mb-4">
                     {t("createCourse.options.title")}
                   </h3>
                   <select
-                    className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                    className="w-full p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     value={formData.difficulty}
                     onChange={(e) => setFormData({ ...formData, difficulty: e.target.value })}
                   >
@@ -327,14 +326,14 @@ const CreateCourse = () => {
                   <input
                     type="text"
                     placeholder={t("createCourse.options.durationPlaceholder")}
-                    className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                    className="w-full p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
                   />
                   <input
                     type="number"
                     placeholder={t("createCourse.options.chaptersPlaceholder")}
-                    className="w-full p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+                    className="w-full p-2 sm:p-3 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
                     value={formData.noOfChp}
                     min={1}
                     max={5}
@@ -344,27 +343,27 @@ const CreateCourse = () => {
               )}
             </>
           )}
-
+  
           {step === 3 && apiResponse.courseLayout && Object.keys(apiResponse.courseLayout).length > 0 && (
             <div>
               {(() => {
                 const course = apiResponse.courseLayout;
                 return (
-                  <div className="space-y-6">
-                    <h3 className="text-3xl font-bold text-purple-700">{course["Course Name"]}</h3>
+                  <div className="space-y-4 sm:space-y-6">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-purple-700">{course["Course Name"]}</h3>
                     
-                    <div className="bg-purple-50 p-6 rounded-xl border border-purple-100">
-                      <p className="text-gray-700 mb-4">
+                    <div className="bg-purple-50 p-4 sm:p-6 rounded-xl border border-purple-100">
+                      <p className="text-gray-700 mb-3 sm:mb-4 text-sm sm:text-base">
                         <strong>{t("createCourse.preview.description")}:</strong> {course.Description}
                       </p>
                       
-                      <div className="mb-4">
-                        <strong className="block mb-2">{t("createCourse.preview.skills")}:</strong>
+                      <div className="mb-3 sm:mb-4">
+                        <strong className="block mb-1 sm:mb-2 text-sm sm:text-base">{t("createCourse.preview.skills")}:</strong>
                         <div className="flex flex-wrap gap-2">
                           {course.Skills.map((skill, skillIdx) => (
                             <span 
                               key={skillIdx} 
-                              className="bg-purple-200 px-3 py-1 rounded-full text-purple-800 text-sm"
+                              className="bg-purple-200 px-2 sm:px-3 py-1 rounded-full text-purple-800 text-xs sm:text-sm"
                             >
                               {skill}
                             </span>
@@ -372,15 +371,15 @@ const CreateCourse = () => {
                         </div>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-2 text-gray-700">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs sm:text-sm text-gray-700">
                         <p><strong>{t("createCourse.preview.level")}:</strong> {course.Level}</p>
                         <p><strong>{t("createCourse.preview.duration")}:</strong> {course.Duration}</p>
                         <p><strong>{t("createCourse.preview.chapters")}:</strong> {course.NoOfChapters}</p>
                       </div>
                       
-                      <div className="mt-4">
-                        <strong className="block mb-2">{t("createCourse.preview.outcomes")}:</strong>
-                        <ul className="list-disc list-inside space-y-1">
+                      <div className="mt-3 sm:mt-4">
+                        <strong className="block mb-1 sm:mb-2 text-sm sm:text-base">{t("createCourse.preview.outcomes")}:</strong>
+                        <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                           {course["Course Outcomes"].map((outcome, outcomeIdx) => (
                             <li key={outcomeIdx} className="text-gray-700">{outcome}</li>
                           ))}
@@ -389,22 +388,22 @@ const CreateCourse = () => {
                     </div>
                     
                     <div>
-                      <h4 className="text-2xl font-semibold mb-4 text-purple-700">
+                      <h4 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-purple-700">
                         {t("createCourse.preview.chaptersTitle")}
                       </h4>
                       {course.Chapters.map((chapter, chapterIdx) => (
                         <div 
                           key={chapterIdx} 
-                          className="bg-white border border-purple-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md transition"
+                          className="bg-white border border-purple-100 rounded-xl p-3 sm:p-5 mb-3 sm:mb-4 shadow-sm hover:shadow-md transition"
                         >
-                          <h5 className="text-xl font-semibold text-purple-600 mb-2">{chapter["Chapter Name"]}</h5>
-                          <p className="text-gray-600 mb-3">{chapter.About}</p>
-                          <p className="mb-2">
+                          <h5 className="text-lg sm:text-xl font-semibold text-purple-600 mb-2">{chapter["Chapter Name"]}</h5>
+                          <p className="text-gray-600 mb-2 sm:mb-3 text-sm sm:text-base">{chapter.About}</p>
+                          <p className="mb-2 text-xs sm:text-sm">
                             <strong>{t("createCourse.preview.chapterDuration")}:</strong> {chapter.Duration}
                           </p>
                           <div>
-                            <strong className="block mb-2">{t("createCourse.preview.content")}:</strong>
-                            <ul className="list-disc list-inside space-y-1">
+                            <strong className="block mb-1 sm:mb-2 text-xs sm:text-sm">{t("createCourse.preview.content")}:</strong>
+                            <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
                               {chapter.Content.map((item, contentIdx) => (
                                 <li key={contentIdx} className="text-gray-700">{item}</li>
                               ))}
@@ -419,72 +418,76 @@ const CreateCourse = () => {
             </div>
           )}
         </div>
-
-        <div className="mt-6 flex justify-between items-center">
-          {step === 0 && (
-            <button 
-              onClick={() => navigate('/my-courses')} 
-              className="p-2 bg-black text-white rounded cursor-pointer"
-            >
-              {t("createCourse.buttons.backToCourses")}
-            </button>
-          )}
-          {step > 0 && step < 3 && (
-            <button 
-              onClick={() => setStep(step - 1)} 
-              className="p-2 bg-gray-300 rounded"
-            >
-              {t("createCourse.buttons.back")}
-            </button>
-          )}
+  
+        <div className="mt-4 sm:mt-6 flex flex-row justify-between items-center gap-2 md:p-0 px-3">
+          <div>
+            {step === 0 && (
+              <button 
+                onClick={() => navigate('/my-courses')} 
+                className="w-full sm:w-auto p-2 bg-gray-600 text-white rounded cursor-pointer text-sm sm:text-base"
+              >
+                {t("createCourse.buttons.backToCourses")}
+              </button>
+            )}
+            {step > 0 && step < 3 && (
+              <button 
+                onClick={() => setStep(step - 1)} 
+                className="w-full sm:w-auto p-2 bg-gray-300 rounded text-sm sm:text-base"
+              >
+                {t("createCourse.buttons.back")}
+              </button>
+            )}
+          </div>
           
-          {step === 2 && (
-            <button 
-              onClick={GenerateCourseLayout} 
-              disabled={generatingCourse}
-              className={`p-2 bg-black text-white rounded flex items-center ${generatingCourse ? 'opacity-50 cursor-not-allowed' : ''}`}
-            >
-              {generatingCourse ? (
-                <>
-                  <Loader2 className="mr-2 animate-spin" />
-                  {t("createCourse.buttons.generating")}
-                </>
-              ) : (
-                t("createCourse.buttons.generate")
-              )}
-            </button>
-          )}
-          
-          {step === 3 && (
-            <button 
-              onClick={GenerateChapterContent} 
-              disabled={generatingChapters}
-              className={`p-2 rounded flex items-center ${
-                !generatingChapters
-                  ? "bg-green-600 text-white" 
-                  : "bg-green-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              {generatingChapters ? (
-                <>
-                  <Loader2 className="mr-2 animate-spin" />
-                  {t("createCourse.buttons.finalizing")}
-                </>
-              ) : (
-                t("createCourse.buttons.finish")
-              )}
-            </button>
-          )}
-          
-          {(step === 0 || step === 1) && (
-            <button 
-              onClick={() => setStep(step + 1)} 
-              className="p-2 bg-black text-white rounded" 
-              disabled={!isNextEnabled()}
-            >
-              {t("createCourse.buttons.next")}
-            </button>
-          )}
+          <div>
+            {step === 2 && (
+              <button 
+                onClick={GenerateCourseLayout} 
+                disabled={generatingCourse}
+                className={`w-full sm:w-auto p-2 bg-black text-white rounded flex items-center justify-center sm:justify-start ${generatingCourse ? 'opacity-50 cursor-not-allowed' : ''} text-sm sm:text-base`}
+              >
+                {generatingCourse ? (
+                  <>
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                    {t("createCourse.buttons.generating")}
+                  </>
+                ) : (
+                  t("createCourse.buttons.generate")
+                )}
+              </button>
+            )}
+            
+            {step === 3 && (
+              <button 
+                onClick={GenerateChapterContent} 
+                disabled={generatingChapters}
+                className={`w-full sm:w-auto p-2 rounded flex items-center justify-center sm:justify-start text-sm sm:text-base ${
+                  !generatingChapters
+                    ? "bg-green-600 text-white" 
+                    : "bg-green-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                {generatingChapters ? (
+                  <>
+                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
+                    {t("createCourse.buttons.finalizing")}
+                  </>
+                ) : (
+                  t("createCourse.buttons.finish")
+                )}
+              </button>
+            )}
+            
+            {(step === 0 || step === 1) && (
+              <button 
+                onClick={() => setStep(step + 1)} 
+                className="w-full sm:w-auto p-2 bg-green-700 text-white rounded text-sm sm:text-base" 
+                disabled={!isNextEnabled()}
+              >
+                {t("createCourse.buttons.next")}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ const Register = () => {
     const { setUser } = useUser();
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-    
+
     // Skill selection state
     const [skillInput, setSkillInput] = useState('');
     const [filteredSkills, setFilteredSkills] = useState([]);
@@ -48,18 +48,18 @@ const Register = () => {
     const handleSkillInputChange = (e) => {
         const value = e.target.value;
         setSkillInput(value);
-        
+
         if (value.trim() === '') {
             setFilteredSkills([]);
             setShowSkillDropdown(false);
             return;
         }
-        
+
         // Filter skills that match the input
-        const matches = skillList.filter(skill => 
+        const matches = skillList.filter(skill =>
             skill.toLowerCase().includes(value.toLowerCase())
         ).slice(0, 5); // Limit to 5 suggestions
-        
+
         setFilteredSkills(matches);
         setShowSkillDropdown(matches.length > 0);
     };
@@ -81,14 +81,14 @@ const Register = () => {
     const handleSkillKeyDown = (e) => {
         if (e.key === 'Enter' && skillInput.trim() !== '') {
             e.preventDefault();
-            
+
             if (filteredSkills.length > 0) {
                 // Select the first match from dropdown
                 handleSelectSkill(filteredSkills[0]);
             } else if (!formData.skills.some(skill => skill.name === skillInput.trim())) {
                 // Add custom skill if not in dropdown
                 setFormData(prev => ({
-                    ...prev, 
+                    ...prev,
                     skills: [...prev.skills, { name: skillInput.trim(), proficiency: 0 }]
                 }));
                 setSkillInput('');
@@ -111,7 +111,7 @@ const Register = () => {
                 setShowSkillDropdown(false);
             }
         };
-        
+
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
@@ -187,22 +187,22 @@ const Register = () => {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="min-h-screen flex items-center justify-center bg-gradient-to-br from-black to-purple-100 p-4 w-lvw"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
         >
             <ToastContainer position="top-right" autoClose={3000} />
-            
-            <motion.div 
-                className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden"
+
+            <motion.div
+                className="bg-white md:p-8 md:m-0 mx-3 p-4 rounded-2xl shadow-2xl md:w-full max-w-3xl overflow-hidden"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
             >
                 <div className="relative h-3 w-full bg-gray-200 rounded-full overflow-hidden mb-8">
-                    <motion.div 
+                    <motion.div
                         className="h-full bg-gradient-to-r from-blue-500 to-purple-600"
                         initial={{ width: 0 }}
                         animate={{ width: `${progressBarWidth}%` }}
@@ -212,17 +212,17 @@ const Register = () => {
 
                 <AnimatePresence mode="wait">
                     {step === 1 && (
-                        <motion.div 
+                        <motion.div
                             key="step1"
-                            className="space-y-6 text-center"
+                            className="md:space-y-6  space-y-3 text-center"
                             variants={formVariants}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                         >
-                            <h2 className="text-4xl font-bold text-gray-800 mb-8">Welcome to our Learning Platform</h2>
+                            <h2 className="md:text-4xl text-2xl font-bold text-gray-800 mb-4 md:mb-8">Welcome to our Learning Platform</h2>
                             <p className="text-lg text-gray-600 mb-8">Select your role to get started</p>
-                            
+
                             <div className="flex flex-col md:flex-row justify-center gap-6">
                                 <motion.div
                                     className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border-2 border-blue-200 cursor-pointer flex flex-col items-center"
@@ -264,7 +264,7 @@ const Register = () => {
                     )}
 
                     {step === 2 && (
-                        <motion.div 
+                        <motion.div
                             key="step2"
                             className="space-y-6"
                             variants={formVariants}
@@ -274,42 +274,42 @@ const Register = () => {
                         >
                             <h2 className="text-3xl font-bold text-gray-800 mb-6">Create Your Account</h2>
                             <p className="text-gray-600 mb-6">Please provide your information to get started</p>
-                            
+
                             <div className="space-y-4">
                                 <div className="relative">
-                                    <input 
-                                        type="text" 
-                                        placeholder=" " 
-                                        name="name" 
-                                        value={formData.name} 
-                                        onChange={handleChange} 
-                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                    <input
+                                        type="text"
+                                        placeholder=" "
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6"
                                         required
                                     />
                                     <label className="absolute left-4 top-4 !text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Full Name</label>
                                 </div>
-                                
+
                                 <div className="relative">
-                                    <input 
-                                        type="email" 
-                                        placeholder=" " 
-                                        name="email" 
-                                        value={formData.email} 
-                                        onChange={handleChange} 
-                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                    <input
+                                        type="email"
+                                        placeholder=" "
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="text-black w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6"
                                         required
                                     />
                                     <label className="absolute left-4 top-4 !text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Email Address</label>
                                 </div>
-                                
+
                                 <div className="relative">
-                                    <input 
-                                        type="password" 
-                                        placeholder=" " 
-                                        name="password" 
-                                        value={formData.password} 
-                                        onChange={handleChange} 
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                    <input
+                                        type="password"
+                                        placeholder=" "
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6"
                                         required
                                     />
                                     <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">Password</label>
@@ -317,8 +317,8 @@ const Register = () => {
                             </div>
 
                             <div className="flex justify-between pt-4">
-                                <motion.button 
-                                    onClick={handlePrev} 
+                                <motion.button
+                                    onClick={handlePrev}
                                     className="px-6 py-3 bg-gray-500 text-white rounded-lg flex items-center gap-2"
                                     variants={buttonVariants}
                                     whileHover="hover"
@@ -329,9 +329,9 @@ const Register = () => {
                                     </svg>
                                     Back
                                 </motion.button>
-                                
-                                <motion.button 
-                                    onClick={handleNext} 
+
+                                <motion.button
+                                    onClick={handleNext}
                                     className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-700 text-white rounded-lg flex items-center gap-2"
                                     variants={buttonVariants}
                                     whileHover="hover"
@@ -347,51 +347,51 @@ const Register = () => {
                     )}
 
                     {step === 3 && (
-                        <motion.div 
+                        <motion.div
                             key="step3"
-                            className="space-y-6"
+                            className="space-y-6 w-full px-4 sm:px-0"
                             variants={formVariants}
                             initial="initial"
                             animate="animate"
                             exit="exit"
                         >
-                            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">
                                 {userType === 'Student' ? 'Tell Us About Yourself' : 'Complete Your Teacher Profile'}
                             </h2>
-                            <p className="text-gray-600 mb-6">
-                                {userType === 'Student' 
-                                    ? 'This helps us personalize your learning experience' 
+                            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
+                                {userType === 'Student'
+                                    ? 'This helps us personalize your learning experience'
                                     : 'Help students discover you and your expertise'}
                             </p>
-                            
+
                             <div className="space-y-4">
                                 <div className="relative" ref={skillInputRef}>
-                                    <input 
-                                        type="text" 
-                                        placeholder=" " 
+                                    <input
+                                        type="text"
+                                        placeholder=" "
                                         value={skillInput}
                                         onChange={handleSkillInputChange}
                                         onKeyDown={handleSkillKeyDown}
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-5 sm:pt-6"
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-focus:-translate-y-2 pointer-events-none">
+                                    <label className="absolute left-3 sm:left-4 top-4 text-sm sm:text-base text-gray-500 transition-all peer-focus:text-xs sm:peer-focus:text-sm peer-focus:top-1 sm:peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm sm:peer-placeholder-shown:text-base peer-focus:-translate-y-1 sm:peer-focus:-translate-y-2 pointer-events-none">
                                         Skills (type to search)
                                     </label>
-                                    
+
                                     {/* Skills dropdown */}
                                     <AnimatePresence>
                                         {showSkillDropdown && (
-                                            <motion.div 
-                                                className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto"
+                                            <motion.div
+                                                className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 sm:max-h-60 overflow-auto"
                                                 variants={dropdownVariants}
                                                 initial="hidden"
                                                 animate="visible"
                                                 exit="hidden"
                                             >
                                                 {filteredSkills.map((skill, index) => (
-                                                    <div 
+                                                    <div
                                                         key={index}
-                                                        className="p-3 hover:bg-blue-50 cursor-pointer transition-colors"
+                                                        className="p-2 sm:p-3 text-sm sm:text-base hover:bg-blue-50 cursor-pointer transition-colors"
                                                         onClick={() => handleSelectSkill(skill)}
                                                     >
                                                         {skill}
@@ -400,26 +400,26 @@ const Register = () => {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                    
+
                                     {/* Selected skills tags */}
-                                    <div className="flex flex-wrap gap-2 mt-3">
+                                    <div className="flex flex-wrap gap-1 sm:gap-2 mt-2 sm:mt-3">
                                         <AnimatePresence>
                                             {formData.skills.map((skillObj, index) => (
-                                                <motion.div 
+                                                <motion.div
                                                     key={`${skillObj.name}-${index}`}
-                                                    className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-3 py-2 rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
+                                                    className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded-full flex items-center gap-1 shadow-sm hover:shadow-md transition-all"
                                                     variants={tagVariants}
                                                     initial="initial"
                                                     animate="animate"
                                                     exit="exit"
                                                 >
                                                     {skillObj.name}
-                                                    <button 
+                                                    <button
                                                         type="button"
                                                         onClick={() => removeSkill(skillObj)}
-                                                        className="ml-1 bg-blue-200 hover:bg-blue-300 rounded-full p-1 text-blue-600 hover:text-blue-800 transition-colors"
+                                                        className="ml-1 bg-blue-200 hover:bg-blue-300 rounded-full p-0.5 sm:p-1 text-blue-600 hover:text-blue-800 transition-colors"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-2.5 w-2.5 sm:h-3 sm:w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                                         </svg>
                                                     </button>
@@ -428,37 +428,37 @@ const Register = () => {
                                         </AnimatePresence>
                                     </div>
                                 </div>
-                                
+
                                 <div className="relative">
-                                    <input 
-                                        type="text" 
-                                        placeholder=" " 
-                                        onChange={(e) => handleArrayChange('careerGoals', e.target.value)} 
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-6" 
+                                    <input
+                                        type="text"
+                                        placeholder=" "
+                                        onChange={(e) => handleArrayChange('careerGoals', e.target.value)}
+                                        className="w-full px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors peer pt-5 sm:pt-6"
                                     />
-                                    <label className="absolute left-4 top-4 text-gray-500 transition-all peer-focus:text-sm peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-2 pointer-events-none">
+                                    <label className="absolute left-3 sm:left-4 top-4 text-sm sm:text-base text-gray-500 transition-all peer-focus:text-xs sm:peer-focus:text-sm peer-focus:top-1 sm:peer-focus:top-2 peer-focus:text-blue-500 peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm sm:peer-placeholder-shown:text-base peer-[&:not(:placeholder-shown)]:text-xs sm:peer-[&:not(:placeholder-shown)]:text-sm peer-[&:not(:placeholder-shown)]:top-1 sm:peer-[&:not(:placeholder-shown)]:top-2 peer-focus:-translate-y-1 sm:peer-focus:-translate-y-2 pointer-events-none">
                                         {userType === 'Student' ? 'Career Goals (comma separated)' : 'Areas of Expertise (comma separated)'}
                                     </label>
                                 </div>
                             </div>
 
                             <div className="flex justify-between pt-4">
-                                <motion.button 
-                                    onClick={handlePrev} 
-                                    className="px-6 py-3 bg-gray-500 text-white rounded-lg flex items-center gap-2"
+                                <motion.button
+                                    onClick={handlePrev}
+                                    className="px-3 sm:px-6 py-2 sm:py-3 bg-gray-500 text-white text-sm sm:text-base rounded-lg flex items-center gap-1 sm:gap-2"
                                     variants={buttonVariants}
                                     whileHover="hover"
                                     whileTap="tap"
                                 >
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                                     </svg>
                                     Back
                                 </motion.button>
-                                
-                                <motion.button 
-                                    onClick={handleSubmit} 
-                                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-lg flex items-center gap-2"
+
+                                <motion.button
+                                    onClick={handleSubmit}
+                                    className="px-3 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-green-700 text-white text-sm sm:text-base rounded-lg flex items-center gap-1 sm:gap-2"
                                     variants={buttonVariants}
                                     whileHover="hover"
                                     whileTap="tap"
@@ -466,16 +466,17 @@ const Register = () => {
                                 >
                                     {isLoading ? (
                                         <>
-                                            <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <svg className="animate-spin h-4 w-4 sm:h-5 sm:w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                             </svg>
-                                            Processing...
+                                            <span className="whitespace-nowrap">Processing...</span>
                                         </>
                                     ) : (
                                         <>
-                                            Complete Registration
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <span className="whitespace-nowrap">Complete</span>
+                                            <span className="hidden sm:inline"> Registration</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                                             </svg>
                                         </>
@@ -486,7 +487,7 @@ const Register = () => {
                     )}
                 </AnimatePresence>
 
-                <motion.div 
+                <motion.div
                     className="mt-8 text-center text-gray-500 text-sm"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

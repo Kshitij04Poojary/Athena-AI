@@ -79,36 +79,36 @@ const ExamDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-6">
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {/* Assessment Generation Section */}
-        <div className="md:col-span-1 bg-white rounded-2xl shadow-2xl border border-blue-50 p-8 transform transition-all hover:scale-105 hover:shadow-3xl">
-          <div className="text-center mb-6">
-            <div className="inline-block bg-blue-100 p-3 rounded-full mb-4">
-              <Target className="text-blue-600" size={32} />
+        <div className="md:col-span-1 bg-white rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border border-blue-50 p-5 md:p-8 transform transition-all hover:shadow-2xl">
+          <div className="text-center mb-4 md:mb-6">
+            <div className="inline-block bg-blue-100 p-2 md:p-3 rounded-full mb-3 md:mb-4">
+              <Target className="text-blue-600" size={24} />
             </div>
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-1 md:mb-2">
               {t("generateTest")}
             </h2>
-            <p className="text-gray-500">{t("createPersonalizedAssessment")}</p>
+            <p className="text-sm md:text-base text-gray-500">{t("createPersonalizedAssessment")}</p>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             <input
               type="text"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder={t("enterTopicPlaceholder")}
-              className="w-full p-4 border-2 border-blue-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all placeholder-gray-400"
+              className="w-full p-3 md:p-4 border-2 border-blue-100 rounded-lg md:rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all placeholder-gray-400 text-sm md:text-base"
               disabled={loading}
             />
             <button
               onClick={generateAssessment}
-              className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 flex items-center justify-center space-x-2 group cursor-pointer"
+              className="w-full px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-lg md:rounded-xl font-bold hover:from-blue-700 hover:to-indigo-800 transition-all duration-300 flex items-center justify-center space-x-2 group cursor-pointer text-sm md:text-base"
               disabled={loading}
             >
               {loading ? (
                 <svg
-                  className="animate-spin h-6 w-6 mr-2 text-white"
+                  className="animate-spin h-5 w-5 md:h-6 md:w-6 mr-2 text-white"
                   viewBox="0 0 24 24"
                 >
                   <circle
@@ -127,7 +127,7 @@ const ExamDashboard = () => {
                 </svg>
               ) : (
                 <>
-                  <Sparkles className="group-hover:rotate-45 transition-transform" size={24} />
+                  <Sparkles className="group-hover:rotate-45 transition-transform" size={20} />
                   <span>{t("generateNewAssessment")}</span>
                 </>
               )}
@@ -136,66 +136,66 @@ const ExamDashboard = () => {
         </div>
 
         {/* Past Assessments Section */}
-        <div className="md:col-span-2 bg-white rounded-2xl shadow-2xl border border-blue-50 p-8">
-          <div className="flex justify-between items-center mb-6">
+        <div className="md:col-span-2 bg-white rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border border-blue-50 p-5 md:p-8 mt-6 md:mt-0">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 md:mb-6">
             <div>
-              <div className="inline-block bg-blue-100 p-3 rounded-full mb-2">
-                <BookOpen className="text-blue-600" size={32} />
+              <div className="inline-block bg-blue-100 p-2 md:p-3 rounded-full mb-2">
+                <BookOpen className="text-blue-600" size={24} />
               </div>
-              <h2 className="text-3xl font-bold text-gray-800">
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
                 {t("yourAssessments")}
               </h2>
-              <p className="text-gray-500">{t("trackLearningProgress")}</p>
+              <p className="text-sm md:text-base text-gray-500">{t("trackLearningProgress")}</p>
             </div>
             {assessments.length > 0 && (
-              <div className="flex items-center text-blue-600 font-semibold">
-                <TrendingUp className="mr-2" size={24} />
+              <div className="flex items-center text-blue-600 font-semibold mt-2 sm:mt-0 text-sm md:text-base">
+                <TrendingUp className="mr-2" size={20} />
                 {assessments.length} {t("totalTests")}
               </div>
             )}
           </div>
 
           {isAssessmentsLoading ? (
-            <div className="flex justify-center items-center h-64">
+            <div className="flex justify-center items-center h-48 md:h-64">
               <div className="animate-pulse">
-                <svg className="h-16 w-16 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                <svg className="h-12 w-12 md:h-16 md:w-16 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M12 2L2 7l10 5 10-5-10-5z" />
                   <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
                 </svg>
               </div>
             </div>
           ) : assessments.length === 0 ? (
-            <div className="text-center bg-blue-50 rounded-xl p-10">
-              <div className="inline-block bg-blue-100 p-4 rounded-full mb-4">
-                <BookOpen className="text-blue-600" size={32} />
+            <div className="text-center bg-blue-50 rounded-lg md:rounded-xl p-6 md:p-10">
+              <div className="inline-block bg-blue-100 p-3 md:p-4 rounded-full mb-3 md:mb-4">
+                <BookOpen className="text-blue-600" size={24} />
               </div>
-              <p className="text-xl text-gray-700 mb-2">{t("noAssessmentsYet")}</p>
-              <p className="text-gray-500">{t("startLearningJourney")}</p>
+              <p className="text-lg md:text-xl text-gray-700 mb-1 md:mb-2">{t("noAssessmentsYet")}</p>
+              <p className="text-sm md:text-base text-gray-500">{t("startLearningJourney")}</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {assessments.map((assessment) => (
                 <div
                   key={assessment._id}
-                  className="bg-blue-50 rounded-xl p-5 flex items-center justify-between hover:bg-blue-100 transition-colors group"
+                  className="bg-blue-50 rounded-lg md:rounded-xl p-4 md:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between hover:bg-blue-100 transition-colors group"
                 >
-                  <div>
-                    <h3 className="font-bold text-xl text-gray-800 mb-1">
+                  <div className="mb-3 sm:mb-0">
+                    <h3 className="font-bold text-lg md:text-xl text-gray-800 mb-1">
                       {assessment.topic}
                     </h3>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Clock className="mr-2" size={16} />
+                    <div className="flex flex-wrap items-center text-xs md:text-sm text-gray-600">
+                      <Clock className="mr-1 md:mr-2" size={14} />
                       {new Date(assessment.createdAt).toLocaleDateString()}
-                      <span className="ml-4 bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">
+                      <span className="ml-2 md:ml-4 bg-blue-200 text-blue-800 px-2 py-0.5 rounded-full">
                         {t("score")}: {assessment.score}%
                       </span>
                     </div>
                   </div>
                   <button
                     onClick={() => reattemptAssessment(assessment._id)}
-                    className="px-5 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center group-hover:translate-x-1 transition-transform cursor-pointer"
+                    className="w-full sm:w-auto px-4 md:px-5 py-2 md:py-2.5 bg-blue-500 text-white rounded-md md:rounded-lg hover:bg-blue-600 flex items-center justify-center sm:justify-start group-hover:translate-x-0 sm:group-hover:translate-x-1 transition-transform cursor-pointer text-xs md:text-sm"
                   >
-                    <RefreshCw className="mr-2" size={16} />
+                    <RefreshCw className="mr-1 md:mr-2" size={14} />
                     {t("reattemptTest")}
                   </button>
                 </div>

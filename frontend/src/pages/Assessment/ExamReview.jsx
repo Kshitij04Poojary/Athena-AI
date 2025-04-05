@@ -62,7 +62,7 @@ const ExamReview = () => {
             return (
               <div
                 key={index}
-                className={`question-review p-5 border rounded-lg shadow-sm ${
+                className={`question-review md:p-5 pr-3 pl-1 py-5 border rounded-lg shadow-sm ${
                   isAttempted 
                     ? isCorrect 
                       ? "border-green-300 bg-green-50" 
@@ -70,7 +70,7 @@ const ExamReview = () => {
                     : "border-yellow-300 bg-yellow-50"
                 }`}
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start md:gap-3 gap-1">
                   {isAttempted ? (
                     isCorrect ? (
                       <CheckCircle className="text-green-500 mt-1 flex-shrink-0" size={20} />
@@ -81,7 +81,7 @@ const ExamReview = () => {
                     <AlertCircle className="text-yellow-500 mt-1 flex-shrink-0" size={20} />
                   )}
                   <div className="w-full">
-                    <h3 className="text-lg font-semibold">
+                    <h3 className="md:text-lg font-semibold">
                       {question.question}
                       {!isAttempted && (
                         <span className="ml-2 text-yellow-600 font-normal text-sm inline-block px-2 py-1 bg-yellow-100 rounded">
@@ -105,7 +105,7 @@ const ExamReview = () => {
                         return (
                           <li
                             key={optIndex}
-                            className={`p-3 rounded-md flex justify-between items-center ${optionClass}`}
+                            className={`md:p-3 py-2 px-2 text-sm md:text-base rounded-md flex justify-between items-center ${optionClass}`}
                           >
                             <span>{option}</span>
                             {statusIcon}
@@ -121,7 +121,7 @@ const ExamReview = () => {
         </div>
       ) : (
         <div className="text-center py-10 bg-gray-50 rounded-lg">
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-600 md:text-lg">
             {t("examReview.noQuizData")}
           </p>
           <p className="text-gray-500 mt-2">
