@@ -87,7 +87,7 @@ const PDFChatComponent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-2 sm:p-4">
+    <div className="h-11/12 bg-gradient-to-br from-blue-50 to-blue-100 flex md:items-center my-6 md:my-0 items-start justify-center p-2 sm:p-4 mx-2">
       <div className="w-full max-w-3xl bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01]">
         <div className="bg-gradient-to-r from-blue-600 to-blue-400 p-3 sm:p-4">
           <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center">

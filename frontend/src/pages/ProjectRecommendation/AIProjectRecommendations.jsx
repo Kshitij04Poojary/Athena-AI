@@ -49,9 +49,9 @@ const AIProjectRecommendations = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen p-8 font-sans">
+    <div className="bg-gray-50 min-h-screen md:p-8 px-6 py-3 font-sans">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+        <h1 className="md:text-4xl text-2xl font-bold text-gray-900 mb-2">
           {t("projects.title")}
         </h1>
         <p className="text-gray-600 mb-4">
@@ -116,7 +116,7 @@ const AIProjectRecommendations = () => {
             {filteredProjects.map((project, index) => (
               <div
                 key={project._id || index}
-                className="bg-white rounded-xl p-6 shadow-sm transition-all duration-300 border border-gray-100 hover:shadow-md"
+                className="bg-white rounded-xl md:p-6 px-3 py-2 shadow-sm transition-all duration-300 border border-gray-100 hover:shadow-md"
               >
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-indigo-100 text-indigo-800">
