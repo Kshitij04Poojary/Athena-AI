@@ -1,106 +1,59 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
+import requests
 from bs4 import BeautifulSoup
 
-def create_chrome_options():
-    options = Options()
-    options.add_argument("--headless=new")  # Enable headless mode
-    options.add_argument("--disable-gpu")  # Disable GPU rendering
-    options.add_argument("--disable-extensions")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--log-level=3")  # Suppress logs
-    return options
-
 def scrape_internships():
-    # Set up Selenium WebDriver with headless mode
-    options = create_chrome_options()
-    service = Service(r"C:\chromedriver-win64\chromedriver.exe")
-    driver = webdriver.Chrome(service=service, options=options)
+    url = "https://internshala.com/internships/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
 
-    # Open the Internshala webpage
-    url = 'https://internshala.com/internships/'
-    driver.get(url)
+    response = requests.get(url, headers=headers)
 
-    # Wait for the page to load completely
-    try:
-        WebDriverWait(driver, 10).until(
-            EC.presence_of_all_elements_located((By.CLASS_NAME, 'internship_meta'))
-        )
-    except:
-        print("Timeout while waiting for internships to load.")
-        driver.quit()
+    if response.status_code != 200:
         return []
 
-    # Extract the rendered page source
-    html = driver.page_source
+    soup = BeautifulSoup(response.text, "html.parser")
 
-    # Parse with BeautifulSoup
-    soup = BeautifulSoup(html, 'html.parser')
+    # Find internship cards
+    internship_cards = soup.find_all("div", class_="individual_internship_details")
 
-    # Find internship listings
-    internship_cards = soup.find_all('div', class_='individual_internship')
-    print(f'Found {len(internship_cards)} internships.')
-
-    # Array to store internship details
     internship_details = []
 
-    # Extract data
     for card in internship_cards:
-        # Extracting the internship title
-        title = card.find('a', class_='job-title-href').get_text(strip=True) if card.find('a', class_='job-title-href') else "N/A"
+        try:
+            title_tag = card.find_previous("a", class_="job-title-href")
+            title = title_tag.get_text(strip=True) if title_tag else "N/A"
+            link = "https://internshala.com" + title_tag["href"] if title_tag else "No link"
 
-        # Extracting the company name
-        company = card.find('p', class_='company-name').get_text(strip=True) if card.find('p', class_='company-name') else "N/A"
+            company_tag = card.find_previous("p", class_="company-name")
+            company = company_tag.get_text(strip=True) if company_tag else "N/A"
 
-        # Extracting the location
-        location_div = card.find('div', class_='row-1-item locations')
-        location = location_div.find('a').get_text(strip=True) if location_div and location_div.find('a') else "Online"
+            row_items = card.find("div", class_="detail-row-1").find_all("div", class_="row-1-item")
+            
+            location = row_items[0].find("a").get_text(strip=True) if row_items[0].find("a") else "Online"
+            duration = row_items[1].find("span").get_text(strip=True) if len(row_items) > 1 else "N/A"
+            stipend = row_items[2].find("span").get_text(strip=True) if len(row_items) > 2 else "N/A"
 
-        # Extracting the internship duration
-        duration_div = card.find_all('div', class_='row-1-item')
-        duration = "N/A"
-        for div in duration_div:
-            if div.find('i', class_='ic-16-calendar'):  # Find the div with a calendar icon
-                duration = div.find('span').get_text(strip=True)
-                break
+            posted_time_tag = card.find("div", class_="status-inactive")
+            posted_time = posted_time_tag.find("span").get_text(strip=True) if posted_time_tag else "N/A"
 
-        # Extracting the stipend
-        stipend = card.find('span', class_='stipend').get_text(strip=True) if card.find('span', class_='stipend') else "N/A"
+            internship_data = {
+                "title": title,
+                "company": company,
+                "location": location,
+                "duration": duration,
+                "stipend": stipend,
+                "posted_time": posted_time,
+                "link": link
+            }
 
-        # Extracting the posting time
-        posted_time = card.find('div', class_='status-info').find('span').get_text(strip=True) if card.find('div', class_='status-info') else "N/A"
+            internship_details.append(internship_data)
 
-        # Extracting the link to the internship details
-        link = 'https://internshala.com' + card.find('a', class_='job-title-href')['href'] if card.find('a', class_='job-title-href') else "No link"
-
-        # print(f"Location: {location}\nDuration: {duration}")
-
-        # Adding the extracted details to the internship_data dictionary
-        internship_data = {
-            'title': title,
-            'company': company,
-            'location': location,
-            'duration': duration,
-            'stipend': stipend,
-            'posted_time': posted_time,
-            'link': link
-        }
-
-        # Appending the internship details to the list
-        internship_details.append(internship_data)
-    # Close the browser
-    driver.quit()
+        except Exception:
+            continue  # Skip the internship if any error occurs
 
     return internship_details
 
-# # Example usage
-# if __name__ == "__main__":
-#     internships = scrape_internships()
-#     for internship in internships:
-#         print(internship)
+# Call the function
+# internships = scrape_internships()
+# print(internships)

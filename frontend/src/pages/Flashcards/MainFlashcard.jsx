@@ -113,11 +113,11 @@ const Flashcards = () => {
   }
 
   return (
-    <div className="max-w-xl mx-auto p-6 bg-gradient-to-br from-[#F5F7FA] to-[#E6E9F0] min-h-screen flex flex-col justify-center">
+    <div className="mx-3 p-6 bg-gradient-to-br from-[#F5F7FA] to-[#E6E9F0] min-h-screen flex flex-col justify-center">
       {/* Back Button */}
       <motion.button
         onClick={() => navigate(`/course/${courseId}`)}
-        className="flex items-center text-gray-600 hover:text-gray-800 mb-6 self-start"
+        className="flex items-center text-gray-600 hover:text-gray-800 mb-2 md:mb-6 self-start"
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.2 }}
@@ -126,18 +126,18 @@ const Flashcards = () => {
         Back to Course
       </motion.button>
 
-      <div className="text-center mb-12">
+      <div className="text-center md:mb-2">
         <motion.h2 
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-extrabold bg-gradient-to-r from-[#8A4FFF] to-[#4E93FF] text-transparent bg-clip-text mb-4"
+          className="md:text-4xl text-3xl font-extrabold bg-gradient-to-r from-[#8A4FFF] to-[#4E93FF] text-transparent bg-clip-text md:mb-4 mb-2"
         >
           Smart Flashcards
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-gray-600 text-lg"
+          className="text-gray-600 md:text-lg"
         >
           Learn Smarter, Not Harder
         </motion.p>
@@ -153,7 +153,7 @@ const Flashcards = () => {
           />
         </AnimatePresence>
 
-        <div className="flex justify-center items-center space-x-6 mt-12">
+        <div className="flex justify-center items-center space-x-6 md:mt-2">
           <motion.button 
             onClick={handlePrevious}
             whileHover={{ scale: 1.1, rotate: -5 }}

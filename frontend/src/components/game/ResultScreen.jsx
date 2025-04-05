@@ -37,14 +37,14 @@ const ResultScreen = ({
     return (
         <div className={`max-w-md mx-auto p-8 rounded-xl shadow-2xl ${styles.bg}`}>
             <h1 className="text-3xl font-bold text-center mb-2">Wave Complete!</h1>
-            <h2 className={`text-2xl text-center mb-8 ${styles.color}`}>
+            <h2 className={`text-2xl text-center mb-2 md:mb-8 ${styles.color}`}>
                 {difficulty} - Wave {wave}
             </h2>
             
             {/* Current Wave Stars */}
             <div className="mb-8 text-center">
-                <h3 className="text-xl mb-4">You earned this wave:</h3>
-                <div className="flex justify-center gap-4 mb-2">
+                <h3 className="text-xl md:mb-4">You earned this wave:</h3>
+                <div className="flex justify-center gap-4 md:mb-2">
                     {[...Array(3)].map((_, i) => (
                         <span 
                             key={i} 
@@ -70,7 +70,7 @@ const ResultScreen = ({
             </div>
 
             {/* Overall Progress */}
-            <div className="mb-8 text-center">
+            <div className="md:mb-8 mb-2 text-center">
                 <h3 className="text-xl mb-2">Total Stars Collected:</h3>
                 <div className="flex justify-center">
                     <span className="text-2xl font-bold">

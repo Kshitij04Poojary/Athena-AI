@@ -99,15 +99,15 @@ const CodeEditor = () => {
   const hasErrors = codeError && (Array.isArray(codeError) ? codeError.length > 0 : true);
 
   return (
-    <div className={`flex flex-col h-full min-h-screen rounded-lg overflow-hidden shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
+    <div className={`mx-5 mb-5 flex flex-col min-h-screen rounded-lg overflow-y-auto shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
       {/* Header */}
-      <div className={`flex justify-between items-center p-4 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
+      <div className={`flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 gap-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
         <div className="flex items-center space-x-2">
           <span className="text-xl">⌨️</span>
           <h2 className="text-lg font-semibold">Code Playground</h2>
         </div>
         
-        <div className="flex items-center space-x-3">
+        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 w-full sm:w-auto">
           {/* Language selector */}
           <div className="relative group">
             <div className={`flex items-center px-3 py-2 rounded-md cursor-pointer ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50 border border-gray-300'}`}>
@@ -144,30 +144,34 @@ const CodeEditor = () => {
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
           
-          {/* Run button */}
-          <button
-            onClick={runCode}
-            disabled={isRunning}
-            className={`px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 ${isRunning ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-white'}`}
-          >
-            <span>{isRunning ? '⏳' : '▶️'}</span>
-            <span>{isRunning ? 'Running...' : 'Run Code'}</span>
-          </button>
-          <button
-            onClick={submitCode}
-            disabled={isSubmitting}
-            className={`px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-400 text-white'}`}
-          >
-            <span>{isSubmitting ? '⏳' : '▶️'}</span>
-            <span>{isSubmitting ? 'Submitting...' : 'Submit Code'}</span>
-          </button>
+          {/* Action buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={runCode}
+              disabled={isRunning}
+              className={`px-3 sm:px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 text-sm sm:text-base ${isRunning ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-white'}`}
+            >
+              <span>{isRunning ? '⏳' : '▶️'}</span>
+              <span className="hidden xs:inline">{isRunning ? 'Running...' : 'Run Code'}</span>
+              <span className="xs:hidden">Run</span>
+            </button>
+            <button
+              onClick={submitCode}
+              disabled={isSubmitting}
+              className={`px-3 sm:px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 text-sm sm:text-base ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-400 text-white'}`}
+            >
+              <span>{isSubmitting ? '⏳' : '▶️'}</span>
+              <span className="hidden xs:inline">{isSubmitting ? 'Submitting...' : 'Submit Code'}</span>
+              <span className="xs:hidden">Submit</span>
+            </button>
+          </div>
         </div>
       </div>
-
+  
       {/* Main editor */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Code panel */}
-        <div className={`flex flex-col flex-1 ${theme === 'dark' ? 'border-r border-gray-700' : 'border-r border-gray-200'}`}>
+        <div className={`flex flex-col flex-1 ${theme === 'dark' ? 'border-r border-gray-700' : 'border-r border-gray-200'} h-1/2 md:h-auto`}>
           <div className={`flex justify-between items-center px-4 py-2 ${theme === 'dark' ? 'bg-gray-800 border-b border-gray-700' : 'bg-gray-50 border-b border-gray-200'}`}>
             <h3 className={`text-sm font-semibold ${theme === 'dark' ? 'text-purple-400' : 'text-purple-600'}`}>Code</h3>
             <span className={`text-xs px-2 py-1 rounded ${theme === 'dark' ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}>
@@ -177,7 +181,7 @@ const CodeEditor = () => {
           
           <div className="flex flex-1 overflow-hidden">
             {/* Line numbers */}
-            <div className={`py-3 px-2 text-right select-none ${theme === 'dark' ? 'bg-gray-800 text-gray-500' : 'bg-gray-50 text-gray-400'} font-mono text-sm w-12 overflow-y-hidden`}>
+            <div className={`py-3 px-2 text-right select-none ${theme === 'dark' ? 'bg-gray-800 text-gray-500' : 'bg-gray-50 text-gray-400'} font-mono text-xs sm:text-sm w-8 sm:w-12 overflow-y-hidden`}>
               {code.split('\n').map((_, idx) => (
                 <div key={idx} className="leading-6">{idx + 1}</div>
               ))}
@@ -188,20 +192,20 @@ const CodeEditor = () => {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="Write your code here..."
-              className={`flex-1 p-3 outline-none resize-none overflow-auto font-mono text-sm tab-size-2 leading-6 ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'} code-input`}
+              className={`flex-1 p-2 sm:p-3 outline-none resize-none overflow-auto font-mono text-xs sm:text-sm tab-size-2 leading-6 ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'} code-input`}
               spellCheck="false"
               wrap="off"
             />
           </div>
         </div>
-
+  
         {/* Output/Error panel */}
-        <div className="flex flex-col flex-1 min-h-64">
+        <div className="flex flex-col flex-1 h-1/2 md:h-auto">
           {/* Tab navigation */}
           <div className={`flex ${theme === 'dark' ? 'bg-gray-800 border-b border-gray-700' : 'bg-gray-50 border-b border-gray-200'}`}>
             <button 
               onClick={() => setActiveTab('output')} 
-              className={`px-4 py-2 text-sm font-medium border-b-2 ${activeTab === 'output' 
+              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 ${activeTab === 'output' 
                 ? `${theme === 'dark' ? 'border-purple-500 text-purple-400' : 'border-purple-600 text-purple-600'}` 
                 : `${theme === 'dark' ? 'border-transparent text-gray-400 hover:text-gray-300' : 'border-transparent text-gray-500 hover:text-gray-700'}`
               }`}
@@ -211,7 +215,7 @@ const CodeEditor = () => {
             
             <button 
               onClick={() => setActiveTab('error')} 
-              className={`px-4 py-2 text-sm font-medium border-b-2 flex items-center ${activeTab === 'error' 
+              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 flex items-center ${activeTab === 'error' 
                 ? `${theme === 'dark' ? 'border-red-500 text-red-400' : 'border-red-600 text-red-600'}` 
                 : `${theme === 'dark' ? 'border-transparent text-gray-400 hover:text-gray-300' : 'border-transparent text-gray-500 hover:text-gray-700'}`
               }`}
@@ -247,33 +251,33 @@ const CodeEditor = () => {
           
           {/* Output content */}
           {activeTab === 'output' && (
-            <pre className={`flex-1 p-4 font-mono text-sm leading-6 overflow-auto whitespace-pre-wrap ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'}`}>
+            <pre className={`flex-1 p-3 sm:p-4 font-mono text-xs sm:text-sm leading-6 overflow-auto whitespace-pre-wrap ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'}`}>
               {output || 'Run your code to see output here...'}
             </pre>
           )}
           
           {/* Error content */}
           {activeTab === 'error' && (
-            <div className={`flex-1 p-4 overflow-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
+            <div className={`flex-1 p-3 sm:p-4 overflow-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
               {hasErrors ? (
                 <div className="space-y-3">
                   {Array.isArray(codeError) ? (
                     codeError.map((err, idx) => (
-                      <div key={idx} className={`p-3 rounded-md ${theme === 'dark' ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
+                      <div key={idx} className={`p-2 sm:p-3 rounded-md ${theme === 'dark' ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
                         <div className={`font-medium mb-1 ${theme === 'dark' ? 'text-red-400' : 'text-red-700'}`}>
                           Error {idx + 1}:
                         </div>
-                        <pre className={`font-mono text-sm whitespace-pre-wrap ${theme === 'dark' ? 'text-red-200' : 'text-red-600'}`}>
+                        <pre className={`font-mono text-xs sm:text-sm whitespace-pre-wrap ${theme === 'dark' ? 'text-red-200' : 'text-red-600'}`}>
                           {typeof err === 'object' ? JSON.stringify(err, null, 2) : err}
                         </pre>
                       </div>
                     ))
                   ) : (
-                    <div className={`p-3 rounded-md ${theme === 'dark' ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
+                    <div className={`p-2 sm:p-3 rounded-md ${theme === 'dark' ? 'bg-red-900/20 border border-red-800' : 'bg-red-50 border border-red-200'}`}>
                       <div className={`font-medium mb-1 ${theme === 'dark' ? 'text-red-400' : 'text-red-700'}`}>
                         Error:
                       </div>
-                      <pre className={`font-mono text-sm whitespace-pre-wrap ${theme === 'dark' ? 'text-red-200' : 'text-red-600'}`}>
+                      <pre className={`font-mono text-xs sm:text-sm whitespace-pre-wrap ${theme === 'dark' ? 'text-red-200' : 'text-red-600'}`}>
                         {typeof codeError === 'object' ? JSON.stringify(codeError, null, 2) : codeError}
                       </pre>
                     </div>

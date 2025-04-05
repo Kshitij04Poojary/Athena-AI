@@ -143,7 +143,7 @@ const GamePage = () => {
     };
 
     return (
-        <div className="relative min-h-screen">
+        <div className="relative min-h-screen px-4">
             <div 
                 className="fixed top-0 left-0 right-0 bottom-0 bg-cover bg-center z-0 opacity-50 pointer-events-none"
                 style={{ 
