@@ -276,17 +276,17 @@ const ChapterDetails = () => {
     }
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
+        <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen md:px-8 p-3 ">
             <div className="max-w-4xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
                 <div className="bg-blue-600 text-white p-6">
-                    <div className="flex items-center space-x-4 mb-4">
+                    <div className="flex items-center space-x-4 md:mb-4">
                         <button
                             className="bg-white/20 p-2 rounded-full hover:bg-white/30 transition"
                             onClick={() => navigate(`/course/${courseId}`)}
                         >
                             <ArrowLeft className="text-white" size={24} />
                         </button>
-                        <h1 className="text-3xl font-bold flex-grow">{chapter.chapterName}</h1>
+                        <h1 className="md:text-3xl text-xl font-bold flex-grow">{chapter.chapterName}</h1>
                         {user.role === "mentor" && (
                             <button onClick={handleEditClick} className="text-white p-2 rounded-full hover:bg-white/30">
                                 <Pencil size={24} />
@@ -295,7 +295,7 @@ const ChapterDetails = () => {
                     </div>
                 </div>
 
-                <div className="p-8 space-y-6">
+                <div className="md:p-8 px-4 py-2 md:space-y-6 space-y-2">
                     <div className="grid md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <div className="flex items-start mb-4">
@@ -306,13 +306,13 @@ const ChapterDetails = () => {
                                 </div>
                             </div>
                             <div className="flex items-center">
-                                <Clock className="mr-3 text-blue-600" size={24} />
-                                <p><strong>Duration:</strong> {chapter.duration}</p>
+                                <Clock className="mr-3 text-blue-600" size={20} />
+                                <p><strong className='md:text-base text-sm'>Duration:</strong> {chapter.duration}</p>
                             </div>
                         </div>
 
-                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                            <div className="flex items-center mb-4">
+                        <div className="bg-blue-50 md:p-6 py-1 rounded-xl border border-blue-100">
+                            <div className="flex items-center md:mb-4">
                                 <CheckCircle className="mr-3 text-blue-600" size={24} />
                                 <p className="font-semibold">
                                     Status: {chapter.isCompleted ? "Completed" : "Not Completed"}
@@ -328,7 +328,7 @@ const ChapterDetails = () => {
                                 <FileText className="mr-3" size={28} />
                                 Presentation
                             </h2>
-                            <div className="bg-white border border-blue-100 rounded-xl p-5 
+                            <div className="bg-white border border-blue-100 rounded-xl md:p-5 px-2
                                            shadow-sm hover:shadow-md transition-all duration-300">
                                 <h3 className="text-xl font-semibold text-blue-600 mb-3">
                                     {chapter.ppt.title || "Chapter Presentation"}
@@ -356,16 +356,16 @@ const ChapterDetails = () => {
                             {chapter.sections.map((section) => (
                                 <div 
                                     key={section._id} 
-                                    className="bg-white border border-blue-100 rounded-xl p-5 
+                                    className="bg-white border border-blue-100 rounded-xl md:p-5 px-3 py-2
                                                shadow-sm hover:shadow-md transition-all duration-300"
                                 >
                                     <h3 className="text-xl font-semibold text-blue-600 mb-3">
                                         {section.title}
                                     </h3>
-                                    <p className="text-gray-600 mb-3">{section.explanation}</p>
+                                    <p className="text-gray-600 mb-3 md:text-base text-sm">{section.explanation}</p>
                                     {section.codeExample && (
-                                        <pre className="bg-blue-50 p-4 rounded-lg overflow-auto text-sm">
-                                            <code className="text-gray-800">{section.codeExample}</code>
+                                        <pre className="bg-blue-50 md:p-4 py-1 px-2 rounded-lg overflow-auto text-sm">
+                                            <code className="text-gray-800 md:text-base text-xs">{section.codeExample}</code>
                                         </pre>
                                     )}
                                 </div>
@@ -409,7 +409,7 @@ const ChapterDetails = () => {
                                        hover:bg-green-600 transition flex items-center justify-center mx-auto"
                             onClick={handleNextChapter}
                         >
-                            <CheckCircle className="mr-2" size={20} />
+                            <CheckCircle className="mr-2" size={15} />
                             Mark as Completed & Next
                         </button>
                     </div>
