@@ -295,7 +295,7 @@ const NotesPage = () => {
 
         <div className="prose max-w-none">
           <h4 className="text-lg font-medium text-gray-700 mb-2">Explanation</h4>
-          <p className="text-gray-600 mb-6 whitespace-pre-line">
+          <p className="text-gray-600 mb-6 whitespace-pre-line md:text-base text-sm">
             {notes.chapters[currentChapterIndex].notes.explanation}
           </p>
 
@@ -309,10 +309,10 @@ const NotesPage = () => {
           )}
         </div>
 
-        <div className="flex justify-between mt-8">
+        <div className="flex justify-between mt-8 md:gap-0 gap-2">
           <button
             onClick={handlePreviousChapter}
-            className={`px-4 py-2 rounded-lg transition-colors ${
+            className={`md:px-4 px-2 py-2 rounded-lg transition-colors ${
               isFirstChapter 
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                 : 'bg-gray-200 text-gray-700 hover:bg-gray-300'

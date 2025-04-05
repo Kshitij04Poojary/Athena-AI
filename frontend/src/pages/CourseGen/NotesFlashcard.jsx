@@ -18,9 +18,9 @@ const NotesFlashcard = () => {
   };
 
   return (
-    <div className="flex space-x-6 mt-6">
+    <div className="flex flex-col md:flex-row md:space-x-6 space-y-6 md:space-y-0 mt-6 justify-center md:mx-0 mx-4">
       {/* Notes Card */}
-      <div className="w-1/2 bg-blue-50 rounded-2xl shadow-lg p-5">
+      <div className="w-full md:w-1/2 bg-blue-50 rounded-2xl shadow-lg p-5">
         <div className="flex items-center mb-4">
           <BookOpen className="text-blue-600 mr-3" size={24} />
           <h2 className="text-xl font-bold text-blue-900">
@@ -43,7 +43,7 @@ const NotesFlashcard = () => {
       </div>
 
       {/* Flashcards Card */}
-      <div className="w-1/2 bg-green-50 rounded-2xl shadow-lg p-5">
+      <div className="w-full md:w-1/2 bg-green-50 rounded-2xl shadow-lg p-5">
         <div className="flex items-center mb-4">
           <Layers className="text-green-600 mr-3" size={24} />
           <h2 className="text-xl font-bold text-green-900">

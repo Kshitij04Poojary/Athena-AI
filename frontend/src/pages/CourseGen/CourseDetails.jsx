@@ -447,7 +447,7 @@ const CourseDetails = () => {
     const { passedFinal } = translatedCourse || {};
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-8">
+        <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen md:p-8 px-3">
             {isTranslating && (
                 <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -464,9 +464,9 @@ const CourseDetails = () => {
                             onClick={() => navigate('/my-courses')}
                             aria-label={t("courseDetails.buttons.back")}
                         >
-                            <ArrowLeft className="text-white" size={24} />
+                            <ArrowLeft className="text-white" size={20} />
                         </button>
-                        <h1 className="text-3xl font-bold flex-grow">{translatedCourse.courseName}</h1>
+                        <h1 className="md:text-3xl text-2xl font-bold flex-grow">{translatedCourse.courseName}</h1>
                         {user.role === "mentor" && (
                             <button 
                                 onClick={handleEditClick} 
@@ -496,7 +496,7 @@ const CourseDetails = () => {
                                 </p>
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid md:grid-cols-2 md:gap-4 gap-2 md:text-md text-sm grid-cols-1">
                                 <div className="flex items-center">
                                     <Star className="mr-2 text-blue-600" size={20} />
                                     <span><strong>{t("courseDetails.level")}:</strong> {translatedCourse.level}</span>
@@ -511,17 +511,17 @@ const CourseDetails = () => {
                         <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
                             <div className="flex items-center mb-4">
                                 <Target className="mr-3 text-blue-600" size={24} />
-                                <h2 className="text-xl font-semibold">{t("courseDetails.outcomesTitle")}</h2>
+                                <h2 className="md:text-xl font-semibold">{t("courseDetails.outcomesTitle")}</h2>
                             </div>
                             <ul className="list-disc pl-6 space-y-2 text-gray-700">
                                 {translatedCourse.courseOutcomes.map((outcome, index) => (
-                                    <li key={index} className="pl-2">{outcome}</li>
+                                    <li key={index} className="pl-2 md:text-md text-sm">{outcome}</li>
                                 ))}
                             </ul>
                         </div>
                     </div>
 
-                    <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b pb-3">
+                    <h2 className="text-2xl font-semibold mb-6 text-blue-700 border-b md:pb-3">
                         {t("courseDetails.chaptersTitle")}
                     </h2>
                     <div className="space-y-4">

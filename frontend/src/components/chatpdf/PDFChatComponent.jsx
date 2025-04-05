@@ -87,13 +87,13 @@ const PDFChatComponent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-2 sm:p-4">
       <div className="w-full max-w-3xl bg-white shadow-2xl rounded-2xl overflow-hidden transform transition-all duration-300 hover:scale-[1.01]">
-        <div className="bg-gradient-to-r from-blue-600 to-blue-400 p-4">
-          <h3 className="text-3xl font-extrabold text-white tracking-tight flex items-center">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-400 p-3 sm:p-4">
+          <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight flex items-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-10 w-10 mr-3 text-blue-200"
+              className="h-8 w-8 sm:h-10 sm:w-10 mr-2 sm:mr-3 text-blue-200"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -108,9 +108,9 @@ const PDFChatComponent = () => {
             QueryPDF
           </h3>
         </div>
-
-        <div className="p-6 space-y-6">
-          <div className="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+  
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+          <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border-l-4 border-blue-500">
             <div className="mb-4">
               <label
                 htmlFor="pdf-upload"
@@ -118,7 +118,7 @@ const PDFChatComponent = () => {
               >
                 Upload PDFs
               </label>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -127,6 +127,7 @@ const PDFChatComponent = () => {
                   multiple
                   onChange={handleFileChange}
                   className="
+                    w-full sm:w-auto
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
@@ -135,76 +136,79 @@ const PDFChatComponent = () => {
                     text-sm text-gray-500
                   "
                 />
-                {files.length > 0 && (
+                <div className="flex items-center space-x-2">
+                  {files.length > 0 && (
+                    <button
+                      onClick={clearFiles}
+                      className="
+                        text-red-500 
+                        hover:text-red-700 
+                        hover:bg-red-50 
+                        rounded-full 
+                        p-2 
+                        transition duration-300
+                      "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  )}
                   <button
-                    onClick={clearFiles}
+                    onClick={handleUpload}
+                    disabled={files.length === 0 || isLoading}
                     className="
-                      text-red-500 
-                      hover:text-red-700 
-                      hover:bg-red-50 
+                      w-full sm:w-auto
+                      px-4 sm:px-6 py-2 
+                      bg-blue-600 text-white 
                       rounded-full 
-                      p-2 
+                      hover:bg-blue-700 
+                      disabled:bg-gray-300
                       transition duration-300
+                      flex items-center justify-center space-x-2
+                      shadow-md hover:shadow-lg
                     "
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    {isLoading ? (
+                      <>
+                        <svg
+                          className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          ></path>
+                        </svg>
+                        <span className="text-sm sm:text-base">Uploading...</span>
+                      </>
+                    ) : (
+                      'Upload'
+                    )}
                   </button>
-                )}
-                <button
-                  onClick={handleUpload}
-                  disabled={files.length === 0 || isLoading}
-                  className="
-                    px-6 py-2 
-                    bg-blue-600 text-white 
-                    rounded-full 
-                    hover:bg-blue-700 
-                    disabled:bg-gray-300
-                    transition duration-300
-                    flex items-center space-x-2
-                    shadow-md hover:shadow-lg
-                  "
-                >
-                  {isLoading ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Uploading...
-                    </>
-                  ) : (
-                    'Upload'
-                  )}
-                </button>
+                </div>
               </div>
-
+  
               {files.length > 0 && (
                 <div className="mt-4 space-y-2">
                   {files.map((file, index) => (
@@ -219,7 +223,7 @@ const PDFChatComponent = () => {
                         border border-blue-100
                       "
                     >
-                      <span className="text-sm text-gray-700 truncate max-w-[70%]">
+                      <span className="text-xs sm:text-sm text-gray-700 truncate max-w-[60%] sm:max-w-[70%]">
                         {file.name}
                       </span>
                       <button
@@ -250,10 +254,10 @@ const PDFChatComponent = () => {
                   ))}
                 </div>
               )}
-
+  
               {uploadStatus && (
                 <p
-                  className={`mt-2 text-sm 
+                  className={`mt-2 text-xs sm:text-sm 
                   flex items-center
                   ${uploadStatus.includes('failed')
                     ? 'text-red-600'
@@ -262,7 +266,7 @@ const PDFChatComponent = () => {
                   {uploadStatus.includes('failed') ? (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -275,7 +279,7 @@ const PDFChatComponent = () => {
                   ) : (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 mr-2"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                     >
@@ -290,15 +294,15 @@ const PDFChatComponent = () => {
                 </p>
               )}
             </div>
-
-            <div className="mt-6">
+  
+            <div className="mt-4 sm:mt-6">
               <label
                 htmlFor="question-input"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
                 Ask a Question about the PDF(s)
               </label>
-              <div className="flex space-x-4">
+              <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                 <input
                   type="text"
                   id="question-input"
@@ -307,32 +311,33 @@ const PDFChatComponent = () => {
                   placeholder="What is the main topic of the PDF(s)?"
                   className="
                     flex-grow 
-                    px-4 py-2 
+                    px-3 sm:px-4 py-2 
                     border border-gray-300 
                     rounded-lg 
                     focus:ring-2 focus:ring-blue-500 
                     focus:border-transparent
                     transition duration-300
+                    text-sm sm:text-base
                   "
                 />
                 <button
                   onClick={handleAskQuestion}
                   disabled={!question || isLoading}
                   className="
-                    px-6 py-2 
+                    px-4 sm:px-6 py-2 
                     bg-blue-600 text-white 
                     rounded-full 
                     hover:bg-blue-700 
                     disabled:bg-gray-300
                     transition duration-300
-                    flex items-center space-x-2
+                    flex items-center justify-center space-x-2
                     shadow-md hover:shadow-lg
                   "
                 >
                   {isLoading2 ? (
                     <>
                       <svg
-                        className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
+                        className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -351,7 +356,7 @@ const PDFChatComponent = () => {
                           d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                         ></path>
                       </svg>
-                      Processing...
+                      <span className="text-sm sm:text-base">Processing...</span>
                     </>
                   ) : (
                     'Ask'
@@ -360,12 +365,12 @@ const PDFChatComponent = () => {
               </div>
             </div>
           </div>
-
+  
           {responseText && (
             <div
               className="
               bg-gradient-to-r from-blue-50 to-blue-100
-              p-5 
+              p-4 sm:p-5 
               rounded-lg 
               border-l-4 
               border-blue-500
@@ -373,10 +378,10 @@ const PDFChatComponent = () => {
               animate-fade-in
             "
             >
-              <h3 className="text-lg font-bold text-blue-800 mb-3 flex items-center">
+              <h3 className="text-base sm:text-lg font-bold text-blue-800 mb-2 sm:mb-3 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 mr-2 text-blue-600"
+                  className="h-5 w-5 sm:h-6 sm:w-6 mr-1 sm:mr-2 text-blue-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -390,7 +395,7 @@ const PDFChatComponent = () => {
                 </svg>
                 PDF Response
               </h3>
-              <p className="text-gray-700 leading-relaxed">{responseText}</p>
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{responseText}</p>
             </div>
           )}
         </div>
