@@ -107,7 +107,7 @@ const CodeEditor = () => {
           <h2 className="text-lg font-semibold">Code Playground</h2>
         </div>
         
-        <div className="flex flex-wrap items-center justify-center sm:justify-end gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full md:w-auto">
           {/* Language selector */}
           <div className="relative group">
             <div className={`flex items-center px-3 py-2 rounded-md cursor-pointer ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50 border border-gray-300'}`}>
@@ -138,7 +138,7 @@ const CodeEditor = () => {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-md ${theme === 'dark' ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+            className={`p-2 rounded-md ${theme === 'dark' ? 'hover:bg-gray-700 bg-white' : 'hover:bg-gray-200 bg-black'}`}
             aria-label="Toggle theme"
           >
             {theme === 'dark' ? '☀️' : '🌙'}
