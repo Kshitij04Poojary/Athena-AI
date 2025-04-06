@@ -6,6 +6,9 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 
 ## 🚀 Features
 
+### 🌍 Multilingual Support
+- Seamless text translation enables accessibility across multiple languages.
+
 ### 🧠 AI Course Content Generator
 - Automatically generates structured course content aligned with industry standards.
 - Embeds videos, documents, and resources.
@@ -130,8 +133,8 @@ npm run dev
 - LangChain, FAISS
 - Selenium
 - Speech-to-Text APIs
-- OpenCV / Webcam APIs
-- CodeMirror (for embedded code editor)
+- OpenCV 
+- Judge0 (for code execution in the embedded code editor)
 
 ---
 
@@ -161,6 +164,17 @@ Let’s build the future of AI-powered learning together! 🚀
 ## 📄 License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
+---
+
+## 👥 Contributors of the Project
+
+Meet the amazing team behind AthenaAI:
+
+- [Kshitij Poojary](https://github.com/Kshitij04Poojary)
+- [Malhar Bhensjariya](https://github.com/Malhar-Bhensjariya)
+- [Joshua Menezes](https://github.com/jm12312)
+- [Onkar Kale](https://github.com/OnkarKale1405)
 
 ---
 
