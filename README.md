@@ -6,14 +6,14 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 
 ## 🚀 Features
 
-### 🌍 Multilingual Support
-- Seamless text translation enables accessibility across multiple languages.
-
 ### 🧠 AI Course Content Generator
 - Automatically generates structured course content aligned with industry standards.
 - Embeds videos, documents, and resources.
 - Issues **certificates only after rigorous final assessments**.
 
+### 🌍 Multilingual Support
+- Seamless text translation enables accessibility across multiple languages.
+  
 ### 🎤 AI Mock Interviews
 - Generates **role-specific interview questions**.
 - Uses **speech-to-text** and **webcam analysis** for **real-time feedback**.
