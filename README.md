@@ -24,7 +24,7 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 - Provides **project descriptions, innovative ideas, and inspiration**.
 
 ### 🎯 Internship Dashboard
-- Built using **Selenium**.
+- Built using **Beautiful Soup**.
 - Scrapes internship listings from multiple platforms in real-time.
 - Filters opportunities by **skills, location, stipend, and work mode**.
 
@@ -72,7 +72,7 @@ AthenaAI/
 - Node.js & npm
 - Python 3.8+
 - Virtualenv (for Python)
-- Selenium requirements (for scraping internship portals)
+- Beautiful Soup requirements (for scraping internship portals)
 
 ---
 
