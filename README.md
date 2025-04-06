@@ -36,7 +36,7 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 - Built with **LLaMA**, responds to both **text and voice inputs**.
 - Helps with **instant doubt resolution**.
 
-### 🕹️ Gamification
+### 🎩 Gamification
 - Users can generate games/learning paths for any skill.
 - Compete and **track progress on a global leaderboard**.
 
@@ -49,69 +49,89 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 
 ---
 
-## 🧩 Project Structure
+## 🧹 Project Structure
 
-AthenaAI/ ├── backend/ │ ├── node/ # AI services like interviews, scraping, etc. │ └── flask/ # PDF chat, vector DB, assessments ├── frontend/ # React-based UI ├── README.md
+```
+AthenaAI/
+├── backend/
+│   ├── node/       # AI services like interviews, scraping, etc.
+│   └── flask/      # PDF chat, vector DB, assessments
+├── frontend/       # React-based UI
+├── README.md
+```
 
 ---
 
 ## ⚙️ Getting Started
 
 ### 🔧 Prerequisites
-- **Node.js & npm**
-- **Python 3.8+**
-- **Virtualenv** (for Python)
-- **Selenium requirements** (for scraping internship portals)
+
+- Node.js & npm
+- Python 3.8+
+- Virtualenv (for Python)
+- Selenium requirements (for scraping internship portals)
 
 ---
 
 ### 📦 Backend Setup
 
 #### ▶ Node Backend (for AI services)
+
+```bash
 cd backend/node
 npm install
 npm run dev
+```
 
-🐍 Flask Backend (for PDF chat, vector DB, etc.)
+#### 🐍 Flask Backend (for PDF chat, vector DB, etc.)
+
+```bash
 cd backend/flask
 python -m venv venv
-# Activate the virtual environment:
+```
 
-# On Windows
-venv\Scripts\activate
+**Activate the virtual environment:**
 
-# On macOS/Linux
-source venv/bin/activate
+- On **Windows**:
+  ```bash
+  venv\Scripts\activate
+  ```
 
+- On **macOS/Linux**:
+  ```bash
+  source venv/bin/activate
+  ```
+
+Then install dependencies and run the server:
+
+```bash
 pip install -r requirements.txt
 python run.py
+```
 
+---
 
-💻 Frontend Setup (React)
+### 💻 Frontend Setup (React)
+
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
+---
 
-🌐 Technologies Used
-React.js (Frontend)
+## 🌐 Technologies Used
 
-Node.js + Express.js
-
-Python Flask
-
-LLMs: LLaMA, Mistral Saba, Gemini Embeddings
-
-LangChain, FAISS
-
-Selenium
-
-Speech-to-Text APIs
-
-OpenCV / Webcam APIs
-
-CodeMirror (for embedded code editor)
-
+- React.js (Frontend)
+- Node.js + Express.js
+- Python Flask
+- LLMs: LLaMA, Mistral Saba, Gemini Embeddings
+- LangChain, FAISS
+- Selenium
+- Speech-to-Text APIs
+- OpenCV / Webcam APIs
+- CodeMirror (for embedded code editor)
 
 ---
 
@@ -121,14 +141,26 @@ Contributions are welcome! To contribute:
 
 1. **Fork** the repository.
 2. **Create a new branch**  
+   ```bash
    git checkout -b feature-branch
+   ```
 3. **Make your changes and commit**  
+   ```bash
    git commit -m "Added new feature"
+   ```
 4. **Push to the branch**  
+   ```bash
    git push origin feature-branch
+   ```
 5. **Open a Pull Request**
 
 Let’s build the future of AI-powered learning together! 🚀
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
 
 ---
 
