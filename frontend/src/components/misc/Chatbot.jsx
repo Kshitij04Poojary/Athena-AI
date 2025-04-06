@@ -179,7 +179,7 @@ export default function Chatbot() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('${NODE_API}/chatbot', {
+      const response = await fetch(`${NODE_API}/chatbot`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userMessage }),
