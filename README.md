@@ -131,7 +131,7 @@ npm run dev
 - Python Flask
 - LLMs: LLaMA, Mistral Saba, Gemini Embeddings
 - LangChain, FAISS
-- Selenium
+- Beautiful Soup
 - Speech-to-Text APIs
 - OpenCV 
 - Judge0 (for code execution in the embedded code editor)
