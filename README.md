@@ -3,7 +3,7 @@
 AthenaAI is an intelligent, all-in-one learning platform designed to revolutionize the way students learn, build, and grow in the tech space. It combines cutting-edge AI features with personalized learning paths, real-time project ideas, assessments, and internships — all tailored to the user's skill level and goals.
 
 ---
-# 🚀 Live Demo Link:
+## 🚀 Live Demo Link:
  [https://athena-ai-ten.vercel.app/](https://athena-ai-ten.vercel.app/)
 ---
 
