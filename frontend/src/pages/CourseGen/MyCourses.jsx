@@ -74,7 +74,7 @@ const MyCourses = () => {
         <div className='bg-gray-50 min-h-screen w-full'>
             <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
                 <div className="bg-white shadow-lg sm:shadow-xl rounded-xl sm:rounded-2xl overflow-visible">
-                    <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-purple-600">
+                    <div className="sm:p-6 bg-gradient-to-r from-blue-600 to-purple-600">
                         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 sm:gap-0">
                             <h2 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-2 sm:gap-3">
                                 <BookOpen className="w-6 h-6 sm:w-8 sm:h-8" />
