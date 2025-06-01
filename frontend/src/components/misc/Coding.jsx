@@ -4,7 +4,24 @@ import { useUser } from '../../context/UserContext';
 
 const CodeEditor = () => {
   const {user} = useUser();
-  const [code, setCode] = useState('// Write your code here\nconsole.log("Hello, world!");');
+  
+  // Function to get default code for each language
+  const getDefaultCode = (language) => {
+    switch (language) {
+      case 'javascript':
+        return '// Write your code here\nconsole.log("Hello, world!");';
+      case 'python':
+        return '# Write your code here\nprint("Hello, world!")';
+      case 'java':
+        return '// Write your code here\npublic class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, world!");\n    }\n}';
+      case 'cpp':
+        return '// Write your code here\n#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, world!" << endl;\n    return 0;\n}';
+      default:
+        return '// Write your code here\nconsole.log("Hello, world!");';
+    }
+  };
+
+  const [code, setCode] = useState(getDefaultCode('javascript'));
   const [output, setOutput] = useState('');
   const [isRunning, setIsRunning] = useState(false);
   const [isSubmitting, setisSubmitting] = useState(false);
@@ -12,7 +29,14 @@ const CodeEditor = () => {
   const [theme, setTheme] = useState('dark');
   const [codeError, setCodeError] = useState(null);
   const [activeTab, setActiveTab] = useState('output'); // 'output' or 'error'
+  const NODE_API = import.meta.env.VITE_NODE_API;
   console.log(user?._id.toString())
+
+  // Update code when language changes
+  useEffect(() => {
+    setCode(getDefaultCode(language));
+  }, [language]);
+
   // Auto-resize textarea based on content
   useEffect(() => {
     const textarea = document.querySelector('.code-input');
@@ -29,7 +53,7 @@ const CodeEditor = () => {
 
     try {
         await axios.post(
-        "https://athenai-backendonly.onrender.com/api/coding/submit-code",
+        `${NODE_API}/coding/submit-code`,
         { "source_code": code, "language": language, "user_id": user?._id.toString() },
         { withCredentials: true }
       );
@@ -39,13 +63,14 @@ const CodeEditor = () => {
       setisSubmitting(false);
     }
   };
+  
   const runCode = async () => {
     setIsRunning(true);
     setOutput('');
     setCodeError(null);
 
     try {
-      const resp = await axios.post("https://athenai-backendonly.onrender.com/api/coding/", { "source_code": code, "language": language},{ withCredentials: true });
+      const resp = await axios.post(`${NODE_API}/coding/`, { "source_code": code, "language": language},{ withCredentials: true });
       setOutput(resp.data.output);
       setCodeError(resp.data.errors);
       
@@ -62,6 +87,7 @@ const CodeEditor = () => {
       setIsRunning(false);
     }
   };
+  
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
@@ -103,23 +129,22 @@ const CodeEditor = () => {
       {/* Header */}
       <div className={`flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 gap-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
         <div className="flex items-center space-x-2">
-          <span className="text-xl">⌨️</span>
           <h2 className="text-lg font-semibold">Code Playground</h2>
         </div>
         
         <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full md:w-auto">
-          {/* Language selector */}
+          {/* Language selector with fixed width */}
           <div className="relative group">
-            <div className={`flex items-center px-3 py-2 rounded-md cursor-pointer ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50 border border-gray-300'}`}>
+            <div className={`flex items-center px-3 py-2 rounded-md cursor-pointer w-32 ${theme === 'dark' ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:bg-gray-50 border border-gray-300'}`}>
               <div className={`w-3 h-3 rounded-full mr-2 ${getLanguageColor(language)}`}></div>
-              <span className="text-sm font-medium">{language.charAt(0).toUpperCase() + language.slice(1)}</span>
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <span className="text-sm font-medium flex-1 truncate">{language.charAt(0).toUpperCase() + language.slice(1)}</span>
+              <svg className="w-4 h-4 ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </div>
             
-            {/* Dropdown menu */}
-            <div className={`absolute z-10 mt-1 w-full rounded-md shadow-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-white border border-gray-200'} hidden group-hover:block`}>
+            {/* Dropdown menu with fixed width */}
+            <div className={`absolute z-10 mt-1 w-32 rounded-md shadow-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-white border border-gray-200'} hidden group-hover:block`}>
               <div className="py-1">
                 {['javascript', 'python', 'java', 'cpp'].map((lang) => (
                   <button
@@ -128,7 +153,7 @@ const CodeEditor = () => {
                     className={`w-full text-left px-4 py-2 text-sm flex items-center ${language === lang ? (theme === 'dark' ? 'bg-gray-600' : 'bg-gray-100') : ''} ${theme === 'dark' ? 'hover:bg-gray-600' : 'hover:bg-gray-50'}`}
                   >
                     <div className={`w-3 h-3 rounded-full mr-2 ${getLanguageColor(lang)}`}></div>
-                    {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                    <span className="truncate">{lang.charAt(0).toUpperCase() + lang.slice(1)}</span>
                   </button>
                 ))}
               </div>
@@ -138,10 +163,10 @@ const CodeEditor = () => {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className={`p-2 rounded-md ${theme === 'dark' ? 'hover:bg-gray-700 bg-white' : 'hover:bg-gray-200 bg-black'}`}
+            className={`p-2 rounded-md ${theme === 'dark' ? 'hover:bg-gray-700 bg-gray-800' : 'hover:bg-gray-200 bg-gray-100'}`}
             aria-label="Toggle theme"
           >
-            {theme === 'dark' ? '☀️' : '🌙'}
+            {theme === 'dark' ? '🌙' : '☀️'}
           </button>
           
           {/* Action buttons */}
@@ -151,7 +176,7 @@ const CodeEditor = () => {
               disabled={isRunning}
               className={`px-3 sm:px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 text-sm sm:text-base ${isRunning ? 'bg-gray-500 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400 text-white'}`}
             >
-              <span>{isRunning ? '⏳' : '▶️'}</span>
+              <span>{isRunning ? '⏳' : ' '}</span>
               <span className="hidden xs:inline">{isRunning ? 'Running...' : 'Run Code'}</span>
               <span className="xs:hidden">Run</span>
             </button>
@@ -160,7 +185,7 @@ const CodeEditor = () => {
               disabled={isSubmitting}
               className={`px-3 sm:px-4 py-2 rounded-md font-medium flex items-center space-x-1 transition transform hover:-translate-y-0.5 text-sm sm:text-base ${isSubmitting ? 'bg-gray-500 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-400 text-white'}`}
             >
-              <span>{isSubmitting ? '⏳' : '▶️'}</span>
+              <span>{isSubmitting ? '⏳' : ' '}</span>
               <span className="hidden xs:inline">{isSubmitting ? 'Submitting...' : 'Submit Code'}</span>
               <span className="xs:hidden">Submit</span>
             </button>

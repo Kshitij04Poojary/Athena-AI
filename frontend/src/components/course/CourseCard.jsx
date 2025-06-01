@@ -102,8 +102,15 @@ const CourseCard = ({ course, onClick, onDelete }) => {
                     <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
                     <span>
                         {course.name.length > 20 ? `${course.name.substring(0, 20)}...` : course.name}
-                        <div className="text-xs font-normal text-gray-500 mt-1 truncate">
-                            {primarySkill || 'General Course'}
+                        <div className="text-xs font-normal text-gray-500 mt-1 truncate flex flex-wrap gap-1 mt-1">
+                            {(course.skills || []).map((skill, index) => (
+                                <span
+                                    key={index}
+                                    className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full"
+                                >
+                                    {skill}
+                                </span>
+                            ))}
                         </div>
                     </span>
                 </h3>
