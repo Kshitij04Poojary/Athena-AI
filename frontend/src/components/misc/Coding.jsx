@@ -29,8 +29,8 @@ const CodeEditor = () => {
   const [theme, setTheme] = useState('dark');
   const [codeError, setCodeError] = useState(null);
   const [activeTab, setActiveTab] = useState('output'); // 'output' or 'error'
-  const NODE_API = import.meta.env.VITE_NODE_API;
-  console.log(user?._id.toString())
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
+  // console.log(user?._id.toString())
 
   // Update code when language changes
   useEffect(() => {
@@ -53,7 +53,7 @@ const CodeEditor = () => {
 
     try {
         await axios.post(
-        `${NODE_API}/coding/submit-code`,
+        `${FLASK_API}/coding/submit-code`,
         { "source_code": code, "language": language, "user_id": user?._id.toString() },
         { withCredentials: true }
       );
@@ -70,7 +70,7 @@ const CodeEditor = () => {
     setCodeError(null);
 
     try {
-      const resp = await axios.post(`${NODE_API}/coding/`, { "source_code": code, "language": language},{ withCredentials: true });
+      const resp = await axios.post(`${FLASK_API}/coding/`, { "source_code": code, "language": language},{ withCredentials: true });
       setOutput(resp.data.output);
       setCodeError(resp.data.errors);
       
