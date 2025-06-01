@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import CourseCard from '../../components/course/CourseCard';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
@@ -14,6 +15,7 @@ const MyCourses = () => {
     const { t, i18n } = useTranslation();
     const [language, setLanguage] = useState(i18n.language);
     const NODE_API = import.meta.env.VITE_NODE_API;
+
     // Track language changes to force component re-render
     useEffect(() => {
         const handleLanguageChange = () => {
@@ -48,7 +50,7 @@ const MyCourses = () => {
                         .map(course => ({
                             id: course._id,
                             name: course.courseName,
-                            topic: course.skills.join(', '),
+                            skills: course.skills,
                             level: course.level,
                             completedChapters: course.chapters.filter(ch => ch.isCompleted).length,
                             totalChapters: course.chapters.length,
@@ -69,6 +71,30 @@ const MyCourses = () => {
 
         fetchCourses();
     }, [user?.token, t, language]); // Now reacts to language changes
+
+    // Delete course function
+    const handleDeleteCourse = async (courseId) => {
+        try {
+            const response = await fetch(`${NODE_API}/courses/${courseId}`, {
+                method: 'DELETE',
+                headers: { 
+                    Authorization: `Bearer ${user.token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                // Remove the course from local state
+                setCourses(prevCourses => prevCourses.filter(course => course.id !== courseId));
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to delete course');
+            }
+        } catch (error) {
+            console.error('Error deleting course:', error);
+            throw error; // Re-throw to be handled by the CourseCard component
+        }
+    };
 
     return (
         <div className='bg-gray-50 min-h-screen w-full'>
@@ -106,10 +132,11 @@ const MyCourses = () => {
                                     <div
                                         key={course.id}
                                         className="transform transition-all duration-300 hover:scale-105 hover:shadow-lg sm:hover:shadow-2xl"
-                                        onClick={() => navigate(`/course/${course.id}`)}
                                     >
                                         <CourseCard
                                             course={course}
+                                            onClick={() => navigate(`/course/${course.id}`)}
+                                            onDelete={handleDeleteCourse}
                                             className="cursor-pointer"
                                         />
                                     </div>

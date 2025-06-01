@@ -122,8 +122,7 @@ exports.updateChapter = async (req, res) => {
     }
 };
 
-
-// Delete Course and Remove from User
+// Delete Course
 exports.deleteCourse = async (req, res) => {
     try {
         const course = await Course.findByIdAndDelete(req.params.id);
@@ -131,7 +130,7 @@ exports.deleteCourse = async (req, res) => {
             return res.status(404).json({ message: 'Course not found' });
         }
 
-        // Remove course from all users' `courses` array
+        // Remove course ID from all users' `courses` array
         await User.updateMany(
             { courses: course._id },
             { $pull: { courses: course._id } }
