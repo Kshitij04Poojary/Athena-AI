@@ -89,7 +89,7 @@ const CareerRoadmapGenerator = () => {
             </div>
           </button>
 
-          <button className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 shadow-2xl hover:bg-white/20 transform hover:scale-105 transition-all duration-300">
+          <button onClick={() => navigate(`/display-roadmaps`)} className="cursor-pointer group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 shadow-2xl hover:bg-white/20 transform hover:scale-105 transition-all duration-300">
             <div className="relative flex items-center gap-3">
               <Eye className="w-6 h-6" />
               View

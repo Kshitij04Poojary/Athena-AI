@@ -48,6 +48,7 @@ import GamePage from "./pages/Gamification/GamePage";
 import NotesPage from "./pages/Notes/NotesPage";
 import CareerRoadmapGenerator from "./pages/Roadmap/CareerRoadmapGenerator";
 import RoadmapContent from "./pages/Roadmap/RoadmapContent";
+import RoadmapDisplay from "./pages/Roadmap/RoadmapDisplay";
 
 const App = () => (
   <UserProvider>
@@ -89,6 +90,7 @@ const App = () => (
           <Route path="/chat-with-pdf" element={<PDFChatComponent/>} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/roadmap/:roadmapid" element={<RoadmapContent/>}/> 
+          <Route path="/display-roadmaps" element={<RoadmapDisplay/>}/>
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
