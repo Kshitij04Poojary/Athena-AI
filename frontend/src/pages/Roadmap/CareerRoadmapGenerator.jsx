@@ -72,7 +72,7 @@ const CareerRoadmapGenerator = () => {
         </div>
 
         {/* Title */}
-        <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-purple-200 mb-12 tracking-tight">
+        <h1 className="text-6xl p-5 font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-purple-200 mb-12 tracking-tight">
           Learning Pathway Generator
         </h1>
 
