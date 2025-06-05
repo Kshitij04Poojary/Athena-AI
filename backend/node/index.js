@@ -20,6 +20,7 @@ const chatbotRouter = require('./routes/chatbotRouter');
 const examRouter = require('./routes/examRouter');
 const flashcardRouter=require('./routes/flashcardRouter')
 const gamificationRouter = require('./routes/GamificationRouter');
+const roadmapRouter = require('./routes/roadmapRouter');
 const Lecture = require('./models/Lecture');
 const User = require('./models/UserModel');
 const jwt = require('jsonwebtoken');
@@ -57,6 +58,7 @@ app.use('/api/assigned', assignedCourseRouter);
 app.use('/api', chatbotRouter);
 app.use('/api/exam', examRouter);
 app.use('/api', flashcardRouter);
+app.use('/api/roadmaps', roadmapRouter);
 
 // Initialize Socket.IO
 const io = new Server(server, {

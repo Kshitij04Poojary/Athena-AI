@@ -46,6 +46,8 @@ import MainCourseDetails from "./pages/CourseGen/MainCourseDetails";
 import MainFlashcard from "./pages/Flashcards/MainFlashcard";
 import GamePage from "./pages/Gamification/GamePage";
 import NotesPage from "./pages/Notes/NotesPage";
+import CareerRoadmapGenerator from "./pages/Roadmap/CareerRoadmapGenerator";
+import RoadmapContent from "./pages/Roadmap/RoadmapContent";
 
 const App = () => (
   <UserProvider>
@@ -86,6 +88,7 @@ const App = () => (
           <Route path="/coding" element={<CodeEditor/>} />
           <Route path="/chat-with-pdf" element={<PDFChatComponent/>} />
           <Route path="/game" element={<GamePage />} />
+          <Route path="/roadmap/:roadmapid" element={<RoadmapContent/>}/> 
           <Route
             path="/recommend-projects"
             element={<AIProjectRecommendations />}
@@ -115,7 +118,8 @@ const App = () => (
         <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />} />
         <Route path="/examreview" element={<ExamReview />} />
         <Route path="/flashcard" element={<NotesFlashcard />} />
-
+        <Route path="/roadmap" element={<CareerRoadmapGenerator/>}/>
+         
       </Routes>
     </Router>
   </UserProvider>

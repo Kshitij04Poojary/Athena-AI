@@ -20,6 +20,7 @@
     "@monaco-editor/react": "^4.7.0",
     "@splinetool/react-spline": "^4.0.0",
     "@tailwindcss/vite": "^4.0.9",
+    "@xyflow/react": "^12.6.4",
     "@zegocloud/zego-uikit-prebuilt": "^2.14.1",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
