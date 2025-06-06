@@ -21,14 +21,15 @@ const MainLayout = () => {
     return (
         <div className="flex h-screen bg-gray-100">
             <SideBar collapsed={collapsed} setCollapsed={setCollapsed} />
-            <div className="flex flex-col flex-1 overflow-hidden">
-                <div className="bg-white shadow-md flex justify-end items-center">
+            <div className="flex flex-col flex-1 overflow-hidden relative">
+                <div className="absolute top-4 right-4 z-10">
                     <LanguageSelector />
                 </div>
-                <div className={`pt-10 md:pt-16 ${collapsed ? 'md:pl-0' : 'md:pl-0'} transition-all duration-300 overflow-y-auto h-screen`}>
+
+                {/* Main content with outlet */}
+                <div className="flex-1 overflow-y-auto">
                     <Outlet />
                 </div>
-
             </div>
         </div>
     );

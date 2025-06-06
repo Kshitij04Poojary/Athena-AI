@@ -82,6 +82,7 @@ const AppContent = () => {
         <Route path="/coding" element={<CodeEditor />} />
         <Route path="/chat-with-pdf" element={<PDFChatComponent />} />
         <Route path="/game" element={<GamePage />} />
+        <Route path="/roadmap" element={<CareerRoadmapGenerator />} />
         <Route path="/roadmap/:roadmapid" element={<RoadmapContent />} />
         <Route path="/display-roadmaps" element={<RoadmapDisplay />} />
         <Route
@@ -113,7 +114,6 @@ const AppContent = () => {
       />
       <Route path="/examreview" element={<ExamReview />} />
       <Route path="/flashcard" element={<NotesFlashcard />} />
-      <Route path="/roadmap" element={<CareerRoadmapGenerator />} />
     </Routes>
   );
 };

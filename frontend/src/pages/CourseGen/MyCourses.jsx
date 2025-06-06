@@ -28,17 +28,22 @@ const MyCourses = () => {
   }, [i18n]);
 
   useEffect(() => {
-    if (!user?.token) {
-      // Still waiting for user token, keep loading true
-      setIsLoading(true);
-      return;
-    }
-
+    console.log('User state changed:', { user: user, hasToken: !!user?.token });
+    
     const fetchCourses = async () => {
-        setIsLoading(true);
+        // Get token from user object or localStorage as fallback
+        const token = user?.token || localStorage.getItem('token') || localStorage.getItem('authToken');
+        
+        if (!token) {
+          console.log('No token found in user object or localStorage');
+          setIsLoading(false);
+          return;
+        }
+
         try {
+            console.log('Fetching courses with token:', token.substring(0, 10) + '...');
             const response = await axios.get(`${NODE_API}/courses/courselist`, {
-            headers: { Authorization: `Bearer ${user.token}` },
+            headers: { Authorization: `Bearer ${token}` },
             });
 
             const data = response.data;
@@ -54,6 +59,7 @@ const MyCourses = () => {
             }))
             .filter(course => !course.assignedCopy);
             setCourses(filteredCourses);
+            console.log('Courses fetched successfully:', filteredCourses.length);
         } catch (error) {
             console.error(t('error.fetchCourses'), error);
             setCourses([]);
@@ -62,15 +68,25 @@ const MyCourses = () => {
         }
     };
 
-    fetchCourses();
-  }, [user?.token, t, language, NODE_API]);
+    // Only fetch if user exists (regardless of token since we'll use localStorage fallback)
+    if (user) {
+      console.log('User available, attempting to fetch courses...');
+      fetchCourses();
+    } else {
+      console.log('User still undefined, keeping loading state');
+    }
+    
+  }, [user, t, language, NODE_API]);
 
   // Delete course function
   const handleDeleteCourse = async (courseId) => {
     try {
+        // Get token from user object or localStorage as fallback
+        const token = user?.token || localStorage.getItem('token') || localStorage.getItem('authToken');
+        
         await axios.delete(`${NODE_API}/courses/${courseId}`, {
         headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${token}`,
         },
         });
 
