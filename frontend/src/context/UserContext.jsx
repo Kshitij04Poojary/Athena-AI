@@ -1,9 +1,8 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // Fix here!
+import { jwtDecode } from 'jwt-decode';
 
 const UserContext = createContext();
-
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
@@ -13,12 +12,32 @@ export const UserProvider = ({ children }) => {
 
     const fetchUser = async (userId) => {
         try {
-            const response = await axios.get(`${NODE_API}/auth/profile/${userId}`);
-            const userData = response.data;
             const token = localStorage.getItem('token');
-            setUser({ ...userData, token }); // Assuming response.data is the user object
+            const response = await axios.get(`${NODE_API}/auth/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            
+            // Handle different possible response structures
+            let userData;
+            if (response.data.user) {
+                // If response has a nested user object
+                userData = response.data.user;
+            } else {
+                // If response data is the user object directly
+                userData = response.data;
+            }
+            
+            // Ensure the user object has an _id field
+            if (!userData._id && userData.id) {
+                userData._id = userData.id;
+            }
+            
+            // Set user with token
+            setUser({ ...userData, token });
         } catch (error) {
-            console.error('Failed to fetch user', error);
+            console.error('❌ Failed to fetch user', error);
             setUser(null);
             localStorage.removeItem('token');
         } finally {
@@ -31,12 +50,20 @@ export const UserProvider = ({ children }) => {
 
         if (token) {
             try {
-                const decoded = jwtDecode(token);  // Use correctly named import
-                const userId = decoded.id; // Extract userId from token
-
-                fetchUser(userId);
+                const decoded = jwtDecode(token);
+                // Handle different possible ID field names in JWT
+                const userId = decoded.id || decoded._id || decoded.userId;
+                
+                if (userId) {
+                    fetchUser(userId);
+                } else {
+                    console.error('❌ No user ID found in token');
+                    setUser(null);
+                    localStorage.removeItem('token');
+                    setLoading(false);
+                }
             } catch (error) {
-                console.error('Invalid token', error);
+                console.error('❌ Invalid token', error);
                 setUser(null);
                 localStorage.removeItem('token');
                 setLoading(false);

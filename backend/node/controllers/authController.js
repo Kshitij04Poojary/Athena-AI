@@ -75,12 +75,21 @@ exports.updateUser = async (req, res) => {
         const { id } = req.params;
         const updates = req.body;
 
+        // Authorization: Only allow self or admin to update
+        if (req.user.id !== id && req.user.userType !== 'admin') {
+            return res.status(403).json({ message: "You are not authorized to update this profile." });
+        }
+
         // Prevent updating password via this route
         if (updates.password) {
             return res.status(400).json({ message: "Password update is not allowed via this route." });
         }
 
-        const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).select('-password');
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            updates,
+            { new: true, runValidators: true }
+        ).select('-password');
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });

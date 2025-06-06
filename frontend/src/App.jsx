@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,8 +11,7 @@ import Home from "./pages/Home";
 import StudentDashboard from "./pages/VideoConferencing/StudentDashboard";
 import ConsultationRoom from "./pages/VideoConferencing/ConsultationRoom";
 import TeacherDashboard from "./pages/VideoConferencing/TeacherDashboard";
-import { UserProvider } from "./context/UserContext";
-// import { SocketProvider } from './context/SocketContext';
+import { UserProvider, useUser } from "./context/UserContext";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import CreateCourse from "./pages/CourseGen/CreateCourse";
@@ -38,7 +37,7 @@ import Transcript from "./components/misc/Transcript";
 import CreateExam from "./pages/Exams/CreateExam";
 import MenteeExamDashboard from "./pages/Exams/MenteeExamDashboard";
 import CodeEditor from "./components/misc/Coding";
-
+import PreLoader from "./components/landing/PreLoader";
 import OfflineAttendance from "./pages/VideoConferencing/OfflineAttendance";
 import PDFChatComponent from "./components/chatpdf/PDFChatComponent";
 import NotesFlashcard from "./pages/CourseGen/NotesFlashcard";
@@ -50,81 +49,95 @@ import CareerRoadmapGenerator from "./pages/Roadmap/CareerRoadmapGenerator";
 import RoadmapContent from "./pages/Roadmap/RoadmapContent";
 import RoadmapDisplay from "./pages/Roadmap/RoadmapDisplay";
 
-const App = () => (
-  <UserProvider>
-    <Router>
-      <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Landing />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        
-        <Route
-          path="/consultation-room/:roomId"
-          element={<ConsultationRoom />}
-        />
+const AppContent = () => {
+  const { user } = useUser();
 
-        <Route element={<MainLayout />}>
+  return (
+    <Routes>
+      <Route path="/" element={<Landing />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/consultation-room/:roomId" element={<ConsultationRoom />} />
+      <Route element={<MainLayout />}>
         <Route path="/home" element={<Home />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/my-courses" element={<MyCourses />} />
-          <Route path="/create-course" element={<CreateCourse />} />
-          {/* <Route path="/course/:courseId" element={<CourseDetails />} /> */}
-          <Route path="/course/:courseId" element={<MainCourseDetails />} />
-          <Route
-            path="/course/:courseId/chapter/:chapterId"
-            element={<ChapterDetails />}
-          />
-          <Route path="/assessment" element={<ExamDashboard />} />
-          <Route path="/interview" element={<InterviewDashboard />} />
-          <Route
-            path="/interview/:interviewId/feedback"
-            element={<Feedback />}
-          />
-          <Route path="/internships" element={<InternshipListings />} />
-          <Route path="/offline-attendance" element={<OfflineAttendance />} />
-          <Route path="/similarity" element={<Similarity />} />
-          <Route path="/calendar" element={<TeamsStyleCalendar />} />
-          <Route path="/transcript" element={<Transcript/>} />
-          <Route path="/coding" element={<CodeEditor/>} />
-          <Route path="/chat-with-pdf" element={<PDFChatComponent/>} />
-          <Route path="/game" element={<GamePage />} />
-          <Route path="/roadmap/:roadmapid" element={<RoadmapContent/>}/> 
-          <Route path="/display-roadmaps" element={<RoadmapDisplay/>}/>
-          <Route
-            path="/recommend-projects"
-            element={<AIProjectRecommendations />}
-          />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/my-courses" element={<MyCourses />} />
+        <Route path="/create-course" element={<CreateCourse />} />
+        <Route path="/course/:courseId" element={<MainCourseDetails />} />
+        <Route
+          path="/course/:courseId/chapter/:chapterId"
+          element={<ChapterDetails />}
+        />
+        <Route path="/assessment" element={<ExamDashboard />} />
+        <Route path="/interview" element={<InterviewDashboard />} />
+        <Route
+          path="/interview/:interviewId/feedback"
+          element={<Feedback />}
+        />
+        <Route path="/internships" element={<InternshipListings />} />
+        <Route path="/offline-attendance" element={<OfflineAttendance />} />
+        <Route path="/similarity" element={<Similarity />} />
+        <Route path="/calendar" element={<TeamsStyleCalendar />} />
+        <Route path="/transcript" element={<Transcript />} />
+        <Route path="/coding" element={<CodeEditor />} />
+        <Route path="/chat-with-pdf" element={<PDFChatComponent />} />
+        <Route path="/game" element={<GamePage />} />
+        <Route path="/roadmap/:roadmapid" element={<RoadmapContent />} />
+        <Route path="/display-roadmaps" element={<RoadmapDisplay />} />
+        <Route
+          path="/recommend-projects"
+          element={<AIProjectRecommendations />}
+        />
+        {user?.role === "mentee" && (
+          <>
+            <Route path="/mentee" element={<StudentDashboard />} />
+            <Route path="/mentee-exam" element={<MenteeExamDashboard />} />
+          </>
+        )}
+        {user?.role === "mentor" && (
+          <>
+            <Route path="/mentor" element={<TeacherDashboard />} />
+            <Route path="/create-exam" element={<CreateExam />} />
+          </>
+        )}
+        <Route path="/flashcards/:courseId" element={<MainFlashcard />} />
+        <Route path="/notes/:courseId" element={<NotesPage />} />
+      </Route>
 
-          if(useUser().user.role==='mentee'){
-            <>
-              <Route path="/mentee" element={<StudentDashboard />} />
-              <Route path="/mentee-exam" element={<MenteeExamDashboard />} />
-             
-            </>
-          }
-          if(useUser().user.role==='mentor'){
-            <>
-              <Route path="/mentor" element={<TeacherDashboard />} />
-         
-              <Route path='/create-exam' element={<CreateExam />} />
-            </>
-          }
-          <Route path="/flashcards/:courseId" element={<MainFlashcard />} />
-          <Route path="/notes/:courseId" element={<NotesPage />} />
-        </Route>
+      <Route path="/interview/:interviewId" element={<StartInterview />} />
+      <Route path="/interview/:interviewId/start" element={<MainInterview />} />
+      <Route path="/assessment/:examId" element={<Exam />} />
+      <Route
+        path="/course/:courseId/course-assessment"
+        element={<CourseAssessment />}
+      />
+      <Route path="/examreview" element={<ExamReview />} />
+      <Route path="/flashcard" element={<NotesFlashcard />} />
+      <Route path="/roadmap" element={<CareerRoadmapGenerator />} />
+    </Routes>
+  );
+};
 
-        <Route path="/interview/:interviewId" element={<StartInterview />} />
-        <Route path='/interview/:interviewId/start' element={<MainInterview />} />
-        <Route path="/assessment/:examId" element={<Exam />} />
-        <Route path="/course/:courseId/course-assessment" element={<CourseAssessment />} />
-        <Route path="/examreview" element={<ExamReview />} />
-        <Route path="/flashcard" element={<NotesFlashcard />} />
-        <Route path="/roadmap" element={<CareerRoadmapGenerator/>}/>
-         
-      </Routes>
-    </Router>
-  </UserProvider>
-);
+const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000); // tweak duration if needed
+    return () => clearTimeout(timeout);
+  }, []);
+
+  if (loading) return <PreLoader />;
+
+  return (
+    <UserProvider>
+      <Router>
+        <ToastContainer />
+        <AppContent />
+      </Router>
+    </UserProvider>
+  );
+};
 
 export default App;

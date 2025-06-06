@@ -39,7 +39,7 @@ const ActivityCard = ({ data, onDelete, onChange, type }) => {
                     </>
                 );
 
-            case 'internship':
+            case 'internships':
                 return (
                     <>
                         <input
@@ -73,7 +73,7 @@ const ActivityCard = ({ data, onDelete, onChange, type }) => {
                     </>
                 );
 
-            case 'achievement':
+            case 'achievements':
                 return (
                     <>
                         <input

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { motion } from "framer-motion";
-import MenteeProfileForm from "../../components/misc/MenteeProfileForm";
+import ProfileForm from "../../components/profile/ProfileForm";
 import generateResume from "../../components/misc/generateResume";
 import axios from "axios";
 import {
@@ -18,44 +18,122 @@ import MentorScoresChart from '../../components/landing/MentorScoresCart';
 const ProfilePage = () => {
   const { user, setUser } = useUser();
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
   const NODE_API = import.meta.env.VITE_NODE_API;
 
   console.log("User data:", user);
-  async function load_flask() {
-    try {
-      const response = await axios.post("https://athenai-backendonly.onrender.com/recommendations/load-projects",
-        { "user_id": user?._id }, { withCredentials: true });
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  useEffect(() => {
-    if (user) {
-      load_flask();
-    }
-  }, [user]);
+  // Transform user data to ProfileForm format
+  const transformUserDataForForm = (userData) => {
+    return {
+      academics: {
+        class10: userData?.education?.class10 || { school: '', percentage: '', yearOfCompletion: '' },
+        class12: userData?.education?.class12 || { school: '', percentage: '', yearOfCompletion: '' },
+        currentEducation: userData?.education?.currentEducation || {
+          institution: '', course: '', specialization: '', yearOfStudy: '', cgpa: ''
+        }
+      },
+      hasExtracurricular: userData?.extracurricular?.length > 0 || false,
+      extracurricular: userData?.extracurricular || [],
+      hasInternships: userData?.internships?.length > 0 || false,
+      internships: userData?.internships || [],
+      hasAchievements: userData?.achievements?.length > 0 || false,
+      achievements: userData?.achievements || [],
+      futureGoals: {
+        shortTerm: userData?.futureGoals?.shortTerm || '',
+        longTerm: userData?.futureGoals?.longTerm || '',
+        dreamCompanies: userData?.futureGoals?.dreamCompanies || []
+      }
+    };
+  };
 
-  const handleUpdate = async (updatedData) => {
+  // Transform ProfileForm data back to user format
+  const transformFormDataToUser = (formData) => {
+    return {
+      education: {
+        class10: formData.academics.class10,
+        class12: formData.academics.class12,
+        currentEducation: formData.academics.currentEducation
+      },
+      extracurricular: formData.extracurricular,
+      internships: formData.internships,
+      achievements: formData.achievements,
+      futureGoals: formData.futureGoals
+    };
+  };
+
+  const handleUpdate = async (updatedFormData) => {
     try {
-      if (!user?._id || !user?.token) {
+      const userId = user?._id;
+      if (!userId || !user?.token) {
         console.error("User ID or token missing");
         return;
       }
 
-      const { data } = await axios.patch(`${NODE_API}/api/auth/profile/${user._id}`, updatedData, {
+      setLoading(true);
+      
+      // Transform form data back to user format
+      const transformedData = transformFormDataToUser(updatedFormData);
+      
+      // Updated to use /api/auth/me endpoint
+      const { data } = await axios.patch(`${NODE_API}/auth/${user._id}`, transformedData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
-      setUser(data.user); // Update the global user state using setUser
+      // Update user context with fresh data
+      setUser({ ...data.user, token: user.token }); // Preserve token
       setIsEditing(false);
+      
+      console.log("Profile updated successfully:", data.user);
     } catch (error) {
       console.error("Update failed:", error.response?.data || error.message);
+      throw error; // Re-throw to let ProfileForm handle the error toast
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!user) return (
+  const fetchUserProfile = async () => {
+    try {
+      if (!user?.token) {
+        console.error("No authentication token");
+        return;
+      }
+
+      setLoading(true);
+
+      // Use GET /api/auth/me for authenticated user's own profile
+      const { data } = await axios.get(`${NODE_API}/auth/${user._id}`, {
+        headers: { Authorization: `Bearer ${user.token}` },
+      });
+
+      setUser({ ...data.user, token: user.token });
+    } catch (error) {
+      console.error("Failed to fetch profile:", error.response?.data || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchPublicUserProfile = async (userId) => {
+    try {
+      // Use GET /api/auth/:userId for public user data (non-authenticated)
+      const { data } = await axios.get(`${NODE_API}/api/auth/${userId}`);
+      return data.user;
+    } catch (error) {
+      console.error("Failed to fetch public profile:", error.response?.data || error.message);
+      return null;
+    }
+  };
+
+  // Refresh user data if user exists but seems incomplete
+  useEffect(() => {
+    if (user?.token && !user?.name) {
+      fetchUserProfile();
+    }
+  }, [user?.token]);
+
+  if (!user || loading) return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="animate-pulse text-center">
         <div className="w-24 h-24 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-full mx-auto mb-4"></div>
@@ -74,7 +152,7 @@ const ProfilePage = () => {
     );
   }
 
-  const renderMenteeProfile = () => {
+  const renderProfile = () => {
     const hasEducation = user?.education?.class10 || user?.education?.class12 || user?.education?.currentEducation;
     const hasSkills = user?.skills && user?.skills.length > 0;
 
@@ -96,8 +174,9 @@ const ProfilePage = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsEditing(true)}
             className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 px-8 rounded-xl font-medium shadow-lg"
+            disabled={loading}
           >
-            Create Profile
+            {loading ? "Loading..." : "Create Profile"}
           </motion.button>
         </div>
       );
@@ -285,8 +364,8 @@ const ProfilePage = () => {
                         className="p-4 sm:p-5 bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all border border-indigo-100"
                       >
                         <h4 className="font-medium text-base sm:text-lg text-indigo-900">{internship.company}</h4>
-                        <p className="text-indigo-700 font-medium">{internship.role}</p>
-                        <p className="text-sm text-indigo-500 mt-1">{internship.duration}</p>
+                        <p className="text-indigo-700 font-medium">Role: {internship.role}</p>
+                        <p className="text-sm text-indigo-500 mt-1">{internship.duration} months</p>
                         <p className="text-sm text-gray-600 mt-2 line-clamp-3">{internship.description}</p>
                       </motion.div>
                     ))}
@@ -321,8 +400,78 @@ const ProfilePage = () => {
             </div>
           </section>
         )}
-      </div>
 
+        {/* Future Goals Section */}
+        {(user?.futureGoals?.shortTerm || user?.futureGoals?.longTerm || user?.futureGoals?.dreamCompanies?.length > 0) && (
+          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
+              <Target className="text-purple-500" size={24} />
+              <span>Future Goals</span>
+            </h2>
+            <div className="space-y-6">
+              {/* Short Term Goals */}
+              {user.futureGoals.shortTerm && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                >
+                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg flex items-center gap-2">
+                    <Target size={18} className="text-blue-500" />
+                    Short Term Goals
+                  </h3>
+                  <p className="text-gray-800">{user.futureGoals.shortTerm}</p>
+                </motion.div>
+              )}
+
+              {/* Long Term Goals */}
+              {user.futureGoals.longTerm && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.1 }}
+                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                >
+                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg flex items-center gap-2">
+                    <Target size={18} className="text-purple-500" />
+                    Long Term Goals
+                  </h3>
+                  <p className="text-gray-800">{user.futureGoals.longTerm}</p>
+                </motion.div>
+              )}
+
+              {/* Dream Companies */}
+              {user.futureGoals.dreamCompanies && user.futureGoals.dreamCompanies.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: 0.2 }}
+                  className="bg-gradient-to-r from-purple-50 to-indigo-50 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all border-l-4 border-purple-500"
+                >
+                  <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-lg flex items-center gap-2">
+                    <Briefcase size={18} className="text-purple-500" />
+                    Dream Companies
+                  </h3>
+                  <div className="flex flex-wrap gap-3">
+                    {user.futureGoals.dreamCompanies.map((company, index) => (
+                      <motion.span
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.2, delay: index * 0.05 }}
+                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium shadow-sm"
+                      >
+                        {company}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </section>
+        )}
+      </div>
     );
   };
 
@@ -357,9 +506,10 @@ const ProfilePage = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsEditing(!isEditing)}
               className="mt-4 sm:mt-0 sm:ml-auto sm:mr-8 mb-4 flex items-center gap-2 px-4 sm:px-5 py-2 rounded-md sm:rounded-lg bg-white text-indigo-700 shadow-md hover:bg-indigo-50 transition-colors text-sm sm:text-base"
+              disabled={loading}
             >
               <Edit2 size={16} />
-              {isEditing ? "Cancel Edit" : "Edit Profile"}
+              {loading ? "Loading..." : isEditing ? "Cancel Edit" : "Edit Profile"}
             </motion.button>
           )}
         </div>
@@ -369,13 +519,13 @@ const ProfilePage = () => {
       <div className="flex flex-col gap-6 sm:gap-8 md:px-4 px-0 sm:px-0">
         {user.userType === "Student" &&
           (isEditing ? (
-            <MenteeProfileForm
-              initialData={user}
+            <ProfileForm
+              initialData={transformUserDataForForm(user)}
               onComplete={handleUpdate}
             />
           ) : (
             <>
-              {renderMenteeProfile()}
+              {renderProfile()}
 
               {(user?.education || user?.extracurricular?.length || user?.internships?.length || user?.skills?.length > 0) && (
                 <motion.div
@@ -388,9 +538,10 @@ const ProfilePage = () => {
                     whileTap={{ scale: 0.95 }}
                     onClick={() => generateResume(user)}
                     className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2 text-sm sm:text-base"
+                    disabled={loading}
                   >
                     <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Download Resume
+                    {loading ? "Loading..." : "Download Resume"}
                   </motion.button>
                 </motion.div>
               )}
@@ -398,7 +549,6 @@ const ProfilePage = () => {
           ))}
       </div>
     </div>
-
   );
 };
 
