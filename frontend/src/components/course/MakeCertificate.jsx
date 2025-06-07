@@ -1,4 +1,6 @@
+import React from 'react';
 import { jsPDF } from 'jspdf';
+import { Download } from 'lucide-react';
 
 const MakeCertificate = ({ course, user, bestAssessmentScore }) => {
     const generateCertificate = () => {
@@ -169,7 +171,18 @@ const MakeCertificate = ({ course, user, bestAssessmentScore }) => {
         doc.line(pageWidth - margin + 5, pageHeight - margin + 5, pageWidth - margin - cornerSize, pageHeight - margin + 5); // Horizontal line
     }
 
-    return { generateCertificate };
+    // Return JSX instead of an object
+    return (
+        <div className="flex justify-center">
+            <button 
+                onClick={generateCertificate}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition-colors duration-200 flex items-center space-x-2"
+            >
+                <Download size={20} />
+                <span>Download Certificate</span>
+            </button>
+        </div>
+    );
 };
 
 export default MakeCertificate;

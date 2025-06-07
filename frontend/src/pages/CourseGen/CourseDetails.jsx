@@ -27,7 +27,7 @@ const CourseDetailPage = () => {
     const { courseId } = useParams();
     const navigate = useNavigate();
     const { user } = useUser();
-    const token = user?.token;
+    const [token, setToken] = useState(user?.token || localStorage.getItem('token'));
     const NODE_API = import.meta.env.VITE_NODE_API;
     
     // State management
@@ -53,6 +53,17 @@ const CourseDetailPage = () => {
         if (!text) return false;
         return text.split(' ').length > DESCRIPTION_WORD_LIMIT;
     };
+
+    useEffect(() => {
+        if (user?.token) {
+            setToken(user.token);
+        } else if (!token) {
+            const storedToken = localStorage.getItem('token');
+            if (storedToken) {
+                setToken(storedToken);
+            }
+        }
+    }, [user?.token]);
 
     // Effects
     useEffect(() => {
