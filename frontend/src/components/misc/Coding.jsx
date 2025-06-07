@@ -125,7 +125,7 @@ const CodeEditor = () => {
   const hasErrors = codeError && (Array.isArray(codeError) ? codeError.length > 0 : true);
 
   return (
-    <div className={`mx-5 mb-5 flex flex-col min-h-screen rounded-lg overflow-y-auto shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
+    <div className={`mt-15 mx-5 mb-5 flex flex-col min-h-screen rounded-lg overflow-y-auto shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
       {/* Header */}
       <div className={`flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 gap-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
         <div className="flex items-center space-x-2">
