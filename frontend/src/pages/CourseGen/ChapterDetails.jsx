@@ -26,7 +26,7 @@ const ChapterDetails = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { user, loading } = useUser();
-    const token = user?.token;
+    const [token, setToken] = useState(user?.token || localStorage.getItem('token'));
     const NODE_API = import.meta.env.VITE_NODE_API;
 
     // Word limit for "About" section
@@ -60,9 +60,13 @@ const ChapterDetails = () => {
 
     useEffect(() => {
         if (loading) return;
-        if (!token) {
-            navigate('/login');
-            return;
+        if (user?.token) {
+            setToken(user.token);
+        } else if (!token) {
+            const storedToken = localStorage.getItem('token');
+            if (storedToken) {
+                setToken(storedToken);
+            }
         }
 
         const fetchChapterDetails = async () => {
