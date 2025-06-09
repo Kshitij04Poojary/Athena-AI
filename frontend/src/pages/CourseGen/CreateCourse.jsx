@@ -13,6 +13,7 @@ import SkillsStep from '../../components/course/SkillsStep';
 import TopicStep from '../../components/course/TopicStep';
 import OptionsStep from '../../components/course/OptionsStep';
 import PreviewStep from '../../components/course/PreviewStep';
+
 const CreateCourse = ({ prefillData = null }) => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -281,96 +282,126 @@ const CreateCourse = ({ prefillData = null }) => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <Toaster position="top-right" richColors />
-      <div className="p-4 sm:p-6 w-full max-w-4xl mx-auto my-4 sm:my-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-purple-600 text-center mb-4 sm:mb-6">
-          {t("createCourse.title")}
-        </h2>
-  
-        <div className="flex justify-center items-center gap-2 sm:gap-4 mb-6 sm:mb-8 overflow-x-auto px-2">
-          {steps.map((stepItem, index) => (
-            <div key={index} className="flex items-center flex-shrink-0">
-              <div className={`w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center rounded-full ${step >= index ? "bg-purple-600 text-white" : "bg-gray-300"}`}>
-                <stepItem.icon className="w-4 h-4 sm:w-5 sm:h-5" />
-              </div>
-              {index < steps.length - 1 && <div className={`w-8 sm:w-16 h-1 ${step > index ? "bg-purple-600" : "bg-gray-300"}`} />}
-            </div>
-          ))}
-        </div>
-  
-        <div className="bg-gradient-to-br from-purple-50 to-white p-4 sm:p-8 rounded-xl shadow-lg">
-          {renderStepContent()}
-        </div>
-  
-        <div className="mt-4 sm:mt-6 flex flex-row justify-between items-center gap-2 md:p-0 px-3">
-          <div>
-            {step === 0 && (
-              <button 
-                onClick={() => navigate('/my-courses')} 
-                className="w-full sm:w-auto p-2 bg-gray-600 text-white rounded cursor-pointer text-sm sm:text-base"
-              >
-                {t("createCourse.buttons.backToCourses")}
-              </button>
-            )}
-            {step > 0 && step < 3 && (
-              <button 
-                onClick={() => setStep(step - 1)} 
-                className="w-full sm:w-auto p-2 bg-gray-300 rounded text-sm sm:text-base"
-              >
-                {t("createCourse.buttons.back")}
-              </button>
-            )}
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-blue-700 mb-2">
+              {t("createCourse.title")}
+            </h1>
+            <p className="text-gray-600 text-base">
+              Follow the steps to create your personalized course
+            </p>
           </div>
-          
-          <div>
-            {step === 2 && (
-              <button 
-                onClick={GenerateCourseLayout} 
-                disabled={generatingCourse}
-                className={`w-full sm:w-auto p-2 bg-black text-white rounded flex items-center justify-center sm:justify-start ${generatingCourse ? 'opacity-50 cursor-not-allowed' : ''} text-sm sm:text-base`}
-              >
-                {generatingCourse ? (
-                  <>
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                    {t("createCourse.buttons.generating")}
-                  </>
-                ) : (
-                  t("createCourse.buttons.generate")
-                )}
-              </button>
-            )}
+
+          {/* Step Names */}
+          <div className="flex justify-center items-center gap-4 mb-8 overflow-x-auto px-4">
+            {steps.map((stepItem, index) => (
+              <div key={index} className="flex flex-col items-center flex-shrink-0 text-center min-w-[80px]">
+                <div className={`w-10 h-10 flex justify-center items-center rounded-full mb-1 ${
+                  step >= index 
+                    ? "bg-blue-600 text-white shadow-md" 
+                    : "bg-gray-200 text-gray-500"
+                }`}>
+                  <stepItem.icon className="w-5 h-5" />
+                </div>
+                <div className={`text-sm font-medium ${
+                  step >= index ? "text-blue-700" : "text-gray-500"
+                }`}>
+                  {stepItem.name}
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+          {/* Main Content Card */}
+          <div className="bg-white shadow-2xl rounded-2xl overflow-hidden mb-8">
+            <div className="p-8">
+              {renderStepContent()}
+            </div>
+          </div>
+
+          {/* Navigation Buttons */}
+          <div className="flex justify-between items-center gap-4">
+            <div>
+              {step === 0 && (
+                <button 
+                  onClick={() => navigate('/my-courses')} 
+                  className="px-6 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md"
+                >
+                  {t("createCourse.buttons.backToCourses")}
+                </button>
+              )}
+              {step > 0 && step < 3 && (
+                <button 
+                  onClick={() => setStep(step - 1)} 
+                  className="px-6 py-3 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md"
+                >
+                  {t("createCourse.buttons.back")}
+                </button>
+              )}
+            </div>
             
-            {step === 3 && (
-              <button 
-                onClick={GenerateChapterContent} 
-                disabled={generatingChapters}
-                className={`w-full sm:w-auto p-2 rounded flex items-center justify-center sm:justify-start text-sm sm:text-base ${
-                  !generatingChapters
-                    ? "bg-green-600 text-white" 
-                    : "bg-green-300 text-gray-500 cursor-not-allowed"
-                }`}
-              >
-                {generatingChapters ? (
-                  <>
-                    <Loader2 className="mr-2 w-4 h-4 animate-spin" />
-                    {t("createCourse.buttons.finalizing")}
-                  </>
-                ) : (
-                  t("createCourse.buttons.finish")
-                )}
-              </button>
-            )}
-            
-            {(step === 0 || step === 1) && (
-              <button 
-                onClick={() => setStep(step + 1)} 
-                className="w-full sm:w-auto p-2 bg-green-700 text-white rounded text-sm sm:text-base" 
-                disabled={!isNextEnabled()}
-              >
-                {t("createCourse.buttons.next")}
-              </button>
-            )}
+            <div>
+              {step === 2 && (
+                <button 
+                  onClick={GenerateCourseLayout} 
+                  disabled={generatingCourse}
+                  className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
+                    generatingCourse 
+                      ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
+                >
+                  {generatingCourse ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("createCourse.buttons.generating")}
+                    </>
+                  ) : (
+                    t("createCourse.buttons.generate")
+                  )}
+                </button>
+              )}
+              
+              {step === 3 && (
+                <button 
+                  onClick={GenerateChapterContent} 
+                  disabled={generatingChapters}
+                  className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
+                    !generatingChapters
+                      ? "bg-green-600 hover:bg-green-700 text-white" 
+                      : "bg-green-300 text-green-600 cursor-not-allowed"
+                  }`}
+                >
+                  {generatingChapters ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("createCourse.buttons.finalizing")}
+                    </>
+                  ) : (
+                    t("createCourse.buttons.finish")
+                  )}
+                </button>
+              )}
+              
+              {(step === 0 || step === 1) && (
+                <button 
+                  onClick={() => setStep(step + 1)} 
+                  className={`px-6 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105 shadow-sm hover:shadow-md ${
+                    isNextEnabled()
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                  disabled={!isNextEnabled()}
+                >
+                  {t("createCourse.buttons.next")}
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

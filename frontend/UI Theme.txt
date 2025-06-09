@@ -1,0 +1,61 @@
+"Professional Learning Gradient Theme"
+Here are the core design characteristics that define this theme:
+Color Palette
+
+Primary: Blue-based (#blue-600, #blue-700) for headers and accents
+Background: Gradient from blue-50 to white (bg-gradient-to-br from-blue-50 to-white)
+Surface: Pure white cards with subtle shadows
+Success: Green tones for completed states
+Neutral: Gray scale for secondary text and disabled states
+Accent: Blue variants with opacity for hover states (bg-white/20, bg-white/30)
+
+Layout & Structure
+
+Container: Centered max-width layout (max-w-4xl mx-auto)
+Cards: Rounded corners with generous padding (rounded-2xl, rounded-xl)
+Grid: Responsive 2-column grid that collapses on mobile
+Sections: Clear separation with border-bottom dividers
+
+Typography
+
+Hierarchy: Clear size progression (3xl → 2xl → xl → base)
+Weight: Bold headers, medium for emphasis, regular for body
+Color: Dark blue for headers, gray scale for content
+
+Interactive Elements
+
+Buttons: Rounded backgrounds with hover opacity changes
+Cards: Subtle hover effects with shadow increase and slight upward transform (hover:-translate-y-1)
+States: Visual feedback for locked/unlocked/completed states using icons and colors
+
+Shadows & Depth
+
+Primary: shadow-2xl for main container
+Secondary: shadow-md with hover:shadow-md transitions
+Subtle: shadow-sm for chapter cards
+
+Icons
+
+Style: Lucide React icons throughout
+Usage: Consistent 20px size with color coordination
+Purpose: Status indicators, navigation, and content categorization
+
+Spacing
+
+Generous: Liberal use of padding (p-6, p-8)
+Consistent: 4-unit spacing system (space-y-4, gap-6)
+Breathing room: Margins between sections (mb-8, mt-8)
+
+Responsive Design
+
+Mobile-first: Responsive prefixes (md:, lg:)
+Adaptive: Text sizes and grid layouts adjust for mobile
+Touch-friendly: Adequate button and card sizes
+
+Special Features
+
+Gradient backgrounds for visual depth
+Status-based styling (locked/unlocked/completed states)
+Smooth transitions for hover effects
+Loading states with pulse animations
+Expandable content with show more/less functionality

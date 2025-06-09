@@ -222,11 +222,11 @@ const SideBar = ({ collapsed, setCollapsed }) => {
                         onClick={handleLogout}
                         className="flex items-center p-3 w-full rounded-lg hover:bg-red-600/20 transition-colors group bg-red-600/10"
                     >
-                        <div className={`${(!collapsed || isMobile) && 'mr-4'} text-red-300 group-hover:text-red-200 transition-colors`}>
+                        <div className={`${(!collapsed || isMobile) && 'mr-4'} text-white group-hover:text-red-200 transition-colors`}>
                             <LogOut size={20} />
                         </div>
                         {(!collapsed || isMobile) && (
-                            <span className="text-red-300 group-hover:text-red-200 transition-colors">
+                            <span className="text-white group-hover:text-red-200 transition-colors">
                                 {t("sidebar.logout")}
                             </span>
                         )}

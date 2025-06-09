@@ -21,8 +21,6 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const NODE_API = import.meta.env.VITE_NODE_API;
 
-  console.log("User data:", user);
-
   // Transform user data to ProfileForm format
   const transformUserDataForForm = (userData) => {
     return {
@@ -72,22 +70,17 @@ const ProfilePage = () => {
 
       setLoading(true);
       
-      // Transform form data back to user format
       const transformedData = transformFormDataToUser(updatedFormData);
       
-      // Updated to use /api/auth/me endpoint
       const { data } = await axios.patch(`${NODE_API}/auth/${user._id}`, transformedData, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
 
-      // Update user context with fresh data
-      setUser({ ...data.user, token: user.token }); // Preserve token
+      setUser({ ...data.user, token: user.token });
       setIsEditing(false);
-      
-      console.log("Profile updated successfully:", data.user);
     } catch (error) {
       console.error("Update failed:", error.response?.data || error.message);
-      throw error; // Re-throw to let ProfileForm handle the error toast
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -95,14 +88,9 @@ const ProfilePage = () => {
 
   const fetchUserProfile = async () => {
     try {
-      if (!user?.token) {
-        console.error("No authentication token");
-        return;
-      }
+      if (!user?.token) return;
 
       setLoading(true);
-
-      // Use GET /api/auth/me for authenticated user's own profile
       const { data } = await axios.get(`${NODE_API}/auth/${user._id}`, {
         headers: { Authorization: `Bearer ${user.token}` },
       });
@@ -115,18 +103,6 @@ const ProfilePage = () => {
     }
   };
 
-  const fetchPublicUserProfile = async (userId) => {
-    try {
-      // Use GET /api/auth/:userId for public user data (non-authenticated)
-      const { data } = await axios.get(`${NODE_API}/api/auth/${userId}`);
-      return data.user;
-    } catch (error) {
-      console.error("Failed to fetch public profile:", error.response?.data || error.message);
-      return null;
-    }
-  };
-
-  // Refresh user data if user exists but seems incomplete
   useEffect(() => {
     if (user?.token && !user?.name) {
       fetchUserProfile();
@@ -134,19 +110,18 @@ const ProfilePage = () => {
   }, [user?.token]);
 
   if (!user || loading) return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-blue-50 to-white">
       <div className="animate-pulse text-center">
-        <div className="w-24 h-24 bg-gradient-to-r from-indigo-300 to-purple-300 rounded-full mx-auto mb-4"></div>
-        <div className="h-8 bg-gray-200 rounded-md w-64 mx-auto mb-2"></div>
-        <div className="h-4 bg-gray-200 rounded-md w-48 mx-auto"></div>
+        <div className="w-24 h-24 bg-gradient-to-r from-blue-300 to-blue-400 rounded-full mx-auto mb-4"></div>
+        <div className="h-8 bg-blue-200 rounded-md w-64 mx-auto mb-2"></div>
+        <div className="h-4 bg-blue-200 rounded-md w-48 mx-auto"></div>
       </div>
     </div>
   );
 
-  // Render mentor view if user is a mentor
   if (user?.userType === "Mentor") {
     return (
-      <div>
+      <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-white">
         <MentorScoresChart />
       </div>
     );
@@ -158,14 +133,14 @@ const ProfilePage = () => {
 
     if (!hasEducation && !user?.extracurricular?.length && !user?.internships?.length && !hasSkills) {
       return (
-        <div className="text-center py-16 glass-card rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-xl">
-          <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <User size={36} className="text-indigo-500" />
+        <div className="text-center py-16 bg-white rounded-2xl shadow-lg border border-blue-100">
+          <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <User size={36} className="text-blue-600" />
           </div>
-          <h3 className="text-2xl font-bold text-gray-800 mb-3">
+          <h3 className="text-2xl font-bold text-blue-800 mb-3">
             Complete Your Profile
           </h3>
-          <p className="text-gray-600 max-w-md mx-auto mb-8">
+          <p className="text-blue-600 max-w-md mx-auto mb-8">
             Your profile is incomplete. Let's create your professional profile to
             showcase your skills and achievements.
           </p>
@@ -173,7 +148,7 @@ const ProfilePage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsEditing(true)}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-3 px-8 rounded-xl font-medium shadow-lg"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-8 rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
             disabled={loading}
           >
             {loading ? "Loading..." : "Create Profile"}
@@ -183,12 +158,12 @@ const ProfilePage = () => {
     }
 
     return (
-      <div className="space-y-8 sm:px-6 md:px-8 lg:px-12">
+      <div className="space-y-8">
         {/* Skills Section */}
         {hasSkills && (
-          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
-              <Award className="text-blue-500" size={24} />
+          <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-blue-50">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-blue-800">
+              <Award className="text-blue-600" size={24} />
               <span>Skills</span>
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -198,7 +173,7 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full text-sm font-medium shadow-sm"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow-sm hover:bg-blue-700 transition-colors"
                 >
                   {skill.name || skill}
                 </motion.span>
@@ -209,9 +184,9 @@ const ProfilePage = () => {
 
         {/* Career Goals Section */}
         {user?.careerGoals?.length > 0 && (
-          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
-              <Target className="text-purple-500" size={24} />
+          <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-blue-50">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-blue-800">
+              <Target className="text-blue-600" size={24} />
               <span>Career Goals</span>
             </h2>
             <div className="flex flex-wrap gap-3">
@@ -221,7 +196,7 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.2, delay: index * 0.05 }}
-                  className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium shadow-sm"
+                  className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium shadow-sm hover:bg-blue-200 transition-colors"
                 >
                   {goal}
                 </motion.span>
@@ -232,27 +207,27 @@ const ProfilePage = () => {
 
         {/* Academic Information */}
         {hasEducation && (
-          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
-              <BookOpen className="text-blue-500" size={24} />
+          <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-blue-50">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-blue-800">
+              <BookOpen className="text-blue-600" size={24} />
               <span>Academic Journey</span>
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Class 10 */}
               {user?.education?.class10 && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                  className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                 >
-                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg">Class 10</h3>
-                  <p className="text-gray-900 font-medium">{user.education.class10.school || "Not specified"}</p>
-                  <p className="text-gray-600">
+                  <h3 className="font-semibold text-blue-700 mb-3 text-lg">Class 10</h3>
+                  <p className="text-blue-900 font-medium">{user.education.class10.school || "Not specified"}</p>
+                  <p className="text-blue-600">
                     Percentage:{" "}
                     <span className="font-medium">{user.education.class10.percentage || "N/A"}%</span>
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-blue-600">
                     Year: <span className="font-medium">{user.education.class10.yearOfCompletion || "N/A"}</span>
                   </p>
                 </motion.div>
@@ -264,15 +239,15 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
-                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                  className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                 >
-                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg">Class 12</h3>
-                  <p className="text-gray-900 font-medium">{user.education.class12.school || "Not specified"}</p>
-                  <p className="text-gray-600">
+                  <h3 className="font-semibold text-blue-700 mb-3 text-lg">Class 12</h3>
+                  <p className="text-blue-900 font-medium">{user.education.class12.school || "Not specified"}</p>
+                  <p className="text-blue-600">
                     Percentage:{" "}
                     <span className="font-medium">{user.education.class12.percentage || "N/A"}%</span>
                   </p>
-                  <p className="text-gray-600">
+                  <p className="text-blue-600">
                     Year: <span className="font-medium">{user.education.class12.yearOfCompletion || "N/A"}</span>
                   </p>
                 </motion.div>
@@ -284,25 +259,25 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className={`${(!user?.education?.class10 || !user?.education?.class12) ? "md:col-span-2" : ""
-                    } bg-gradient-to-r from-blue-50 to-indigo-50 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all border-l-4 border-blue-500`}
+                  className={`${(!user?.education?.class10 || !user?.education?.class12) ? "md:col-span-2" : ""}
+                  bg-blue-50 p-5 rounded-xl shadow-sm hover:shadow-md transition-all border-l-4 border-blue-600`}
                 >
-                  <h3 className="font-semibold text-gray-800 mb-2 sm:mb-3 text-lg">Current Education</h3>
-                  <p className="text-gray-900 font-medium text-base sm:text-lg">
+                  <h3 className="font-semibold text-blue-800 mb-3 text-lg">Current Education</h3>
+                  <p className="text-blue-900 font-medium text-lg">
                     {user.education.currentEducation.institution || "Not specified"}
                   </p>
-                  <p className="text-gray-700">
+                  <p className="text-blue-700">
                     {user.education.currentEducation.course || "N/A"}
                     {user.education.currentEducation.specialization && (
                       <span> - {user.education.currentEducation.specialization}</span>
                     )}
                   </p>
                   <div className="flex flex-wrap gap-4 mt-2">
-                    <p className="text-gray-600">
+                    <p className="text-blue-600">
                       <span className="font-medium">Year:</span>{" "}
                       {user.education.currentEducation.yearOfStudy || "N/A"}
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-blue-600">
                       <span className="font-medium">CGPA:</span>{" "}
                       {user.education.currentEducation.cgpa || "N/A"}
                     </p>
@@ -315,17 +290,17 @@ const ProfilePage = () => {
 
         {/* Experience & Achievements */}
         {(user?.extracurricular?.length > 0 || user?.internships?.length > 0 || user?.achievements?.length > 0) && (
-          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
-              <Briefcase className="text-purple-500" size={24} />
+          <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-blue-50">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-blue-800">
+              <Briefcase className="text-blue-600" size={24} />
               <span>Experience & Achievements</span>
             </h2>
-            <div className="space-y-6 sm:space-y-8">
+            <div className="space-y-8">
               {/* Extracurricular Activities */}
               {user?.extracurricular?.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-lg flex items-center gap-2">
-                    <Award size={18} className="text-yellow-500" />
+                  <h3 className="font-semibold text-blue-800 mb-4 text-lg flex items-center gap-2">
+                    <Award size={18} className="text-blue-600" />
                     Extracurricular Activities
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -335,12 +310,12 @@ const ProfilePage = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="p-4 sm:p-5 bg-white/70 rounded-xl shadow-sm hover:shadow-md transition-all border border-gray-100"
+                        className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                       >
-                        <h4 className="font-medium text-base sm:text-lg text-gray-800">{activity.activity}</h4>
-                        <p className="text-gray-700 font-medium">{activity.role}</p>
-                        <p className="text-sm text-gray-500 mt-1">{activity.duration}</p>
-                        <p className="text-sm text-gray-600 mt-2 line-clamp-3">{activity.description}</p>
+                        <h4 className="font-medium text-lg text-blue-800">{activity.activity}</h4>
+                        <p className="text-blue-700 font-medium">{activity.role}</p>
+                        <p className="text-sm text-blue-500 mt-1">{activity.duration}</p>
+                        <p className="text-sm text-blue-600 mt-2 line-clamp-3">{activity.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -350,8 +325,8 @@ const ProfilePage = () => {
               {/* Internships */}
               {user?.internships?.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-lg flex items-center gap-2">
-                    <Briefcase size={18} className="text-blue-500" />
+                  <h3 className="font-semibold text-blue-800 mb-4 text-lg flex items-center gap-2">
+                    <Briefcase size={18} className="text-blue-600" />
                     Internships
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -361,12 +336,12 @@ const ProfilePage = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="p-4 sm:p-5 bg-gradient-to-br from-indigo-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all border border-indigo-100"
+                        className="p-4 bg-blue-50 rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-200"
                       >
-                        <h4 className="font-medium text-base sm:text-lg text-indigo-900">{internship.company}</h4>
-                        <p className="text-indigo-700 font-medium">Role: {internship.role}</p>
-                        <p className="text-sm text-indigo-500 mt-1">{internship.duration} months</p>
-                        <p className="text-sm text-gray-600 mt-2 line-clamp-3">{internship.description}</p>
+                        <h4 className="font-medium text-lg text-blue-900">{internship.company}</h4>
+                        <p className="text-blue-700 font-medium">Role: {internship.role}</p>
+                        <p className="text-sm text-blue-500 mt-1">{internship.duration} months</p>
+                        <p className="text-sm text-blue-600 mt-2 line-clamp-3">{internship.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -376,8 +351,8 @@ const ProfilePage = () => {
               {/* Achievements */}
               {user?.achievements?.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-lg flex items-center gap-2">
-                    <Award size={18} className="text-amber-500" />
+                  <h3 className="font-semibold text-blue-800 mb-4 text-lg flex items-center gap-2">
+                    <Award size={18} className="text-blue-600" />
                     Achievements
                   </h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -387,11 +362,11 @@ const ProfilePage = () => {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3, delay: index * 0.1 }}
-                        className="p-4 sm:p-5 bg-gradient-to-br from-amber-50 to-white rounded-xl shadow-sm hover:shadow-md transition-all border border-amber-100"
+                        className="p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                       >
-                        <h4 className="font-medium text-base sm:text-lg text-amber-900">{achievement.title}</h4>
-                        <p className="text-sm text-amber-600 mt-1">{achievement.year}</p>
-                        <p className="text-sm text-gray-700 mt-2 line-clamp-3">{achievement.description}</p>
+                        <h4 className="font-medium text-lg text-blue-800">{achievement.title}</h4>
+                        <p className="text-sm text-blue-500 mt-1">{achievement.year}</p>
+                        <p className="text-sm text-blue-600 mt-2 line-clamp-3">{achievement.description}</p>
                       </motion.div>
                     ))}
                   </div>
@@ -403,9 +378,9 @@ const ProfilePage = () => {
 
         {/* Future Goals Section */}
         {(user?.futureGoals?.shortTerm || user?.futureGoals?.longTerm || user?.futureGoals?.dreamCompanies?.length > 0) && (
-          <section className="glass-card p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-white/90 to-white/70 shadow-lg transition-all hover:shadow-xl">
-            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 flex items-center gap-3 text-gray-800">
-              <Target className="text-purple-500" size={24} />
+          <section className="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition-all border border-blue-50">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3 text-blue-800">
+              <Target className="text-blue-600" size={24} />
               <span>Future Goals</span>
             </h2>
             <div className="space-y-6">
@@ -415,13 +390,13 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                  className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                 >
-                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg flex items-center gap-2">
-                    <Target size={18} className="text-blue-500" />
+                  <h3 className="font-semibold text-blue-700 mb-3 text-lg flex items-center gap-2">
+                    <Target size={18} className="text-blue-600" />
                     Short Term Goals
                   </h3>
-                  <p className="text-gray-800">{user.futureGoals.shortTerm}</p>
+                  <p className="text-blue-800">{user.futureGoals.shortTerm}</p>
                 </motion.div>
               )}
 
@@ -431,13 +406,13 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
-                  className="bg-white/60 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all"
+                  className="bg-white p-5 rounded-xl shadow-sm hover:shadow-md transition-all border border-blue-100"
                 >
-                  <h3 className="font-semibold text-gray-700 mb-2 sm:mb-3 text-lg flex items-center gap-2">
-                    <Target size={18} className="text-purple-500" />
+                  <h3 className="font-semibold text-blue-700 mb-3 text-lg flex items-center gap-2">
+                    <Target size={18} className="text-blue-600" />
                     Long Term Goals
                   </h3>
-                  <p className="text-gray-800">{user.futureGoals.longTerm}</p>
+                  <p className="text-blue-800">{user.futureGoals.longTerm}</p>
                 </motion.div>
               )}
 
@@ -447,10 +422,10 @@ const ProfilePage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.2 }}
-                  className="bg-gradient-to-r from-purple-50 to-indigo-50 p-5 sm:p-6 rounded-xl shadow-sm hover:shadow-md transition-all border-l-4 border-purple-500"
+                  className="bg-blue-50 p-5 rounded-xl shadow-sm hover:shadow-md transition-all border-l-4 border-blue-600"
                 >
-                  <h3 className="font-semibold text-gray-800 mb-3 sm:mb-4 text-lg flex items-center gap-2">
-                    <Briefcase size={18} className="text-purple-500" />
+                  <h3 className="font-semibold text-blue-800 mb-4 text-lg flex items-center gap-2">
+                    <Briefcase size={18} className="text-blue-600" />
                     Dream Companies
                   </h3>
                   <div className="flex flex-wrap gap-3">
@@ -460,7 +435,7 @@ const ProfilePage = () => {
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.2, delay: index * 0.05 }}
-                        className="px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full text-sm font-medium shadow-sm"
+                        className="px-4 py-2 bg-blue-600 text-white rounded-full text-sm font-medium shadow-sm hover:bg-blue-700 transition-colors"
                       >
                         {company}
                       </motion.span>
@@ -476,25 +451,25 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto h-screen max-h-screen p-4 sm:p-6 flex flex-col gap-6 sm:gap-8">
+    <div className="max-w-4xl mx-auto min-h-screen p-6">
       {/* Header with Cover Photo */}
-      <div className="relative">
-        <div className="w-full h-26 sm:h-38 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl overflow-hidden shadow-lg">
+      <div className="relative mb-8">
+        <div className="w-full h-40 bg-gradient-to-r from-indigo-500 via-purple-400 to-blue-300 rounded-xl overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
         </div>
 
         {/* Profile Info */}
-        <div className="relative -mt-14 sm:-mt-16 sm:ml-8 flex flex-col sm:flex-row items-start sm:items-end sm:justify-between px-4 sm:px-0">
-          <div className="md:mb-6 w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white shadow-lg">
+        <div className="relative -mt-16 ml-6 flex flex-col sm:flex-row items-start sm:items-end sm:justify-between">
+          <div className="w-28 h-28 rounded-full border-4 border-white bg-gradient-to-r from-indigo-500 via-purple-400 to-blue-300 flex items-center justify-center text-3xl font-bold text-white shadow-xl">
             {user?.name?.charAt(0)?.toUpperCase() || "G"}
           </div>
           <div className="sm:ml-6 mt-4 sm:mt-0 mb-4">
-            <h1 className="text-2xl sm:text-4xl font-bold leading-8 sm:leading-9 text-white drop-shadow-md">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">
               {user.name}
             </h1>
-            <p className="text-white/90 text-sm sm:text-base">{user.email}</p>
-            <div className="mt-1">
-              <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-xs sm:text-sm rounded-full">
+            <p className="text-white/90 text-sm sm:text-base h-auto">{user.email}</p>
+            <div className="mt-5">
+              <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-sm rounded-full">
                 {user.userType || "Student"}
               </span>
             </div>
@@ -505,7 +480,7 @@ const ProfilePage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsEditing(!isEditing)}
-              className="mt-4 sm:mt-0 sm:ml-auto sm:mr-8 mb-4 flex items-center gap-2 px-4 sm:px-5 py-2 rounded-md sm:rounded-lg bg-white text-indigo-700 shadow-md hover:bg-indigo-50 transition-colors text-sm sm:text-base"
+              className="mt-4 sm:mt-0 sm:ml-auto sm:mr-6 mb-4 flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-blue-700 shadow-md hover:bg-blue-50 transition-colors"
               disabled={loading}
             >
               <Edit2 size={16} />
@@ -516,7 +491,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col gap-6 sm:gap-8 md:px-4 px-0 sm:px-0">
+      <div className="flex flex-col gap-8">
         {user.userType === "Student" &&
           (isEditing ? (
             <ProfileForm
@@ -531,16 +506,16 @@ const ProfilePage = () => {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex justify-center mt-6 sm:mt-8"
+                  className="flex justify-center mt-8"
                 >
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => generateResume(user)}
-                    className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg sm:rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2 text-sm sm:text-base"
+                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
                     disabled={loading}
                   >
-                    <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                    <Download className="w-5 h-5" />
                     {loading ? "Loading..." : "Download Resume"}
                   </motion.button>
                 </motion.div>

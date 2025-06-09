@@ -131,9 +131,6 @@ const CourseCard = ({ course, onClick, onDelete }) => {
                         <CheckCircle className="w-3 h-3 md:w-4 md:h-4 text-green-500" />
                         {course.completedChapters} / {course.totalChapters} Chapters
                     </p>
-                    <p className="text-xs md:text-sm font-medium text-gray-700">
-                        {Math.round(progress)}% Complete
-                    </p>
                 </div>
             </div>
 

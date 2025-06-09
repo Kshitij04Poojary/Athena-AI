@@ -24,7 +24,7 @@ const CareerRoadmapGenerator = () => {
       });
       
       if (response.data && response.data._id) {
-       console.log(response.data)
+        console.log(response.data)
         navigate(`/roadmap/${response.data._id}`);
       } else {
         console.error('Failed to generate roadmap');

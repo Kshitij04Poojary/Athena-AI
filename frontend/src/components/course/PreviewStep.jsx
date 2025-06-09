@@ -16,9 +16,9 @@ const PreviewStep = ({ courseLayout }) => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      <h3 className="text-2xl sm:text-3xl font-bold text-purple-700">{course["Course Name"]}</h3>
+      <h3 className="text-2xl sm:text-3xl font-bold text-blue-700">{course["Course Name"]}</h3>
       
-      <div className="bg-purple-50 p-4 sm:p-6 rounded-xl border border-purple-100">
+      <div className="bg-blue-50 p-4 sm:p-6 rounded-xl border border-blue-100 shadow-sm">
         <p className="text-gray-700 mb-3 sm:mb-4 text-sm sm:text-base">
           <strong>{t("createCourse.preview.description")}:</strong> {course.Description}
         </p>
@@ -29,7 +29,7 @@ const PreviewStep = ({ courseLayout }) => {
             {course.Skills.map((skill, skillIdx) => (
               <span 
                 key={skillIdx} 
-                className="bg-purple-200 px-2 sm:px-3 py-1 rounded-full text-purple-800 text-xs sm:text-sm"
+                className="bg-blue-200 px-2 sm:px-3 py-1 rounded-full text-blue-800 text-xs sm:text-sm"
               >
                 {skill}
               </span>
@@ -45,33 +45,33 @@ const PreviewStep = ({ courseLayout }) => {
         
         <div className="mt-3 sm:mt-4">
           <strong className="block mb-1 sm:mb-2 text-sm sm:text-base">{t("createCourse.preview.outcomes")}:</strong>
-          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
+          <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-gray-700">
             {course["Course Outcomes"].map((outcome, outcomeIdx) => (
-              <li key={outcomeIdx} className="text-gray-700">{outcome}</li>
+              <li key={outcomeIdx}>{outcome}</li>
             ))}
           </ul>
         </div>
       </div>
       
       <div>
-        <h4 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-purple-700">
+        <h4 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 text-blue-700">
           {t("createCourse.preview.chaptersTitle")}
         </h4>
         {course.Chapters.map((chapter, chapterIdx) => (
           <div 
             key={chapterIdx} 
-            className="bg-white border border-purple-100 rounded-xl p-3 sm:p-5 mb-3 sm:mb-4 shadow-sm hover:shadow-md transition"
+            className="bg-white border border-blue-100 rounded-xl p-3 sm:p-5 mb-3 sm:mb-4 shadow-sm hover:shadow-md transition"
           >
-            <h5 className="text-lg sm:text-xl font-semibold text-purple-600 mb-2">{chapter["Chapter Name"]}</h5>
+            <h5 className="text-lg sm:text-xl font-semibold text-blue-600 mb-2">{chapter["Chapter Name"]}</h5>
             <p className="text-gray-600 mb-2 sm:mb-3 text-sm sm:text-base">{chapter.About}</p>
             <p className="mb-2 text-xs sm:text-sm">
               <strong>{t("createCourse.preview.chapterDuration")}:</strong> {chapter.Duration}
             </p>
             <div>
               <strong className="block mb-1 sm:mb-2 text-xs sm:text-sm">{t("createCourse.preview.content")}:</strong>
-              <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm">
+              <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-gray-700">
                 {chapter.Content.map((item, contentIdx) => (
-                  <li key={contentIdx} className="text-gray-700">{item}</li>
+                  <li key={contentIdx}>{item}</li>
                 ))}
               </ul>
             </div>
