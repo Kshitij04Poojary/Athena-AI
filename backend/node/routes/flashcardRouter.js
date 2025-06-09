@@ -27,15 +27,16 @@ router.post('/genflashcards/:courseId', async (req, res) => {
         const response = await result.response;
         const text = response.text();
 
-        // Extract and parse JSON
+        // Extract and parse JSON from response
         const jsonString = text.match(/```json\n([\s\S]*?)\n```/)?.[1] || text;
         const cardsData = JSON.parse(jsonString);
 
-        // Create new flashcard document
-        const newFlashcards = await Flashcard.create({
-            course: course._id,
-            cards: cardsData
-        });
+        // Atomically insert if not already inserted (avoids race condition)
+        const newFlashcards = await Flashcard.findOneAndUpdate(
+            { course: course._id },
+            { $setOnInsert: { course: course._id, cards: cardsData } },
+            { upsert: true, new: true }
+        );
 
         res.status(201).json({
             message: 'Flashcards generated successfully',

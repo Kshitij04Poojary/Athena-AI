@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, RefreshCw, RotateCw, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FlashCardItem from './FlashCardItem';
+import axios from 'axios';
 
 const Flashcards = () => {
   const { courseId } = useParams();
@@ -13,42 +14,30 @@ const Flashcards = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const NODE_API = import.meta.env.VITE_NODE_API;
-  useEffect(() => {
-    const fetchOrGenerateFlashcards = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        // First try to fetch existing flashcards
-        const fetchResponse = await fetch(`${NODE_API}/flashcards/${courseId}`);
-        
-        if (fetchResponse.ok) {
-          const data = await fetchResponse.json();
-          if (data.flashcards?.cards?.length > 0) {
-            setFlashCards(data.flashcards.cards);
-            return;
-          }
-        }
-        
-        // If no flashcards exist, generate new ones
-        const generateResponse = await fetch(`${NODE_API}/genflashcards/${courseId}`, {
-          method: 'POST'
-        });
-        
-        if (!generateResponse.ok) throw new Error('Failed to generate flashcards');
-        
-        const generatedData = await generateResponse.json();
-        setFlashCards(generatedData.flashcards.cards);
-        
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const fetchOrGenerateFlashcards = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-    fetchOrGenerateFlashcards();
-  }, [courseId]);
+      const { data } = await axios.post(`${NODE_API}/genflashcards/${courseId}`);
+      
+      if (data.flashcards?.cards?.length > 0) {
+        setFlashCards(data.flashcards.cards);
+      } else {
+        setError("No flashcards returned from server");
+      }
+
+    } catch (err) {
+      setError(err.response?.data?.message || err.message || "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchOrGenerateFlashcards();
+}, [courseId]);
+
 
   // Handle flipping the card
   const handleFlip = () => {
