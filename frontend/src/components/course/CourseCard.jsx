@@ -80,7 +80,7 @@ const CourseCard = ({ course, onClick, onDelete }) => {
 
     return (
         <div
-            className="sm:h-[150px] md:h-[180px] border-1 rounded-xl p-3 md:p-5 flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer hover:bg-gray-50 transform relative group"
+            className="sm:h-[150px] md:h-[180px] border border-gray-200 rounded-xl p-3 md:p-5 flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer hover:bg-gray-50 transform relative group"
             onClick={onClick}
         >
             {/* Delete Button - Top Right Corner */}
@@ -102,7 +102,7 @@ const CourseCard = ({ course, onClick, onDelete }) => {
                     <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
                     <span>
                         {course.name.length > 20 ? `${course.name.substring(0, 20)}...` : course.name}
-                        <div className="text-xs font-normal text-gray-500 mt-1 truncate flex flex-wrap gap-1 mt-1">
+                        <div className="text-xs font-normal text-gray-500 truncate flex flex-wrap gap-1 mt-1">
                             {(course.skills || []).map((skill, index) => (
                                 <span
                                     key={index}
