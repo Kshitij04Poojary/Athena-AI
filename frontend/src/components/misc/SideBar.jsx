@@ -54,7 +54,7 @@ const SideBar = ({ collapsed, setCollapsed }) => {
     };
 
     const menuItems = [
-        { name: "Learning Pathway", icon: Route, path: '/roadmap' },
+        { name: t("sidebar.items.learning"), icon: Route, path: '/roadmap' },
         { name: t("sidebar.items.courses"), icon: BookOpen, path: '/my-courses' },
         { name: t("sidebar.items.assessments"), icon: ClipboardList, path: '/assessment' },
         ...(user?.role === 'mentor' ? [{ name: t("sidebar.items.attendance"), icon: ListChecks, path: '/offline-attendance' }] : []),
