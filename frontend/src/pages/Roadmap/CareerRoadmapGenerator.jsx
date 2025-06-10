@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Sparkles, X, Eye, Zap } from 'lucide-react';
 import { useUser } from "../../context/UserContext";
+import { useTranslation } from "react-i18next";
 
 const CareerRoadmapGenerator = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -11,6 +12,7 @@ const CareerRoadmapGenerator = () => {
   const { user } = useUser();
   const NODE_API = import.meta.env.VITE_NODE_API;
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleGenerate = async () => {
     if (!inputValue.trim()) return;
@@ -73,7 +75,7 @@ const CareerRoadmapGenerator = () => {
 
         {/* Title */}
         <h1 className="text-6xl p-5 font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-blue-200 to-purple-200 mb-12 tracking-tight">
-          Learning Pathway Generator
+          {t("learningpath.title")} 
         </h1>
 
         {/* Action Buttons */}
@@ -85,14 +87,14 @@ const CareerRoadmapGenerator = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-400 to-pink-400 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity"></div>
             <div className="relative flex items-center gap-3">
               <Zap className="w-6 h-6" />
-              Generate
+              {t("learningpath.generate")} 
             </div>
           </button>
 
           <button onClick={() => navigate(`/display-roadmaps`)} className="cursor-pointer group relative px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-bold text-lg rounded-2xl border border-white/30 shadow-2xl hover:bg-white/20 transform hover:scale-105 transition-all duration-300">
             <div className="relative flex items-center gap-3">
               <Eye className="w-6 h-6" />
-              View
+              {t("learningpath.view")} 
             </div>
           </button>
         </div>
@@ -116,10 +118,10 @@ const CareerRoadmapGenerator = () => {
             {/* Dialog Content */}
             <div className="relative z-10 cursor-pointer ">
               <h2 className="text-2xl font-bold text-white mb-2 text-center">
-                Generate Your Roadmap
+                {t("learningpath.generateRoadmap")}
               </h2>
               <p className="text-white/80 text-center mb-6">
-                Enter the position/skills to Generate Roadmap
+                {t("learningpath.position")}
               </p>
 
               {/* Input Field */}
@@ -128,7 +130,7 @@ const CareerRoadmapGenerator = () => {
                   type="text"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
-                  placeholder="e.g., Frontend Developer, React Developer..."
+                   placeholder={t("learningpath.placeholder")}
                   className="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent transition-all"
                   disabled={isGenerating}
                 />
@@ -141,7 +143,7 @@ const CareerRoadmapGenerator = () => {
                   disabled={isGenerating}
                   className="flex-1 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/30 text-white font-semibold rounded-xl hover:bg-white/20 transition-all disabled:opacity-50"
                 >
-                  Cancel
+                  {t("learningpath.cancel")}
                 </button>
                 
                 <button
@@ -152,7 +154,7 @@ const CareerRoadmapGenerator = () => {
                   <Sparkles 
                     className={`w-5 h-5 ${isGenerating ? 'animate-spin' : ''}`} 
                   />
-                  {isGenerating ? 'Generating...' : 'Generate'}
+                  {isGenerating ? t('learningpath.generating') : t('learningpath.generate')}
                 </button>
               </div>
             </div>

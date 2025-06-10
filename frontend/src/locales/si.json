@@ -247,5 +247,15 @@
         "title": "PDF අහන්න",
         "description": "යෙකෙසේ හෝ PDF ගොනුවක් උඩුගත කර ප්‍රශ්න ලබා ගන්න. සුද්ධ රෙවිෂන් සඳහා ඉතා සුදුසුයි.",
         "button": "ඔබේ PDF අහන්න"
+    },
+    "learningpath": {
+        "title": "ඉගෙනුම් මාර්ග ජනකය",
+        "generate": "ජනනය කරන්න",
+        "view": "බලන්න",
+        "generateRoadmap": "ඔබගේ මාර්ග සිතියම ජනනය කරන්න",
+        "position": "මාර්ග සිතියම ජනනය කිරීමට තනතුර/නිපුණතා ඇතුළත් කරන්න",
+        "placeholder": "උදා: Frontend Developer, React Developer...",
+        "cancel": "අවලංගු කරන්න",
+        "generating": "ජනනය වෙමින් පවතී..."
     }
 }

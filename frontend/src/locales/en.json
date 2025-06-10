@@ -57,71 +57,71 @@
     "createCourse": {
         "title": "Create Course",
         "steps": {
-        "skills": "Skills",
-        "topic": "Topic and Description",
-        "options": "Options",
-        "generated": "Generated Course"
+            "skills": "Skills",
+            "topic": "Topic and Description",
+            "options": "Options",
+            "generated": "Generated Course"
         },
         "skills": {
-        "title": "Select Skills",
-        "addPlaceholder": "Add skill",
-        "addButton": "Add Skill"
+            "title": "Select Skills",
+            "addPlaceholder": "Add skill",
+            "addButton": "Add Skill"
         },
         "topic": {
-        "title": "Topic & Description",
-        "topicPlaceholder": "Topic",
-        "descriptionPlaceholder": "Course Description"
+            "title": "Topic & Description",
+            "topicPlaceholder": "Topic",
+            "descriptionPlaceholder": "Course Description"
         },
         "options": {
-        "title": "Options",
-        "difficultyPlaceholder": "Select Difficulty",
-        "difficulty": {
-            "basic": "Basic",
-            "intermediate": "Intermediate",
-            "advanced": "Advanced"
-        },
-        "durationPlaceholder": "Duration",
-        "chaptersPlaceholder": "No. of Chapters (1-5)"
+            "title": "Options",
+            "difficultyPlaceholder": "Select Difficulty",
+            "difficulty": {
+                "basic": "Basic",
+                "intermediate": "Intermediate",
+                "advanced": "Advanced"
+            },
+            "durationPlaceholder": "Duration",
+            "chaptersPlaceholder": "No. of Chapters (1-5)"
         },
         "preview": {
-        "description": "Description",
-        "skills": "Skills",
-        "level": "Level",
-        "duration": "Duration",
-        "chapters": "Number of Chapters",
-        "outcomes": "Course Outcomes",
-        "chaptersTitle": "Chapters",
-        "chapterDuration": "Duration",
-        "content": "Chapter Content"
+            "description": "Description",
+            "skills": "Skills",
+            "level": "Level",
+            "duration": "Duration",
+            "chapters": "Number of Chapters",
+            "outcomes": "Course Outcomes",
+            "chaptersTitle": "Chapters",
+            "chapterDuration": "Duration",
+            "content": "Chapter Content"
         },
         "buttons": {
-        "backToCourses": "Back to My Courses",
-        "back": "Back",
-        "next": "Next",
-        "generate": "Generate",
-        "generating": "Generating...",
-        "finish": "Finish",
-        "finalizing": "Finalizing..."
+            "backToCourses": "Back to My Courses",
+            "back": "Back",
+            "next": "Next",
+            "generate": "Generate",
+            "generating": "Generating...",
+            "finish": "Finish",
+            "finalizing": "Finalizing..."
         },
         "success": {
-        "layoutGenerated": "Course layout generated successfully!",
-        "courseCreated": "Course created successfully!",
-        "assignedCreated": "Assigned course created for mentor."
+            "layoutGenerated": "Course layout generated successfully!",
+            "courseCreated": "Course created successfully!",
+            "assignedCreated": "Assigned course created for mentor."
         },
         "errors": {
-        "generateFailed": "Failed to generate course layout",
-        "noChapters": "Please generate a course with chapters first",
-        "chapterFailed": "Failed to fetch content for chapter: {{chapter}}",
-        "sessionExpired": "Session expired or you're not logged in. Please log in again.",
-        "noCourseId": "Course created, but unable to retrieve course ID",
-        "createFailed": "Error creating course",
-        "saveFailed": "Failed to save course. Please try again.",
-        "generationFailed": "Error generating course. Please try again.",
-        "assignFailed": "Failed to create assigned course for mentor.",
-        "chapterError": "Error generating content for chapter \"{{chapter}}\""
+            "generateFailed": "Failed to generate course layout",
+            "noChapters": "Please generate a course with chapters first",
+            "chapterFailed": "Failed to fetch content for chapter: {{chapter}}",
+            "sessionExpired": "Session expired or you're not logged in. Please log in again.",
+            "noCourseId": "Course created, but unable to retrieve course ID",
+            "createFailed": "Error creating course",
+            "saveFailed": "Failed to save course. Please try again.",
+            "generationFailed": "Error generating course. Please try again.",
+            "assignFailed": "Failed to create assigned course for mentor.",
+            "chapterError": "Error generating content for chapter \"{{chapter}}\""
         },
         "warnings": {
-        "chapterSkipped": "Failed to generate content for chapter \"{{chapter}}\". Skipping this chapter."
+            "chapterSkipped": "Failed to generate content for chapter \"{{chapter}}\". Skipping this chapter."
         }
     },
     "courseDetails": {
@@ -143,28 +143,28 @@
         "downloadCertificate": "Download Certificate",
         "editTitle": "Edit Course",
         "buttons": {
-        "back": "Back",
-        "edit": "Edit",
-        "save": "Save Changes",
-        "cancel": "Cancel",
-        "addChapter": "Add Chapter"
+            "back": "Back",
+            "edit": "Edit",
+            "save": "Save Changes",
+            "cancel": "Cancel",
+            "addChapter": "Add Chapter"
         },
         "errors": {
-        "noToken": "No authentication token found",
-        "fetchFailed": "Failed to fetch course data",
-        "fetchError": "Error fetching course data:",
-        "updateFailed": "Failed to update course status",
-        "updateError": "Error updating course status:",
-        "translationError": "Error translating content:",
-        "assessmentError": "Error fetching assessments:",
-        "noAssessments": "No assessments found for this course"
+            "noToken": "No authentication token found",
+            "fetchFailed": "Failed to fetch course data",
+            "fetchError": "Error fetching course data:",
+            "updateFailed": "Failed to update course status",
+            "updateError": "Error updating course status:",
+            "translationError": "Error translating content:",
+            "assessmentError": "Error fetching assessments:",
+            "noAssessments": "No assessments found for this course"
         },
         "certificate": {
-        "title": "Certificate of Completion",
-        "certifyText": "This is to certify that",
-        "completedText": "has successfully completed the course",
-        "issuedOn": "Issued on:",
-        "issuedBy": "Issued By:"
+            "title": "Certificate of Completion",
+            "certifyText": "This is to certify that",
+            "completedText": "has successfully completed the course",
+            "issuedOn": "Issued on:",
+            "issuedBy": "Issued By:"
         }
     },
     "assessment": {
@@ -177,12 +177,12 @@
         "questionsTitle": "Questions",
         "progress": "Progress",
         "buttons": {
-        "previous": "Previous",
-        "next": "Next",
-        "submit": "Submit Quiz"
+            "previous": "Previous",
+            "next": "Next",
+            "submit": "Submit Quiz"
         },
         "errors": {
-        "generateFailed": "Error generating course-end assessment:"
+            "generateFailed": "Error generating course-end assessment:"
         }
     },
     "projects": {
@@ -191,20 +191,20 @@
         "loading": "Fetching personalized recommendations...",
         "featuresTitle": "Key Features",
         "filter": {
-        "title": "Filter by Domain",
-        "all": "All"
+            "title": "Filter by Domain",
+            "all": "All"
         },
         "buttons": {
-        "getRecommendations": "Get AI Project Recommendations",
-        "loading": "Loading Recommendations..."
+            "getRecommendations": "Get AI Project Recommendations",
+            "loading": "Loading Recommendations..."
         },
         "empty": {
-        "title": "No Recommendations Yet",
-        "message": "Click the button above to get personalized AI project recommendations."
+            "title": "No Recommendations Yet",
+            "message": "Click the button above to get personalized AI project recommendations."
         },
         "errors": {
-        "notLoggedIn": "User not logged in",
-        "fetchFailed": "Error fetching project recommendations:"
+            "notLoggedIn": "User not logged in",
+            "fetchFailed": "Error fetching project recommendations:"
         }
     },
     "sidebar": {
@@ -214,23 +214,23 @@
         "guestEmail": "guest@example.com",
         "logout": "Logout",
         "aria": {
-        "expand": "Expand sidebar",
-        "collapse": "Collapse sidebar"
+            "expand": "Expand sidebar",
+            "collapse": "Collapse sidebar"
         },
         "items": {
-        "profile": "Profile",
-        "courses": "Courses",
-        "assessments": "Assessments",
-        "attendance": "Attendance",
-        "video": "Video Conferencing",
-        "projects": "Project Recommendations",
-        "schedule": "AI Schedule",
-        "coding": "Coding",
-        "challenge": "Challenge Yourself",
-        "exams": "Exams",
-        "interviews": "Mock Interviews",
-        "internships": "Internships",
-        "learning": "Learning Pathway"
+            "profile": "Profile",
+            "courses": "Courses",
+            "assessments": "Assessments",
+            "attendance": "Attendance",
+            "video": "Video Conferencing",
+            "projects": "Project Recommendations",
+            "schedule": "AI Schedule",
+            "coding": "Coding",
+            "challenge": "Challenge Yourself",
+            "exams": "Exams",
+            "interviews": "Mock Interviews",
+            "internships": "Internships",
+            "learning": "Learning Pathway"
         }
     },
     "notes": {
@@ -245,7 +245,17 @@
     },
     "querypdf": {
         "title": "Query PDF",
-        "description": "Upload and ask questions from any PDF file. Perfect for smart revision..",
+        "description": "Upload and ask questions from any PDF file. Perfect for smart revision.",
         "button": "Ask your PDF"
+    },
+    "learningpath": {
+        "title": "Learning Pathway Generator",
+        "generate": "Generate",
+        "view": "View",
+        "generateRoadmap": "Generate Your Roadmap",
+        "position": "Enter the position/skills to Generate Roadmap",
+        "placeholder": "e.g., Frontend Developer, React Developer...",
+        "cancel": "Cancel",
+        "generating": "Generating..."
     }
 }

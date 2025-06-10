@@ -247,5 +247,15 @@
         "title": "PDF विचारा",
         "description": "कोणतीही PDF फाइल अपलोड करा आणि प्रश्न विचारा. स्मार्ट पुनरावृत्तीसाठी परिपूर्ण.",
         "button": "तुमचा PDF विचार"
+    },
+    "learningpath": {
+        "title": "लर्निंग पथ जनरेटर",
+        "generate": "जनरेट करा",
+        "view": "पहा",
+        "generateRoadmap": "आपला रोडमॅप जनरेट करा",
+        "position": "रोडमॅप जनरेट करण्यासाठी पद/कौशल्ये प्रविष्ट करा",
+        "placeholder": "उदा. Frontend Developer, React Developer...",
+        "cancel": "रद्द करा",
+        "generating": "जनरेट होत आहे..."
     }
 }

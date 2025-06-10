@@ -247,5 +247,15 @@
       "title": "PDF पुछो",
       "description": "कोनो PDF फाइल अपलोड करो अउर सवाल पूछो। स्मार्ट रिवीजन के लिए सर्वोत्तम।",
       "button": "अपना PDF पुछो"
-    }
+    },
+    "learningpath": {
+  "title": "सीखणे रास्ता जनरेटर",
+  "generate": "बनाओ",
+  "view": "देखो",
+  "generateRoadmap": "अपना रोडमैप बनाओ",
+  "position": "रोडमैप बनाने लेई पद/कौशल डालो",
+  "placeholder": "जैसे: Frontend Developer, React Developer...",
+  "cancel": "रद्द करो",
+  "generating": "बनाया जा रह्या है..."
+}
   }

@@ -247,5 +247,15 @@
         "title": "PDF সুধক",
         "description": "PDF ফাইল উʼপলোড তন দৌ আর প্রশ্ন কৌরকী। স্মার্ট পুনর্বিবেচনাকেই চুংথৌয়ে।",
         "button": "আপোন PDF সুধক"
+    },
+    "learningpath": {
+        "title": "ꯇꯦꯡꯕ ꯂꯝꯂꯦꯟ ꯁꯦꯝꯕꯤꯔꯝꯕ",
+        "generate": "ꯁꯦꯝꯕꯤꯔꯝꯕ",
+        "view": "ꯎꯠꯂꯤꯟꯅꯕ",
+        "generateRoadmap": "ꯅꯍꯥꯛꯀꯤ ꯔꯣꯗꯃꯦꯞ ꯁꯦꯝꯕꯤꯔꯝꯕ",
+        "position": "ꯔꯣꯗꯃꯦꯞ ꯁꯦꯝꯕꯤꯔꯝꯕꯒꯤꯗꯃꯛ ꯃꯐꯝ/ꯃꯆꯤꯟ ꯑꯦꯇꯦꯟꯗ ꯇꯧꯕ",
+        "placeholder": "ꯃꯆꯤ: Frontend Developer, React Developer...",
+        "cancel": "ꯑꯣꯏꯊꯣꯛꯄ",
+        "generating": "ꯁꯦꯝꯒꯅꯤ..."
     }
 }

@@ -247,5 +247,15 @@
     "title": "PDF पुछबो",
     "description": "कोनो PDF फाइल अपलोड करुन आनि प्रश्न पूछुन। स्मार्ट पुनरावलोकनार उपयुक्त।",
     "button": "तुमर PDF पुछबो"
-  }
+  },
+  "learningpath": {
+  "title": "सोनारो हार फोरमायथि",
+  "generate": "फोरमा",
+  "view": "नाय",
+  "generateRoadmap": "नोंथांनि रोडमेप फोरमा",
+  "position": "रोडमेप फोरमायनो थाखाय पजिसन/स्किल हानजा",
+  "placeholder": "दादै: Frontend Developer, React Developer...",
+  "cancel": "खारखा",
+  "generating": "फोरमायनाय जागासिनो दं..."
+}
   }

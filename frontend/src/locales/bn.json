@@ -247,5 +247,15 @@
     "title": "PDF জিজ্ঞাসা করুন",
     "description": "যেকোনো PDF ফাইল আপলোড করুন এবং প্রশ্ন করুন। স্মার্ট পুনর্বিবেচনার জন্য উপযুক্ত।",
     "button": "আপনার PDF জিজ্ঞাসা করুন"
-  }
+  },
+  "learningpath": {
+  "title": "লার্নিং পাথ জেনারেটর",
+  "generate": "জেনারেট করুন",
+  "view": "দেখুন",
+  "generateRoadmap": "আপনার রোডম্যাপ তৈরি করুন",
+  "position": "রোডম্যাপ তৈরি করতে পদ/দক্ষতা লিখুন",
+  "placeholder": "যেমন: Frontend Developer, React Developer...",
+  "cancel": "বাতিল",
+  "generating": "জেনারেট করা হচ্ছে..."
+}
   }

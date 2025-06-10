@@ -247,5 +247,15 @@
         "title": "PDF ਪੁੱਛੋ",
         "description": "ਕਿਸੇ ਵੀ PDF ਫਾਈਲ ਨੂੰ ਅੱਪਲੋਡ ਕਰੋ ਅਤੇ ਸਵਾਲ ਪੁੱਛੋ। ਸਮਾਰਟ ਰਿਵਿਜ਼ਨ ਲਈ ਉੱਤਮ।",
         "button": "ਤੁਹਾਡਾ PDF ਪੁੱਛੋ"
+    },
+    "learningpath": {
+        "title": "ਲਰਨਿੰਗ ਪਾਥਵੇ ਜਨਰੇਟਰ",
+        "generate": "ਜਨਰੇਟ ਕਰੋ",
+        "view": "ਵੇਖੋ",
+        "generateRoadmap": "ਆਪਣਾ ਰੋਡਮੈਪ ਜਨਰੇਟ ਕਰੋ",
+        "position": "ਰੋਡਮੈਪ ਜਨਰੇਟ ਕਰਨ ਲਈ ਪਦ/ਹੁਨਰ ਦਰਜ ਕਰੋ",
+        "placeholder": "ਜਿਵੇਂ: Frontend Developer, React Developer...",
+        "cancel": "ਰੱਦ ਕਰੋ",
+        "generating": "ਜਨਰੇਟ ਹੋ ਰਿਹਾ ਹੈ..."
     }
 }

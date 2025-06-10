@@ -247,5 +247,15 @@
         "title": "PDF पूछी",
         "description": "कउनो PDF फाइल अपलोड करीं आ प्रश्न पूछीं। स्मार्ट पुनरावलोकन खातिर उत्तम।",
         "button": "अपना PDF पूछी"
+    },
+    "learningpath": {
+        "title": "ज्ञानपथ जनरेटर",
+        "generate": "बनाउ",
+        "view": "देखु",
+        "generateRoadmap": "अपन रोडमैप बनाउ",
+        "position": "रोडमैप बनाएबाक लेल पद/कौशल डालू",
+        "placeholder": "जहाँ: Frontend Developer, React Developer...",
+        "cancel": "रद्द करू",
+        "generating": "बनाएल जा रहल अछि..."
     }
 }

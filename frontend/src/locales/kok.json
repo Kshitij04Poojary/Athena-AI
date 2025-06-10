@@ -247,5 +247,15 @@
         "title": "PDF विचरांचें",
         "description": "कोणत्याही PDF फाईल अपलोड कर आणि प्रश्न विचर. स्मार्ट पुनरावलोकनासाठी परफेक्ट.",
         "button": "तुमचो PDF विचर"
+    },
+    "learningpath": {
+        "title": "शिकपाचो मार्ग जनरेटर",
+        "generate": "तयार करचें",
+        "view": "पळेवचें",
+        "generateRoadmap": "आपलो रोडमॅप तयार करचो",
+        "position": "रोडमॅप तयार करपाक पद/कुशळकाय दाखोवची",
+        "placeholder": "देखीक: Frontend Developer, React Developer...",
+        "cancel": "रद्द करचें",
+        "generating": "तयार जाता..."
     }
 }

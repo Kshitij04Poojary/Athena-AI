@@ -247,5 +247,15 @@
     "title": "PDF প্ৰশ্ন কৰক",
     "description": "যিকোনো PDF ফাইল আপল’ড কৰক আৰু প্ৰশ্ন কৰক। বুদ্ধিমত্তামূলক পুনঃপাঠৰ বাবে উপযুক্ত।",
     "button": "আপোনাৰ PDF সুধক"
-  }
+  },
+  "learningpath": {
+  "title": "শিকাৰ পথ নিৰ্মাতা",
+  "generate": "সৃজন কৰক",
+  "view": "চাওক",
+  "generateRoadmap": "আপোনাৰ ৰোডমেপ সৃজন কৰক",
+  "position": "ৰোডমেপ সৃজন কৰিবলে‍岗位/দক্ষতা সুমুৱাওক",
+  "placeholder": "যেনে: Frontend Developer, React Developer...",
+  "cancel": "বাতিল কৰক",
+  "generating": "সৃজন কৰি থকা হৈছে..."
+}
 }
