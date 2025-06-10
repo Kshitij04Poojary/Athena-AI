@@ -244,7 +244,7 @@
     },
     "querypdf": {
         "title": "Query PDF",
-        "description": "Upload and ask questions from any PDF file. Perfect for smart revision..",
+        "description": "Upload and ask questions from any PDF file. Perfect for smart revision.",
         "button": "Ask your PDF"
     }
 }
