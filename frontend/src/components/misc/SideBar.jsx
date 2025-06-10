@@ -54,13 +54,13 @@ const SideBar = ({ collapsed, setCollapsed }) => {
     };
 
     const menuItems = [
+        { name: "Learning Pathway", icon: Route, path: '/roadmap' },
         { name: t("sidebar.items.courses"), icon: BookOpen, path: '/my-courses' },
         { name: t("sidebar.items.assessments"), icon: ClipboardList, path: '/assessment' },
         ...(user?.role === 'mentor' ? [{ name: t("sidebar.items.attendance"), icon: ListChecks, path: '/offline-attendance' }] : []),
         ...(user?.role === 'mentor' || user?.role === 'mentee'
             ? [{ name: t("sidebar.items.video"), icon: Video, path: user?.role === 'mentor' ? '/mentor' : '/mentee' }]
             : []),
-        { name: "Learning Pathway", icon: Route, path: '/roadmap' },
         { name: t("sidebar.items.projects"), icon: Lightbulb, path: '/recommend-projects' },
         { name: t("sidebar.items.coding"), icon: BarChart2, path: '/coding' },
         ...(user?.role === 'mentor' || user?.role === 'mentee'
@@ -222,11 +222,11 @@ const SideBar = ({ collapsed, setCollapsed }) => {
                         onClick={handleLogout}
                         className="flex items-center p-3 w-full rounded-lg hover:bg-red-600/20 transition-colors group bg-red-600/10"
                     >
-                        <div className={`${(!collapsed || isMobile) && 'mr-4'} text-white group-hover:text-red-200 transition-colors`}>
+                        <div className={`${(!collapsed || isMobile) && 'mr-4'} text-white group-hover:text-red-500 cursor-pointer transition-colors`}>
                             <LogOut size={20} />
                         </div>
                         {(!collapsed || isMobile) && (
-                            <span className="text-white group-hover:text-red-200 transition-colors">
+                            <span className="text-white group-hover:text-red-500 cursor-pointer transition-colors">
                                 {t("sidebar.logout")}
                             </span>
                         )}
