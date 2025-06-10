@@ -23,6 +23,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const NODE_API = import.meta.env.VITE_NODE_API;
   const navigate = useNavigate();
+  console.log("User data:", user);
 
   // Transform user data to ProfileForm format
   const transformUserDataForForm = (userData) => {
