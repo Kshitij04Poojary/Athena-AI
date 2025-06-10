@@ -2,20 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import {
-    ArrowLeft,
-    BookOpen,
-    Clock,
-    Target,
-    Layers,
-    Star,
-    Lock,
-    Unlock,
-    CheckCircle,
-    Pencil,
-    Download,
-    ChevronDown,
-    ChevronUp,
-    ArrowRight
+    ArrowLeft, BookOpen, Clock, Target, Layers, Star, Lock, Unlock, CheckCircle, Pencil, Download, ChevronDown, ChevronUp, ArrowRight
 } from 'lucide-react';
 import { useTranslation } from "react-i18next";
 import { translateText } from "../../components/language/translateService";

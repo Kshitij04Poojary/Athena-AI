@@ -1,6 +1,7 @@
 import React from 'react';
 import CourseDetails from './CourseDetails';
 import NotesFlashcard from './NotesFlashcard';
+import PDFChatComponent from '../../components/chatpdf/PDFChatComponent';
 
 const MainCourseDetails = () => {
   return (

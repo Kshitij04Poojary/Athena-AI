@@ -80,8 +80,6 @@ const AppContent = () => {
         <Route path="/calendar" element={<TeamsStyleCalendar />} />
         <Route path="/transcript" element={<Transcript />} />
         <Route path="/coding" element={<CodeEditor />} />
-        <Route path="/chat-with-pdf" element={<PDFChatComponent />} />
-        <Route path="/game" element={<GamePage />} />
         <Route path="/roadmap" element={<CareerRoadmapGenerator />} />
         <Route path="/roadmap/:roadmapid" element={<RoadmapContent />} />
         <Route path="/display-roadmaps" element={<RoadmapDisplay />} />
@@ -103,6 +101,7 @@ const AppContent = () => {
         )}
         <Route path="/flashcards/:courseId" element={<MainFlashcard />} />
         <Route path="/notes/:courseId" element={<NotesPage />} />
+        <Route path="/chat-with-pdf/:courseId" element={<PDFChatComponent />} />
       </Route>
 
       <Route path="/interview/:interviewId" element={<StartInterview />} />
@@ -114,6 +113,7 @@ const AppContent = () => {
       />
       <Route path="/examreview" element={<ExamReview />} />
       <Route path="/flashcard" element={<NotesFlashcard />} />
+      <Route path="/game" element={<GamePage />} />
     </Routes>
   );
 };

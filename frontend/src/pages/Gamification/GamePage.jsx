@@ -1,4 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 import GameCard from '../../components/game/GameCard';
 import GameQuestions from '../../components/game/GameQuestions';
 import ResultScreen from '../../components/game/ResultScreen';
@@ -8,6 +10,8 @@ import { useUser } from '../../context/UserContext';
 
 const GamePage = () => {
     const { user } = useUser();
+    const navigate = useNavigate();
+
     const [currentView, setCurrentView] = useState('gameSelection');
     const [currentDifficulty, setCurrentDifficulty] = useState(null);
     const [currentWave, setCurrentWave] = useState(0);
@@ -28,7 +32,7 @@ const GamePage = () => {
     const [lastWaveResult, setLastWaveResult] = useState(null);
     const dropdownRef = useRef(null);
     const NODE_API = import.meta.env.VITE_NODE_API;
-    // Filter skills based on search term
+
     const filteredSkills = useMemo(() => {
         return skillList.filter(skill =>
             skill.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,8 +83,6 @@ const GamePage = () => {
 
     const fetchUserGames = async () => {
         try {
-            console.log("ID: ", user._id);
-            console.log("Token: ", user.token);
             const response = await fetch(`${NODE_API}/games/user/${user._id}`, {
                 headers: {
                     'Authorization': `Bearer ${user.token}`
@@ -97,7 +99,6 @@ const GamePage = () => {
 
     const handleGenerateGame = async () => {
         if (!selectedSkill) return;
-        
         try {
             const result = await createGame(selectedSkill, selectedSkill);
             setGeneratedGame(result.game);
@@ -124,7 +125,7 @@ const GamePage = () => {
                 userAnswers
             );
             setGameProgress(result.game.progress);
-            setLastWaveResult(result); // Store the result
+            setLastWaveResult(result);
             setCurrentView('results');
         } catch (error) {
             alert(`Error completing wave: ${error.message}`);
@@ -160,10 +161,20 @@ const GamePage = () => {
 
             {currentView === 'gameSelection' && (
                 <div className="relative z-10 max-w-4xl mx-auto bg-gray-900 bg-opacity-70 p-8 rounded-xl shadow-2xl mt-12">
+                    
+                    {/* <- Back Button */}
+                    <button
+                        onClick={() => navigate('/profile')}
+                        className="text-white hover:text-yellow-400 mb-4"
+                    >
+                        <ArrowLeft className="w-6 h-6" />
+                    </button>
+
                     <h1 className="text-4xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-500">
                         Tower of Knowledge
                     </h1>
                     
+                    {/* Skill Input + Generate */}
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6 relative">
                         <div className="relative w-full sm:w-auto text-white" ref={dropdownRef}>
                             <input
@@ -172,9 +183,7 @@ const GamePage = () => {
                                 onChange={(e) => {
                                     setSearchTerm(e.target.value);
                                     setShowDropdown(true);
-                                    if (!e.target.value) {
-                                        setSelectedSkill('');
-                                    }
+                                    if (!e.target.value) setSelectedSkill('');
                                 }}
                                 onFocus={() => setShowDropdown(true)}
                                 onBlur={() => {
@@ -219,6 +228,7 @@ const GamePage = () => {
                         </button>
                     </div>
 
+                    {/* Game History or Game Cards */}
                     <div className="mt-6">
                         <button 
                             onClick={() => {
@@ -237,7 +247,6 @@ const GamePage = () => {
                         {showHistory ? (
                             <div className="mt-4">
                                 <h2 className="text-2xl font-semibold text-white mb-4">My Game History</h2>
-                                
                                 {userGames.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
                                         {userGames.map(game => (

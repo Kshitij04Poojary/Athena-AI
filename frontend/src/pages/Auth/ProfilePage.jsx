@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import ProfileForm from "../../components/profile/ProfileForm";
 import generateResume from "../../components/misc/generateResume";
 import axios from "axios";
@@ -12,6 +13,7 @@ import {
   Target,
   User,
   Download,
+  Gamepad,
 } from "lucide-react";
 import MentorScoresChart from '../../components/landing/MentorScoresCart';
 
@@ -20,6 +22,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const NODE_API = import.meta.env.VITE_NODE_API;
+  const navigate = useNavigate();
 
   // Transform user data to ProfileForm format
   const transformUserDataForForm = (userData) => {
@@ -454,13 +457,13 @@ const ProfilePage = () => {
     <div className="max-w-4xl mx-auto min-h-screen p-6">
       {/* Header with Cover Photo */}
       <div className="relative mb-8">
-        <div className="w-full h-40 bg-gradient-to-r from-indigo-500 via-purple-400 to-blue-300 rounded-xl overflow-hidden shadow-xl">
+        <div className="w-full h-40 bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 rounded-xl overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
         </div>
 
         {/* Profile Info */}
         <div className="relative -mt-16 ml-6 flex flex-col sm:flex-row items-start sm:items-end sm:justify-between">
-          <div className="w-28 h-28 rounded-full border-4 border-white bg-gradient-to-r from-indigo-500 via-purple-400 to-blue-300 flex items-center justify-center text-3xl font-bold text-white shadow-xl">
+          <div className="w-28 h-28 rounded-full border-4 border-white bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 flex items-center justify-center text-3xl font-bold text-white shadow-xl">
             {user?.name?.charAt(0)?.toUpperCase() || "G"}
           </div>
           <div className="sm:ml-6 mt-4 sm:mt-0 mb-4">
@@ -476,16 +479,29 @@ const ProfilePage = () => {
           </div>
 
           {user.userType === "Student" && (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setIsEditing(!isEditing)}
-              className="mt-4 sm:mt-0 sm:ml-auto sm:mr-6 mb-4 flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-blue-700 shadow-md hover:bg-blue-50 transition-colors"
-              disabled={loading}
-            >
-              <Edit2 size={16} />
-              {loading ? "Loading..." : isEditing ? "Cancel Edit" : "Edit Profile"}
-            </motion.button>
+            <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0 sm:ml-auto sm:mr-6 mb-4">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setIsEditing(!isEditing)}
+                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-blue-700 shadow-md hover:bg-blue-50 transition-colors"
+                disabled={loading}
+              >
+                <Edit2 size={16} />
+                {loading ? "Loading..." : isEditing ? "Cancel Edit" : "Edit Profile"}
+              </motion.button>
+              {/*
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/game')}
+                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md hover:from-purple-700 hover:to-indigo-700 transition-colors"
+              >
+                <Gamepad size={16} />
+                Challenge Yourself
+              </motion.button>
+              */}
+            </div>
           )}
         </div>
       </div>
@@ -503,22 +519,32 @@ const ProfilePage = () => {
               {renderProfile()}
 
               {(user?.education || user?.extracurricular?.length || user?.internships?.length || user?.skills?.length > 0) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex justify-center mt-8"
-                >
+                <div className="flex justify-center gap-4 mt-8">
                   <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => generateResume(user)}
-                    className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
+                    className="bg-gradient-to-r from-green-500 to-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
                     disabled={loading}
                   >
                     <Download className="w-5 h-5" />
                     {loading ? "Loading..." : "Download Resume"}
                   </motion.button>
-                </motion.div>
+                  
+                  <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => navigate('/game')}
+                    className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
+                  >
+                    <Gamepad className="w-5 h-5" />
+                    Challenge Yourself
+                  </motion.button>
+                </div>
               )}
             </>
           ))}

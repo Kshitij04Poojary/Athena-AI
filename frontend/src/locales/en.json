@@ -241,5 +241,10 @@
         "title": "View Flashcards",
         "description": "Boost your memory with interactive, custom-generated flashcards.",
         "button": "View Flashcards"
+    },
+    "querypdf": {
+        "title": "Query PDF",
+        "description": "Upload and ask questions from any PDF file. Perfect for smart revision..",
+        "button": "Ask your PDF"
     }
 }
