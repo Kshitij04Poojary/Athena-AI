@@ -67,8 +67,7 @@ const SideBar = ({ collapsed, setCollapsed }) => {
             ? [{ name: t("sidebar.items.exams"), icon: BarChart2, path: user?.role === 'mentor' ? '/create-exam' : '/mentee-exam' }]
             : []),
         { name: t("sidebar.items.interviews"), icon: BrainCircuit, path: '/interview' },
-        { name: t("sidebar.items.internships"), icon: Briefcase, path: '/internships' },
-        { name: t('Query PDF'), icon: SearchIcon, path: '/chat-with-pdf' },
+        { name: t("sidebar.items.internships"), icon: Briefcase, path: '/internships' }
     ];
 
     const isActive = (path) => {
