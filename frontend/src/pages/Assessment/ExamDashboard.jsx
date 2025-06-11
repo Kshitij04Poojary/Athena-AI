@@ -82,7 +82,7 @@ const ExamDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
         {/* Assessment Generation Section */}
-        <div className="md:col-span-1 bg-white rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border border-blue-50 p-5 md:p-8 transform transition-all hover:shadow-2xl">
+        <div className="md:col-span-1 md:h-[24rem] bg-white rounded-xl md:rounded-2xl shadow-xl md:shadow-2xl border border-blue-50 p-5 md:p-8 transform transition-all hover:shadow-2xl">
           <div className="text-center mb-4 md:mb-6">
             <div className="inline-block bg-blue-100 p-2 md:p-3 rounded-full mb-3 md:mb-4">
               <Target className="text-blue-600" size={24} />

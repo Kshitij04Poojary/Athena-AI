@@ -22,13 +22,13 @@ const CourseCard = ({ course, onClick, onDelete }) => {
 
     // Get primary skill icon (use first skill in the array)
     const primarySkill = course.skills?.[0] || '';
-    const Icon = primarySkill ? 
-        (skillIconMap[primarySkill] || BookOpen) : 
+    const Icon = primarySkill ?
+        (skillIconMap[primarySkill] || BookOpen) :
         BookOpen;
 
     const handleDelete = async (e) => {
         e.stopPropagation();
-        
+
         // Show confirmation toast with action buttons
         toast.warn(
             ({ closeToast }) => (
@@ -50,7 +50,7 @@ const CourseCard = ({ course, onClick, onDelete }) => {
                             onClick={async () => {
                                 closeToast();
                                 setIsDeleting(true);
-                                
+
                                 try {
                                     await onDelete(course.id);
                                     toast.success('Course deleted successfully!');
@@ -80,7 +80,7 @@ const CourseCard = ({ course, onClick, onDelete }) => {
 
     return (
         <div
-            className="sm:h-[150px] md:h-[180px] border border-gray-200 rounded-xl p-3 md:p-5 flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer hover:bg-gray-50 transform relative group"
+            className="sm:h-[150px] md:h-[200px] border border-gray-200 rounded-xl p-3 md:px-5 md:py-7 flex flex-col justify-between shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer hover:bg-gray-50 transform relative group"
             onClick={onClick}
         >
             {/* Delete Button - Top Right Corner */}
@@ -98,8 +98,8 @@ const CourseCard = ({ course, onClick, onDelete }) => {
             </button>
 
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-0">
-                <h3 className="font-bold lg:text-md md:text-xl text-gray-800 flex items-center gap-2">
-                    <Icon className="w-5 h-5 md:w-6 md:h-6 text-blue-600" />
+                <h3 className="font-bold lg:text-md md:text-xl text-gray-800 flex items-start gap-2">
+                    <Icon className="w-5 h-5 md:w-6 md:h-6 md:mt-1 text-blue-600" />
                     <span>
                         {course.name.length > 20 ? `${course.name.substring(0, 20)}...` : course.name}
                         <div className="text-xs font-normal text-gray-500 truncate flex flex-wrap gap-1 mt-1">

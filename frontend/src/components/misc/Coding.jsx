@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useUser } from '../../context/UserContext';
 
 const CodeEditor = () => {
-  const {user} = useUser();
-  
+  const { user } = useUser();
+
   // Function to get default code for each language
   const getDefaultCode = (language) => {
     switch (language) {
@@ -52,7 +52,7 @@ const CodeEditor = () => {
     setCodeError(null);
 
     try {
-        await axios.post(
+      await axios.post(
         `${FLASK_API}/coding/submit-code`,
         { "source_code": code, "language": language, "user_id": user?._id.toString() },
         { withCredentials: true }
@@ -63,17 +63,17 @@ const CodeEditor = () => {
       setisSubmitting(false);
     }
   };
-  
+
   const runCode = async () => {
     setIsRunning(true);
     setOutput('');
     setCodeError(null);
 
     try {
-      const resp = await axios.post(`${FLASK_API}/coding/`, { "source_code": code, "language": language},{ withCredentials: true });
+      const resp = await axios.post(`${FLASK_API}/coding/`, { "source_code": code, "language": language }, { withCredentials: true });
       setOutput(resp.data.output);
       setCodeError(resp.data.errors);
-      
+
       // Automatically switch to errors tab if there are errors
       if (resp.data.errors && resp.data.errors.length > 0) {
         setActiveTab('error');
@@ -87,7 +87,7 @@ const CodeEditor = () => {
       setIsRunning(false);
     }
   };
-  
+
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
@@ -125,13 +125,13 @@ const CodeEditor = () => {
   const hasErrors = codeError && (Array.isArray(codeError) ? codeError.length > 0 : true);
 
   return (
-    <div className={`mt-15 mx-5 mb-5 flex flex-col min-h-screen rounded-lg overflow-y-auto shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
+    <div className={`mx-5 my-5 flex flex-col min-h-screen rounded-lg overflow-y-auto shadow-xl ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-800'}`}>
       {/* Header */}
       <div className={`flex flex-col sm:flex-row justify-between items-center p-3 sm:p-4 gap-2 ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-100'}`}>
         <div className="flex items-center space-x-2">
           <h2 className="text-lg font-semibold">Code Playground</h2>
         </div>
-        
+
         <div className="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full md:w-auto">
           {/* Language selector with fixed width */}
           <div className="relative group">
@@ -142,7 +142,7 @@ const CodeEditor = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </div>
-            
+
             {/* Dropdown menu with fixed width */}
             <div className={`absolute z-10 mt-1 w-32 rounded-md shadow-lg ${theme === 'dark' ? 'bg-gray-700' : 'bg-white border border-gray-200'} hidden group-hover:block`}>
               <div className="py-1">
@@ -159,7 +159,7 @@ const CodeEditor = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
@@ -168,7 +168,7 @@ const CodeEditor = () => {
           >
             {theme === 'dark' ? '🌙' : '☀️'}
           </button>
-          
+
           {/* Action buttons */}
           <div className="flex gap-2">
             <button
@@ -192,7 +192,7 @@ const CodeEditor = () => {
           </div>
         </div>
       </div>
-  
+
       {/* Main editor */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
         {/* Code panel */}
@@ -203,7 +203,7 @@ const CodeEditor = () => {
               {`main.${language === 'javascript' ? 'js' : language === 'python' ? 'py' : language === 'java' ? 'java' : 'cpp'}`}
             </span>
           </div>
-          
+
           <div className="flex flex-1 overflow-hidden">
             {/* Line numbers */}
             <div className={`py-3 px-2 text-right select-none ${theme === 'dark' ? 'bg-gray-800 text-gray-500' : 'bg-gray-50 text-gray-400'} font-mono text-xs sm:text-sm w-8 sm:w-12 overflow-y-hidden`}>
@@ -211,7 +211,7 @@ const CodeEditor = () => {
                 <div key={idx} className="leading-6">{idx + 1}</div>
               ))}
             </div>
-            
+
             {/* Code input */}
             <textarea
               value={code}
@@ -223,27 +223,27 @@ const CodeEditor = () => {
             />
           </div>
         </div>
-  
+
         {/* Output/Error panel */}
         <div className="flex flex-col flex-1 h-1/2 md:h-auto">
           {/* Tab navigation */}
           <div className={`flex ${theme === 'dark' ? 'bg-gray-800 border-b border-gray-700' : 'bg-gray-50 border-b border-gray-200'}`}>
-            <button 
-              onClick={() => setActiveTab('output')} 
-              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 ${activeTab === 'output' 
-                ? `${theme === 'dark' ? 'border-purple-500 text-purple-400' : 'border-purple-600 text-purple-600'}` 
+            <button
+              onClick={() => setActiveTab('output')}
+              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 ${activeTab === 'output'
+                ? `${theme === 'dark' ? 'border-purple-500 text-purple-400' : 'border-purple-600 text-purple-600'}`
                 : `${theme === 'dark' ? 'border-transparent text-gray-400 hover:text-gray-300' : 'border-transparent text-gray-500 hover:text-gray-700'}`
-              }`}
+                }`}
             >
               Output
             </button>
-            
-            <button 
-              onClick={() => setActiveTab('error')} 
-              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 flex items-center ${activeTab === 'error' 
-                ? `${theme === 'dark' ? 'border-red-500 text-red-400' : 'border-red-600 text-red-600'}` 
+
+            <button
+              onClick={() => setActiveTab('error')}
+              className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium border-b-2 flex items-center ${activeTab === 'error'
+                ? `${theme === 'dark' ? 'border-red-500 text-red-400' : 'border-red-600 text-red-600'}`
                 : `${theme === 'dark' ? 'border-transparent text-gray-400 hover:text-gray-300' : 'border-transparent text-gray-500 hover:text-gray-700'}`
-              }`}
+                }`}
             >
               Errors
               {hasErrors && (
@@ -252,35 +252,35 @@ const CodeEditor = () => {
                 </span>
               )}
             </button>
-            
+
             <div className="flex-grow"></div>
-            
-            {isRunning && 
+
+            {isRunning &&
               <div className="text-xs px-2 py-1 my-1 mr-2 rounded bg-yellow-500 text-yellow-900 font-medium self-center">
                 Running
               </div>
             }
-            
-            {!isRunning && output && activeTab === 'output' && 
+
+            {!isRunning && output && activeTab === 'output' &&
               <div className="text-xs px-2 py-1 my-1 mr-2 rounded bg-green-500 text-green-900 font-medium self-center">
                 Completed
               </div>
             }
-            
-            {!isRunning && hasErrors && activeTab === 'error' && 
+
+            {!isRunning && hasErrors && activeTab === 'error' &&
               <div className="text-xs px-2 py-1 my-1 mr-2 rounded bg-red-500 text-red-900 font-medium self-center">
                 Error
               </div>
             }
           </div>
-          
+
           {/* Output content */}
           {activeTab === 'output' && (
             <pre className={`flex-1 p-3 sm:p-4 font-mono text-xs sm:text-sm leading-6 overflow-auto whitespace-pre-wrap ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-white text-gray-800'}`}>
               {output || 'Run your code to see output here...'}
             </pre>
           )}
-          
+
           {/* Error content */}
           {activeTab === 'error' && (
             <div className={`flex-1 p-3 sm:p-4 overflow-auto ${theme === 'dark' ? 'bg-gray-900' : 'bg-white'}`}>
