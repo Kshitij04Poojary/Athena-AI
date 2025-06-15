@@ -15,6 +15,10 @@ AthenaAI is an intelligent, all-in-one learning platform designed to revolutioni
 
 ### 🌍 Multilingual Support
 - Seamless text translation enables accessibility across multiple languages.
+
+### 🧭 AI Learning Pathway Generator
+- Generates a complete, personalized learning roadmap from beginner to advanced levels for any topic.
+- Each concept is paired with highly relevant, curated learning resources (videos, articles, docs).
   
 ### 🎤 AI Mock Interviews
 - Generates **role-specific interview questions**.
