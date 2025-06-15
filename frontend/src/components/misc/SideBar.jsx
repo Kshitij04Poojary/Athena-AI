@@ -114,14 +114,12 @@ const SideBar = ({ collapsed, setCollapsed }) => {
             {renderMobileOverlay()}
 
             <div
-                className={`
-                    bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative
+                className={`bg-gradient-to-b from-indigo-900 to-blue-800 text-white transition-all duration-300 ease-in-out relative
                     ${isMobile 
                         ? `fixed top-0 left-0 z-50 h-full w-3/4 max-w-72 transform transition-transform ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}`
                         : `${collapsed ? 'w-20' : 'w-72'} h-full`
                     }
-                    flex flex-col
-                `}
+                    flex flex-col ${isMobile && !mobileOpen ? 'hidden' : ''}`}
             >
                 {/* Collapse/Expand Button - Only show on desktop */}
                 {!isMobile && (

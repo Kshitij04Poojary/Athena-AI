@@ -3,32 +3,32 @@ import { Search, MapPin, WalletCards, Clock, DollarSign, Calendar, ExternalLink,
 
 const InternshipCard = ({ internship }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-6 border border-gray-100 transform hover:-translate-y-1 hover:border-blue-300 h-full flex flex-col justify-between relative">
-      <div className="absolute -top-3 -right-3 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+    <div className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-all duration-300 p-4 md:p-6 border border-gray-100 transform hover:-translate-y-1 hover:border-blue-300 h-full flex flex-col justify-between relative">
+      <div className="absolute -top-3 -right-3 bg-blue-600 text-white text-[10px] md:text-xs font-bold px-2 md:px-3 py-1 rounded-full shadow-md">
         New
       </div>
       <div className="mb-4">
-        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full mb-2">
+        <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-[10px] md:text-xs font-medium rounded-full mb-2">
           {internship.location}
         </span>
-        <h3 className="text-xl font-bold text-blue-900 mb-1 leading-tight">{internship.title}</h3>
-        <p className="text-gray-700 font-semibold">{internship.company}</p>
+        <h3 className="text-lg md:text-xl font-bold text-blue-900 mb-1 leading-tight">{internship.title}</h3>
+        <p className="text-gray-700 font-semibold text-sm md:text-base">{internship.company}</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mb-5">
-        <div className="flex items-center text-gray-700">
-          <Calendar size={16} className="mr-2 text-blue-600" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+        <div className="flex items-center text-gray-700 text-sm md:text-base">
+          <Calendar size={14} md:size={16} className="mr-2 text-blue-600" />
           <span className="font-medium">{internship.duration}</span>
         </div>
 
-        <div className="flex items-center text-gray-700">
-          <WalletCards size={16} className="mr-2 text-green-500" />
+        <div className="flex items-center text-gray-700 text-sm md:text-base">
+          <WalletCards size={14} md:size={16} className="mr-2 text-green-500" />
           <span className="font-medium">{internship.stipend}</span>
         </div>
 
         {internship.posted_time !== "N/A" && (
-          <div className="flex items-center text-gray-700 col-span-2">
-            <Clock size={16} className="mr-2 text-blue-600" />
+          <div className="flex items-center text-gray-700 col-span-1 md:col-span-2 text-sm md:text-base">
+            <Clock size={14} md:size={16} className="mr-2 text-blue-600" />
             <span className="font-medium">{internship.posted_time}</span>
           </div>
         )}
@@ -39,10 +39,10 @@ const InternshipCard = ({ internship }) => {
           href={internship.link}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
+          className="w-full inline-flex items-center justify-center px-3 py-2 md:px-4 md:py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm md:text-base font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
         >
           Apply Now
-          <ExternalLink size={16} className="ml-2" />
+          <ExternalLink size={14} md:size={16} className="ml-2" />
         </a>
       </div>
     </div>
@@ -134,8 +134,12 @@ const InternshipListings = () => {
     <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen p-6">
       <div className="max-w-6xl mx-auto shadow-2xl rounded-2xl bg-white p-8">
         <div className="mb-12 text-center">
-          <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 mb-3">Internship Explorer</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">Discover and apply to the latest internship opportunities from top companies across India</p>
+          <h1 className="text-4xl md:text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 mb-3">
+            Internship Explorer
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
+            Discover and apply to the latest internship opportunities from top companies across India
+          </p>
         </div>
 
         <div className="bg-white rounded-xl shadow-md p-6 mb-10 border-b border-gray-100">
@@ -146,7 +150,7 @@ const InternshipListings = () => {
               </div>
               <input
                 type="text"
-                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"
                 placeholder="Search by role, company or location..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -155,7 +159,7 @@ const InternshipListings = () => {
 
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center justify-center px-4 py-3 bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium rounded-lg transition-colors"
+              className="flex items-center justify-center px-4 py-3 bg-blue-100 hover:bg-blue-200 text-blue-800 font-medium rounded-lg transition-colors text-sm md:text-base"
             >
               <Filter size={18} className="mr-2" />
               Filters
@@ -164,13 +168,13 @@ const InternshipListings = () => {
 
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-gray-100">
-              <h3 className="font-medium text-blue-800 mb-2">Locations</h3>
+              <h3 className="font-medium text-blue-800 mb-2 text-sm md:text-base">Locations</h3>
               <div className="flex flex-wrap gap-2">
                 {locations.map(location => (
                   <button
                     key={location}
                     onClick={() => setSearchTerm(location)}
-                    className="px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full hover:bg-blue-200"
+                    className="px-3 py-1 bg-blue-100 text-blue-800 text-xs md:text-sm font-medium rounded-full hover:bg-blue-200"
                   >
                     {location}
                   </button>
@@ -195,13 +199,13 @@ const InternshipListings = () => {
           </div>
         ) : filteredInternships.length > 0 ? (
           <>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-blue-900">
+            <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+              <h2 className="text-xl md:text-2xl font-bold text-blue-900">
                 {filteredInternships.length} Internships Available
               </h2>
               <div className="flex items-center text-gray-600">
                 <Briefcase size={20} className="mr-2" />
-                <span className="font-medium">Latest Opportunities</span>
+                <span className="font-medium text-sm md:text-base">Latest Opportunities</span>
               </div>
             </div>
 
@@ -217,7 +221,7 @@ const InternshipListings = () => {
 
         <div className="mt-16 text-center">
           <div className="inline-block px-6 py-3 bg-white rounded-lg shadow-sm">
-            <p className="text-gray-500">
+            <p className="text-gray-500 text-sm md:text-base">
               <span className="font-medium text-blue-600">Internship Explorer</span> •
               Last updated {new Date().toLocaleDateString()}
             </p>
