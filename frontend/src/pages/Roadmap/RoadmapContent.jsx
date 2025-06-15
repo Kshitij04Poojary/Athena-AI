@@ -63,7 +63,7 @@ const RoadmapContent = () => {
   }
 
   return (
-    <div className='mb-20 sm:mb-65 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20'>
+    <div className='pb-15 mb-20 sm:mb-65 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20'>
       <div className='px-4 sm:px-6 pt-4 sm:pt-6'>
         <button 
           onClick={handleBackNavigation}
