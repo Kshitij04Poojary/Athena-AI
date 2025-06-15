@@ -22,9 +22,24 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const NODE_API = import.meta.env.VITE_NODE_API;
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
   const navigate = useNavigate();
   console.log("User data:", user);
+  async function load_flask() {
+    try {
+      const response = await axios.post(`${FLASK_API}/recommendations/load-projects`,
+        { "user_id": user?._id }, { withCredentials: true });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  useEffect(() => {
+    if (user) {
+      load_flask();
+    }
+  }, [user]);
   // Transform user data to ProfileForm format
   const transformUserDataForForm = (userData) => {
     return {
@@ -455,60 +470,49 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto min-h-screen p-6">
+    <div className="max-w-4xl mx-auto min-h-screen p-3 sm:p-6">
       {/* Header with Cover Photo */}
       <div className="relative mb-8">
-        <div className="w-full h-40 bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 rounded-xl overflow-hidden shadow-xl">
+        <div className="w-full h-32 sm:h-40 bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 rounded-xl overflow-hidden shadow-xl">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30"></div>
         </div>
 
         {/* Profile Info */}
-        <div className="relative -mt-16 ml-6 flex flex-col sm:flex-row items-start sm:items-end sm:justify-between">
-          <div className="w-28 h-28 rounded-full border-4 border-white bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 flex items-center justify-center text-3xl font-bold text-white shadow-xl">
+        <div className="relative -mt-16 mx-4 sm:mx-6 flex flex-col items-start">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-white bg-gradient-to-r from-purple-500 via-indigo-400 to-blue-300 flex items-center justify-center text-2xl sm:text-3xl font-bold text-white shadow-xl">
             {user?.name?.charAt(0)?.toUpperCase() || "G"}
           </div>
-          <div className="sm:ml-6 mt-4 sm:mt-0 mb-4">
-            <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-md">
+          <div className="mt-4 mb-4">
+            <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 dark:text-white drop-shadow-md">
               {user.name}
             </h1>
-            <p className="text-white/90 text-sm sm:text-base h-auto">{user.email}</p>
-            <div className="mt-5">
-              <span className="px-3 py-1 bg-white/20 backdrop-blur-md text-white text-sm rounded-full">
+            <p className="text-gray-600 dark:text-white/90 text-sm sm:text-base">{user.email}</p>
+            <div className="mt-3">
+              <span className="px-3 py-1 bg-blue-600/20 backdrop-blur-md text-blue-800 text-sm rounded-full">
                 {user.userType || "Student"}
               </span>
             </div>
           </div>
 
           {user.userType === "Student" && (
-            <div className="flex flex-col sm:flex-row gap-3 mt-4 sm:mt-0 sm:ml-auto sm:mr-6 mb-4">
+            <div className="flex flex-col w-full sm:flex-row gap-3 mt-2 sm:mt-4">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsEditing(!isEditing)}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-white text-blue-700 shadow-md hover:bg-blue-50 transition-colors"
+                className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-white text-blue-700 shadow-md hover:bg-blue-50 transition-colors w-full sm:w-auto"
                 disabled={loading}
               >
                 <Edit2 size={16} />
                 {loading ? "Loading..." : isEditing ? "Cancel Edit" : "Edit Profile"}
               </motion.button>
-              {/*
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/game')}
-                className="flex items-center gap-2 px-5 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-md hover:from-purple-700 hover:to-indigo-700 transition-colors"
-              >
-                <Gamepad size={16} />
-                Challenge Yourself
-              </motion.button>
-              */}
             </div>
           )}
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6 sm:gap-8 px-3 sm:px-0">
         {user.userType === "Student" &&
           (isEditing ? (
             <ProfileForm
@@ -520,14 +524,14 @@ const ProfilePage = () => {
               {renderProfile()}
 
               {(user?.education || user?.extracurricular?.length || user?.internships?.length || user?.skills?.length > 0) && (
-                <div className="flex justify-center gap-4 mt-8">
+                <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6 sm:mt-8 pb-6">
                   <motion.button
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => generateResume(user)}
-                    className="bg-gradient-to-r from-green-500 to-green-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
+                    className="w-full sm:w-auto bg-gradient-to-r from-green-500 to-green-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2"
                     disabled={loading}
                   >
                     <Download className="w-5 h-5" />
@@ -540,7 +544,7 @@ const ProfilePage = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate('/game')}
-                    className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-8 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center gap-2"
+                    className="w-full sm:w-auto bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:shadow-xl transition-all flex items-center justify-center gap-2"
                   >
                     <Gamepad className="w-5 h-5" />
                     Challenge Yourself

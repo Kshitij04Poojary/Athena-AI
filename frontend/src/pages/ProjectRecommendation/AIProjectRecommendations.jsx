@@ -9,6 +9,7 @@ const AIProjectRecommendations = () => {
   const [projectRecommendations, setProjectRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
+  const FLASK_API = import.meta.env.VITE_FLASK_API;
 
   const domains = [
     t("projects.filter.all"),
@@ -28,7 +29,7 @@ const AIProjectRecommendations = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://athenai-backendonly.onrender.com/recommendations/",
+        `${FLASK_API}/recommendations/`,
         { "user_id": user._id },
         { withCredentials: true }
       );
