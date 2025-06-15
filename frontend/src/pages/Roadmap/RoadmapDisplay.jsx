@@ -120,14 +120,14 @@ const RoadmapDisplay = () => {
             {roadmaps.map((roadmap, index) => (
               <div
                 key={roadmap._id}
-                className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 sm:p-6 lg:p-8 hover:border-purple-500/50 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/10"
+                className="group relative bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur-sm border border-slate-700/50 rounded-2xl p-4 sm:p-6 lg:p-8 hover:border-purple-500/50 transition-all duration-500 transform hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/10 flex flex-col h-full"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {/* Glow effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-600/0 via-purple-600/5 to-pink-600/0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 
                 {/* Content */}
-                <div className="relative z-10">
+                <div className="relative z-10 flex flex-col h-full">
                   {/* Header */}
                   <div className="flex items-start justify-between mb-4 sm:mb-6">
                     <div className="flex items-center space-x-3">
@@ -143,31 +143,39 @@ const RoadmapDisplay = () => {
                     </div>
                   </div>
 
-                  {/* Description */}
-                  <p className="text-gray-300 text-sm mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                    {roadmap.roadmapData.description}
-                  </p>
+                  {/* Description - Fixed height with scrollable overflow */}
+                  <div className="mb-4 sm:mb-6 flex-shrink-0" style={{ minHeight: '60px' }}>
+                    <p className="text-gray-300 text-sm leading-relaxed line-clamp-3">
+                      {roadmap.roadmapData.description}
+                    </p>
+                  </div>
 
-                  {/* Details */}
-                  <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                    <div className="flex items-center space-x-3">
-                      <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0" />
-                      <span className="text-white font-medium text-sm sm:text-base">{roadmap.roadmapData.duration}</span>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400 flex-shrink-0" />
-                      <span className="text-gray-300 text-sm sm:text-base">{formatDate(roadmap.createdAt)}</span>
+                  {/* Details - Fixed height section */}
+                  <div className="flex-grow">
+                    <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                      <div className="flex items-start space-x-3">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                        <span className="text-white font-medium text-sm sm:text-base leading-tight">
+                          {roadmap.roadmapData.duration}
+                        </span>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400 flex-shrink-0" />
+                        <span className="text-gray-300 text-sm sm:text-base">{formatDate(roadmap.createdAt)}</span>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Action Button */}
-                  <button
-                    onClick={() => handleViewRoadmap(roadmap._id)}
-                    className="cursor-pointer w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn shadow-lg hover:shadow-purple-500/25 text-sm sm:text-base"
-                  >
-                    <span>Explore Roadmap</span>
-                    <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
+                  {/* Action Button - Always at bottom */}
+                  <div className="mt-auto">
+                    <button
+                      onClick={() => handleViewRoadmap(roadmap._id)}
+                      className="cursor-pointer w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2 group/btn shadow-lg hover:shadow-purple-500/25 text-sm sm:text-base"
+                    >
+                      <span>Explore Roadmap</span>
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Decorative elements */}
